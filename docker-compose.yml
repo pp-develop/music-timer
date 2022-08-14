@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  react_native:
+    image: react_native:v1
+    build: ./dockerfile/
+    container_name: react_native
+    working_dir: /usr/src/app
+    volumes:
+      - ./src/:/usr/src/app
+    env_file: .env
+    ports:
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+      - "19006:19006"
+    tty: true
