@@ -7,7 +7,7 @@ services:
     container_name: react_native
     working_dir: /usr/src/app
     volumes:
-      - ./src/:/usr/src/app
+      - ./app/:/usr/src/app
     env_file: .env
     ports:
       - "19000:19000"
