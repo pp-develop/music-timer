@@ -1,7 +1,15 @@
-import { HelloWorld } from "./screens/HelloWorld";
+import { Header } from "./components/Header";
+import { Home } from "./screens/Home";
+import { SpecifyTime } from "./screens/SpecifyTime";
+import { Footer } from "./components/Footer";
 
 export const App = () => {
   return (
-    <HelloWorld />
+    <div>
+      <Header />
+      <Home />
+      <SpecifyTime />
+      <Footer />
+    </div>
   );
 }
