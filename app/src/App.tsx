@@ -1,21 +1,21 @@
+import React from "react";
 import { Header } from "./components/Header";
 import { Home } from "./screens/Home";
 import { SpecifyTime } from "./screens/SpecifyTime";
 import { Footer } from "./components/Footer";
-import { OAuthButton } from "./components/OAuthButton";
 import { SpecifyForm } from "./components/SpecifyForm";
 import { DeletePlaylist } from "./components/DeletePlaylistButton";
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export const App = () => {
   return (
-    <div>
-      <OAuthButton />
-      <SpecifyForm/>
-      <DeletePlaylist />
+    <SafeAreaProvider>
       <Header />
+      <SpecifyForm />
+      <DeletePlaylist />
       <Home />
       <SpecifyTime />
       <Footer />
-    </div>
+    </SafeAreaProvider>
   );
 }
