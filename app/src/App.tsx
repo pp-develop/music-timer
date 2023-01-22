@@ -1,5 +1,6 @@
 import React from "react";
 import { Header } from "./components/Header";
+import { Description } from "./components/Description";
 import { Home } from "./screens/Home";
 import { SpecifyTime } from "./screens/SpecifyTime";
 import { Footer } from "./components/Footer";
@@ -11,6 +12,7 @@ export const App = () => {
   return (
     <SafeAreaProvider>
       <Header />
+      <Description />
       <SpecifyForm />
       <DeletePlaylist />
       <Home />
