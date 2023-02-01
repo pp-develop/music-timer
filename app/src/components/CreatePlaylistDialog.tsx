@@ -5,7 +5,7 @@ import {
 import { View, StyleSheet } from 'react-native';
 import { ResponseContext } from './SpecifyForm';
 
-export const PlaylistDialog = (prop: any) => {
+export const CreatePlaylistDialog = (prop: any) => {
   const responseCreatePlayliset = React.useContext(ResponseContext);
   let response = responseCreatePlayliset;
 
@@ -23,6 +23,7 @@ export const PlaylistDialog = (prop: any) => {
             <iframe style={styles.playlist} src={'https://open.spotify.com/embed/playlist/' + response.playlistId + "?utm_source=generator"} width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
           </div>
         }
+        {/* TODO エラー時の考慮 */}
       </Dialog>
     </View>
   );

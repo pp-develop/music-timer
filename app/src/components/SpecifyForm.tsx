@@ -4,7 +4,7 @@ import axios from 'axios';
 // import { Input, Icon } from '@rneui/themed';
 import { Input } from "@rneui/base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { PlaylistDialog } from "./PlaylistDialog"
+import { CreatePlaylistDialog } from "./CreatePlaylistDialog"
 import { CreatePlaylistButton } from "./CreatePlaylistButton"
 
 export const SpecifyForm = () => {
@@ -58,7 +58,7 @@ export const SpecifyForm = () => {
             // value={number}
             />
             <CreatePlaylistButton onclick={createPlaylist} />
-            <PlaylistDialog visible={dialogVisible} isLoading={isLoading} changeVisible={changeDialogVisible} />
+            <CreatePlaylistDialog visible={dialogVisible} isLoading={isLoading} changeVisible={changeDialogVisible} />
         </>
     );
 
