@@ -11,11 +11,12 @@ export const SpecifyForm = () => {
 
     const [dialogVisible, setDialogVisible] = useState(false);
     const [isLoading, setisLoading] = useState(false);
+    const [httpStatus, setHttpStatus] = useState(0);
 
     const changeDialogVisible = (isVisible: any) => {
         setDialogVisible(isVisible)
     }
-    
+
     return (
         <>
             <Input
@@ -58,7 +59,12 @@ export const SpecifyForm = () => {
             // value={number}
             />
             <CreatePlaylistButton onclick={createPlaylist} />
-            <CreatePlaylistDialog visible={dialogVisible} isLoading={isLoading} changeVisible={changeDialogVisible} />
+            <CreatePlaylistDialog
+                visible={dialogVisible}
+                isLoading={isLoading}
+                httpStatus={httpStatus}
+                changeVisible={changeDialogVisible}
+            />
         </>
     );
 
@@ -82,11 +88,12 @@ export const SpecifyForm = () => {
                 console.log(response);
                 if (response.status == 201) {
                     spotifyResponse.createPlaylist.playlistId = response.data
+                    setHttpStatus(response.status)
                 }
-
             })
             .catch(function (error) {
                 console.error(error);
+                setHttpStatus(error.status)
             })
             .finally(function () {
                 setisLoading(false)
