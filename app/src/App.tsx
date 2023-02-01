@@ -7,8 +7,6 @@ import { Footer } from "./components/Footer";
 import { SpecifyForm } from "./components/SpecifyForm";
 import { DeletePlaylist } from "./components/DeletePlaylistButton";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { CreatePlaylistButton } from './components/CreatePlaylistButton';
-import { PlaylistDialog } from './components/PlaylistDialog';
 
 export const App = () => {
   return (
@@ -16,9 +14,8 @@ export const App = () => {
       <Header />
       <Description />
       <SpecifyForm />
-      {/* <CreatePlaylistButton /> */}
       <DeletePlaylist />
-      {/* <PlaylistDialog /> */}
+
       <Home />
       <SpecifyTime />
       <Footer />
