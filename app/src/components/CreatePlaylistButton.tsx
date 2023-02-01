@@ -16,6 +16,9 @@ export const CreatePlaylistButton = (prop: any) => {
                 width: 200,
                 marginHorizontal: 50,
                 marginVertical: 10,
+                maxWidth: 1280,
+                marginLeft: 'auto',
+                marginRight: 'auto',
             }}
             titleStyle={{ fontWeight: 'bold' }}
             onPress={prop.onclick}

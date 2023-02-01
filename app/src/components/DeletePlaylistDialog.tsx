@@ -11,7 +11,7 @@ export const DeletePlaylistDialog = (prop: any) => {
 
   return (
     <View>
-      <Dialog isVisible={prop.visible} onBackdropPress={toggleDialog}>
+      <Dialog isVisible={prop.visible} onBackdropPress={toggleDialog} overlayStyle={styles.dialog}>
         {prop.isLoading ?
           <Dialog.Loading />
           :
@@ -31,17 +31,8 @@ export const DeletePlaylistDialog = (prop: any) => {
 };
 
 const styles = StyleSheet.create({
-  button: {
-    borderRadius: 6,
-    width: 220,
-    margin: 20,
+  dialog: {
+    // backgroundColor: 'black',
+    borderRadius: 12,
   },
-  buttonContainer: {
-    margin: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  playlist: {
-    borderRadius: 12
-  },
-});
+})
