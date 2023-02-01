@@ -6,23 +6,29 @@ export const Header = () => {
     return (
         <HeaderComponent
             backgroundColor="black"
-            backgroundImageStyle={{}}
+            backgroundImageStyle={{
+                backgroundColor: "black"
+            }}
             barStyle="default"
             centerComponent={{
                 text: "Specify",
                 style: {
                     color: "white",
-                    fontSize: 30,
+                    fontSize: 35,
                     fontWeight: "bold"
                 },
             }}
             centerContainerStyle={{}}
             containerStyle={{
-                paddingTop: 12,
+                paddingTop: 30,
                 paddingBottom: 12,
                 paddingRight: 32,
                 paddingLeft: 32,
-                borderBottomWidth: 0
+                borderBottomWidth: 0,
+                maxWidth: 1280,
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                width: '100%'
             }}
             leftContainerStyle={{}}
             linearGradientProps={{}}

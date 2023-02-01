@@ -15,7 +15,13 @@ export const Description = () => {
       h4Style={{}}
       style={{
         paddingLeft: 47,
+        paddingBottom: 12,
+        paddingRight: 32,
         backgroundColor: "black",
+        maxWidth: 1280,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        width: '100%'
       }}
     >
       Create a playlist by specifying the time.

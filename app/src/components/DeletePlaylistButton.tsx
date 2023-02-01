@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from "@rneui/base";
 import { Text, StyleSheet, Pressable } from 'react-native';
 import axios from 'axios';
 
@@ -25,9 +26,22 @@ const onPress = () => {
 export const DeletePlaylist = (props: any) => {
     const { title = 'Delete' } = props;
     return (
-        <Pressable style={styles.button} onPress={onPress}>
-            <Text style={styles.text}>{title}</Text>
-        </Pressable>
+        <Button
+            title="Delete Playlist"
+            buttonStyle={{
+                backgroundColor: 'black',
+                borderWidth: 2,
+                borderColor: 'white',
+                borderRadius: 30,
+            }}
+            containerStyle={{
+                width: 200,
+                marginHorizontal: 50,
+                marginVertical: 10,
+            }}
+            titleStyle={{ fontWeight: 'bold' }}
+            onPress={onPress}
+        />
     );
 }
 
