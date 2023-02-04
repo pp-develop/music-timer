@@ -4,8 +4,8 @@ import { Description } from "./features/Description";
 import { Home } from "./components/Home";
 import { SpecifyTime } from "./components/SpecifyTime";
 import { Footer } from "./features/Footer";
-import { SpecifyForm } from "./features/SpecifyForm";
-import { DeletePlaylist } from "./features/DeletePlaylistButton";
+import { SpecifyForm } from "./features/createPlaylist/components/SpecifyForm";
+import { DeletePlaylist } from "./features/deletePlaylist/DeletePlaylistButton";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export const App = () => {

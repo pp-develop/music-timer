@@ -3,7 +3,7 @@ import {
   Dialog,
 } from '@rneui/themed';
 import { View, StyleSheet } from 'react-native';
-import { ResponseContext } from './SpecifyForm';
+import { ResponseContext } from './CreatePlaylistButton';
 
 export const CreatePlaylistDialog = (prop: any) => {
   const responseCreatePlayliset = React.useContext(ResponseContext);

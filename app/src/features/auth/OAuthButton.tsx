@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet, Pressable } from 'react-native';
-import axios from 'axios';
+import {axios} from '../../lib/axos';
 
 export const OAuthButton = () => {
     // const { title = 'Save' } = props;
     const [isLogin, setIsLogin] = useState(false);
 
     const onPress = () => {
-        axios.get('http://localhost:8080/authz-url', {
+        axios.get('/authz-url', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Headers': '*',
