@@ -11,7 +11,7 @@ export const SpecifyForm = () => {
 
     const [dialogVisible, setDialogVisible] = useState(false);
     const [isLoading, setisLoading] = useState(false);
-    const [number, setNumber] = useState("");
+    const [minute, setMinute] = useState("");
     const [httpStatus, setHttpStatus] = useState(0);
 
     const changeDialogVisible = (isVisible: any) => {
@@ -57,8 +57,8 @@ export const SpecifyForm = () => {
                 rightIcon={<Icon name="close" size={20} />}
                 rightIconContainerStyle={{}}
                 placeholder="Enter Minute"
-                onChangeText={setNumber}
-                value={number}
+                onChangeText={setMinute}
+                value={minute}
             />
             <CreatePlaylistButton onclick={createPlaylist} />
             <CreatePlaylistDialog
@@ -75,7 +75,7 @@ export const SpecifyForm = () => {
         setisLoading(true)
         axios.post('http://localhost:8080/playlist',
             {
-                'minute': parseInt(number)
+                'minute': parseInt(minute)
             },
             {
                 headers: {
