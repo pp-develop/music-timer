@@ -1,11 +1,11 @@
 import React from "react";
-import { Header } from "./components/Header";
-import { Description } from "./components/Description";
-import { Home } from "./screens/Home";
-import { SpecifyTime } from "./screens/SpecifyTime";
-import { Footer } from "./components/Footer";
-import { SpecifyForm } from "./components/SpecifyForm";
-import { DeletePlaylist } from "./components/DeletePlaylistButton";
+import { Header } from "./features/Header";
+import { Description } from "./features/Description";
+import { Home } from "./components/Home";
+import { SpecifyTime } from "./components/SpecifyTime";
+import { Footer } from "./features/Footer";
+import { SpecifyForm } from "./features/SpecifyForm";
+import { DeletePlaylist } from "./features/DeletePlaylistButton";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export const App = () => {
