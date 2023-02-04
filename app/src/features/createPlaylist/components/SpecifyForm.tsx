@@ -1,19 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
-// import { Input, Icon } from '@rneui/themed';
 import { Input } from "@rneui/base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CreatePlaylistButton } from "./CreatePlaylistButton"
-
-const spotifyResponse = {
-    createPlaylist: {
-        playlistId: '',
-    },
-};
-
-export const ResponseContext = React.createContext(
-    spotifyResponse.createPlaylist
-);
 
 export const SpecifyForm = () => {
     const [minute, setMinute] = useState("");

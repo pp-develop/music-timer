@@ -2,37 +2,26 @@ import React, { useState } from "react";
 import { Button } from "@rneui/base";
 import { createPlaylist } from "../api/createPlaylist"
 import { CreatePlaylistDialog } from "./CreatePlaylistDialog"
-
-const spotifyResponse = {
-    createPlaylist: {
-        playlistId: '',
-    },
-};
-
-export const ResponseContext = React.createContext(
-    spotifyResponse.createPlaylist
-);
+import { useDisclosure } from '../../../hooks/useDisclosure';
+import { ResponseContext } from '../hooks/useContext';
 
 export const CreatePlaylistButton = (prop: any) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const { toggle, open, isOpen } = useDisclosure();
     const [isLoading, setIsLoading] = useState(false);
     const [httpStatus, setHttpStatus] = useState(0);
+    const context = React.useContext(ResponseContext);
 
     const onclick = async (minute: string) => {
-        setIsOpen(true)
         setIsLoading(true)
+        open()
 
         const response = await createPlaylist(minute)
         if (response.httpStatus = 201) {
-            spotifyResponse.createPlaylist.playlistId = response.playlistId
+            context.playlistId = response.playlistId
         }
 
         setHttpStatus(response.httpStatus)
         setIsLoading(false)
-    }
-
-    const changeDialogVisible = (isVisible: any) => {
-        setIsOpen(isVisible)
     }
 
     return (
@@ -57,10 +46,10 @@ export const CreatePlaylistButton = (prop: any) => {
                 onPress={() => onclick(prop.minute)}
             />
             <CreatePlaylistDialog
-                visible={isOpen}
+                isOpen={isOpen}
                 isLoading={isLoading}
                 httpStatus={httpStatus}
-                changeVisible={changeDialogVisible}
+                toggle={toggle}
             />
         </>
     );

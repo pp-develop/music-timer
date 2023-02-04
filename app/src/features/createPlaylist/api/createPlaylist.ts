@@ -5,14 +5,9 @@ export type CreatePlaylistResponse = {
     httpStatus: number;
 };
 
-type CreatePlaylistOptions = {
-    minute: string;
-};
-
 export function createPlaylist(minute: string): Promise<CreatePlaylistResponse> {
     return new Promise((resolve) => {
 
-        console.log(minute)
         const createPlaylist: CreatePlaylistResponse = {
             playlistId: "",
             httpStatus: 0
