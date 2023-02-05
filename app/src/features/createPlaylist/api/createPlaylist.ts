@@ -1,14 +1,14 @@
 import { axios } from '../../../lib/axos';
 
-export type CreatePlaylistResponse = {
+export type Response = {
     playlistId: string;
     httpStatus: number;
 };
 
-export function createPlaylist(minute: string): Promise<CreatePlaylistResponse> {
+export function createPlaylist(minute: string): Promise<Response> {
     return new Promise((resolve) => {
 
-        const createPlaylist: CreatePlaylistResponse = {
+        const createPlaylist: Response = {
             playlistId: "",
             httpStatus: 0
         };
