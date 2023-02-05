@@ -1,18 +1,26 @@
 import React, { useState } from 'react';
 import { Button } from "@rneui/base";
 import { Text, StyleSheet, Pressable } from 'react-native';
-import axios from 'axios';
+import { useDisclosure } from '../../../hooks/useDisclosure';
 import { DeletePlaylistDialog } from "./DeletePlaylistDialog"
+import { deletePlaylist } from '../api/DeletePlaylist';
 
 
 
 export const DeletePlaylist = (props: any) => {
-    const [dialogVisible, setDialogVisible] = useState(false);
+    // const [dialogVisible, setDialogVisible] = useState(false);
+    const { toggle, open, isOpen } = useDisclosure();
     const [isLoading, setIsLoading] = useState(false);
     const [httpStatus, setHttpStatus] = useState(0);
 
-    const changeDialogVisible = (isVisible: any) => {
-        setDialogVisible(isVisible)
+    const onclick = async () => {
+        setIsLoading(true)
+        open()
+
+        const response = await deletePlaylist()
+
+        setHttpStatus(response.httpStatus)
+        setIsLoading(false)
     }
 
     return (
@@ -35,40 +43,16 @@ export const DeletePlaylist = (props: any) => {
                     marginRight: 'auto',
                 }}
                 titleStyle={{ fontWeight: 'bold' }}
-                onPress={onPress}
+                onPress={onclick}
             />
             <DeletePlaylistDialog
-                visible={dialogVisible}
+                visible={isOpen}
                 isLoading={isLoading}
                 httpStatus={httpStatus}
-                changeVisible={changeDialogVisible}
+                changeVisible={toggle}
             />
         </>
     );
-
-    function onPress(){
-        setDialogVisible(true)
-        setIsLoading(true)
-        axios.delete('http://localhost:8080/playlist', {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Headers': '*',
-                "Access-Control-Allow-Credentials": 'true',
-            },
-            withCredentials: true,
-        })
-            .then(function (response) {
-                console.log(response);
-                setHttpStatus(response.status)
-            })
-            .catch(function (error) {
-                console.error(error);
-                setHttpStatus(error.status)
-            })
-            .finally(function () {
-                setIsLoading(false)
-            });
-    };
 }
 
 const styles = StyleSheet.create({
