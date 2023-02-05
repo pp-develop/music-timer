@@ -9,7 +9,6 @@ const image = {uri: 'https://reactjs.org/logo-og.png'};
 export const OAuthButton = () => {
     const [localStorage, setLocalStorage] = useLocalStorage("isLogin", "");
     const [isLogin, setIsLogin] = useState(localStorage != "")
-    console.log(localStorage)
 
     const login = async () => {
         const response = await authz()
