@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import { Button } from "@rneui/base";
-import { Text, StyleSheet, Pressable } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useDisclosure } from '../../../hooks/useDisclosure';
 import { DeletePlaylistDialog } from "./DeletePlaylistDialog"
 import { deletePlaylist } from '../api/DeletePlaylist';
 
-
-
 export const DeletePlaylist = (props: any) => {
-    // const [dialogVisible, setDialogVisible] = useState(false);
     const { toggle, open, isOpen } = useDisclosure();
     const [isLoading, setIsLoading] = useState(false);
     const [httpStatus, setHttpStatus] = useState(0);
