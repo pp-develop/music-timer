@@ -1,6 +1,6 @@
 import React from "react";
 import { Header as HeaderComponent } from "@rneui/base";
-import { OAuthButton } from "./OAuthButton";
+import { OAuthButton } from "../../features/auth/";
 
 export const Header = () => {
     return (

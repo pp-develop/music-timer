@@ -32,7 +32,6 @@ export const DeletePlaylistDialog = (prop: any) => {
 
 const styles = StyleSheet.create({
   dialog: {
-    // backgroundColor: 'black',
     borderRadius: 12,
   },
 })
