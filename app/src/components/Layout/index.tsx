@@ -1,7 +1,7 @@
 import React from "react";
 import { Header } from "../Parts/Header"
 import { Description } from "../Parts/Description";
-import { SpecifyForm } from "../../features/createPlaylist";
+import { Form } from "../../features/createPlaylist";
 import { DeletePlaylist } from "../../features/deletePlaylist/components/DeletePlaylistButton";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -10,7 +10,7 @@ export const App = () => {
     <SafeAreaProvider>
       <Header />
       <Description />
-      <SpecifyForm />
+      <Form />
       <DeletePlaylist />
     </SafeAreaProvider>
   );

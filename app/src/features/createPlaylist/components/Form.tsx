@@ -1,11 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer} from 'react';
 import { StyleSheet } from 'react-native';
 import { Input } from "@rneui/base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CreatePlaylistButton } from "./CreatePlaylistButton"
 
-export const SpecifyForm = () => {
+export function reducer(state, action) {
+    if (action.type === 'crete') {
+        minute
+        return {
+            minute: state.minute
+        };
+    }
+}
+
+export const Form = () => {
     const [minute, setMinute] = useState("");
+    const [state, dispatch] = useReducer(reducer, { age: minute });
 
     return (
         <>
@@ -51,7 +61,7 @@ export const SpecifyForm = () => {
             />
             <CreatePlaylistButton minute={minute} />
         </>
-    );    
+    );
 };
 
 const styles = StyleSheet.create({
