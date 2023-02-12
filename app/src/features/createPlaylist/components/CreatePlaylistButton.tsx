@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "@rneui/base";
-import { createPlaylist } from "../api/createPlaylist"
+import { CreatePlaylist } from "../api/createPlaylist"
+import { CreatePlaylistWithFavoriteArtists } from "../api/createPlaylistWithFavoriteArtists"
 import { CreatePlaylistDialog } from "./CreatePlaylistDialog"
 import { useDisclosure } from '../../../hooks/useDisclosure';
 import { ResponseContext } from '../hooks/useContext';
@@ -11,11 +12,24 @@ export const CreatePlaylistButton = (prop: any) => {
     const [httpStatus, setHttpStatus] = useState(0);
     const context = React.useContext(ResponseContext);
 
-    const onclick = async (minute: string) => {
+    const createPlaylist = async (minute: string) => {
         setIsLoading(true)
         open()
 
-        const response = await createPlaylist(minute)
+        const response = await CreatePlaylist(minute)
+        if (response.httpStatus = 201) {
+            context.playlistId = response.playlistId
+        }
+
+        setHttpStatus(response.httpStatus)
+        setIsLoading(false)
+    }
+
+    const createPlaylistWithFavoriteArtists = async (minute: string) => {
+        setIsLoading(true)
+        open()
+
+        const response = await CreatePlaylistWithFavoriteArtists(minute)
         if (response.httpStatus = 201) {
             context.playlistId = response.playlistId
         }
@@ -43,7 +57,8 @@ export const CreatePlaylistButton = (prop: any) => {
                     marginRight: 'auto',
                 }}
                 titleStyle={{ fontWeight: 'bold' }}
-                onPress={() => onclick(prop.minute)}
+                onPress={() => context.isFavoriteArtists
+                    ? createPlaylistWithFavoriteArtists(prop.minute) : createPlaylist(prop.minute)}
             />
             <CreatePlaylistDialog
                 isOpen={isOpen}

@@ -1,7 +1,7 @@
 import { axios } from '../../../lib/axos';
 import { Response } from '../types/index'
 
-export function CreatePlaylist(minute: string): Promise<Response> {
+export function CreatePlaylistWithFavoriteArtists(minute: string): Promise<Response> {
     return new Promise((resolve) => {
 
         const createPlaylist: Response = {
@@ -9,7 +9,7 @@ export function CreatePlaylist(minute: string): Promise<Response> {
             httpStatus: 0
         };
 
-        axios.post('/playlist',
+        axios.post('/playlist-with-favorite-artists',
             {
                 'minute': parseInt(minute)
             },

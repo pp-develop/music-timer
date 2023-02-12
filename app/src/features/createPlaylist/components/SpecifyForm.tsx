@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Input } from "@rneui/base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CreatePlaylistButton } from "./CreatePlaylistButton"
+import { SwitchFavoriteArtists } from "./SwitchFavoriteArtists"
 
 export const SpecifyForm = () => {
     const [minute, setMinute] = useState("");
@@ -49,6 +50,7 @@ export const SpecifyForm = () => {
                 onChangeText={setMinute}
                 value={minute}
             />
+            <SwitchFavoriteArtists />
             <CreatePlaylistButton minute={minute} />
         </>
     );    
