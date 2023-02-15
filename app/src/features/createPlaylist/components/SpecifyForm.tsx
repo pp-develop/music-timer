@@ -35,6 +35,7 @@ export const SpecifyForm = () => {
                 inputStyle={{}}
                 label="Specify Time"
                 labelStyle={{
+                    paddingTop: 10,
                     backgroundColor: "white",
                     maxWidth: 1280,
                     marginLeft: 'auto',
@@ -53,7 +54,7 @@ export const SpecifyForm = () => {
             <SwitchFavoriteArtists />
             <CreatePlaylistButton minute={minute} />
         </>
-    );    
+    );
 };
 
 const styles = StyleSheet.create({
