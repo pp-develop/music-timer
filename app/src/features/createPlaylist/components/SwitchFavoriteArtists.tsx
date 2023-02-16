@@ -17,14 +17,11 @@ export const SwitchFavoriteArtists = (prop: any) => {
         <View style={styles.view}>
             <Text
                 h3
-                h1Style={{}}
-                h2Style={{}}
                 h3Style={{
                     fontSize: 16,
                     fontWeight: "bold",
                     color: "black",
                 }}
-                h4Style={{}}
                 style={{
                     paddingTop: 10,
                     paddingBottom: 10,

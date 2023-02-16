@@ -31,7 +31,7 @@ export function CreatePlaylist(minute: string): Promise<Response> {
             })
             .catch(function (error) {
                 console.error(error);
-                createPlaylist.httpStatus = error.status
+                createPlaylist.httpStatus = error.response.status
             })
             .finally(function () {
                 resolve(createPlaylist)

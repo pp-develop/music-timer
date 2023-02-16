@@ -1,1 +1,1 @@
-export * from './components/SpecifyForm';
+export * from './components/Form';

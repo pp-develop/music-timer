@@ -5,7 +5,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CreatePlaylistButton } from "./CreatePlaylistButton"
 import { SwitchFavoriteArtists } from "./SwitchFavoriteArtists"
 
-export const SpecifyForm = () => {
+export const Form = () => {
     const [minute, setMinute] = useState("");
 
     return (

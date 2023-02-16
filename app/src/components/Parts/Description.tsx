@@ -5,14 +5,11 @@ export const Description = () => {
   return (
     <Text
       h3
-      h1Style={{}}
-      h2Style={{}}
       h3Style={{
         fontSize: 30,
         fontWeight: "bold",
         color: "white",
       }}
-      h4Style={{}}
       style={{
         paddingLeft: 47,
         paddingBottom: 12,

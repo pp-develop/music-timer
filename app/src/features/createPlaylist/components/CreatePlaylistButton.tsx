@@ -17,7 +17,7 @@ export const CreatePlaylistButton = (prop: any) => {
         open()
 
         const response = await CreatePlaylist(minute)
-        if (response.httpStatus = 201) {
+        if (response.httpStatus == 201) {
             context.playlistId = response.playlistId
         }
 
@@ -30,7 +30,7 @@ export const CreatePlaylistButton = (prop: any) => {
         open()
 
         const response = await CreatePlaylistWithFavoriteArtists(minute)
-        if (response.httpStatus = 201) {
+        if (response.httpStatus == 201) {
             context.playlistId = response.playlistId
         }
 
