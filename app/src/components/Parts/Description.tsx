@@ -11,9 +11,9 @@ export const Description = () => {
         color: "white",
       }}
       style={{
-        paddingLeft: 47,
+        paddingLeft: 25,
         paddingBottom: 12,
-        paddingRight: 32,
+        paddingRight: 25,
         backgroundColor: "black",
         maxWidth: 1000,
         marginLeft: 'auto',
