@@ -14,18 +14,18 @@ export const Header = () => {
                 text: "Specify",
                 style: {
                     color: "white",
-                    fontSize: 35,
-                    fontWeight: "bold"
+                    fontSize: 32,
+                    fontWeight: "bold",
+                    marginTop: 'auto',
+                    marginBottom: 'auto',
                 },
             }}
             centerContainerStyle={{}}
             containerStyle={{
                 paddingTop: 30,
                 paddingBottom: 12,
-                paddingRight: 32,
-                paddingLeft: 32,
                 borderBottomWidth: 0,
-                maxWidth: 1280,
+                maxWidth: 1000,
                 marginLeft: 'auto',
                 marginRight: 'auto',
                 width: '100%'

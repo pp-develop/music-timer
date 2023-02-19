@@ -25,7 +25,7 @@ export const SwitchFavoriteArtists = (prop: any) => {
                 style={{
                     paddingTop: 10,
                     paddingBottom: 10,
-                    maxWidth: 1280,
+                    maxWidth: 1000,
                     marginLeft: 'auto',
                     marginRight: 'auto',
                     width: '100%'
@@ -45,7 +45,7 @@ export const SwitchFavoriteArtists = (prop: any) => {
 const styles = StyleSheet.create({
     view: {
         backgroundColor: "white",
-        maxWidth: 1280,
+        maxWidth: 1000,
         marginLeft: 'auto',
         marginRight: 'auto',
         width: '100%'

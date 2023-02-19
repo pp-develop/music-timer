@@ -18,7 +18,7 @@ export const Form = () => {
                 }}
                 inputContainerStyle={{
                     backgroundColor: "white",
-                    maxWidth: 1280,
+                    maxWidth: 1000,
                     marginLeft: 'auto',
                     marginRight: 'auto',
                     width: '100%'
@@ -26,7 +26,7 @@ export const Form = () => {
                 errorMessage="Oops! that's not correct."
                 errorStyle={{
                     backgroundColor: "white",
-                    maxWidth: 1280,
+                    maxWidth: 1000,
                     marginLeft: 'auto',
                     marginRight: 'auto',
                     width: '100%'
@@ -37,7 +37,7 @@ export const Form = () => {
                 labelStyle={{
                     paddingTop: 10,
                     backgroundColor: "white",
-                    maxWidth: 1280,
+                    maxWidth: 1000,
                     marginLeft: 'auto',
                     marginRight: 'auto',
                     width: '100%'

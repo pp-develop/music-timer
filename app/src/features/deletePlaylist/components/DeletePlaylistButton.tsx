@@ -35,7 +35,7 @@ export const DeletePlaylist = (props: any) => {
                     marginHorizontal: 50,
                     marginVertical: 10,
 
-                    maxWidth: 1280,
+                    maxWidth: 1000,
                     marginLeft: 'auto',
                     marginRight: 'auto',
                 }}

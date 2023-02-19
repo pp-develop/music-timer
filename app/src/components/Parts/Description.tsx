@@ -15,7 +15,7 @@ export const Description = () => {
         paddingBottom: 12,
         paddingRight: 32,
         backgroundColor: "black",
-        maxWidth: 1280,
+        maxWidth: 1000,
         marginLeft: 'auto',
         marginRight: 'auto',
         width: '100%'
