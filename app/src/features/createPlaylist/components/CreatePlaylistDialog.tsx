@@ -27,7 +27,7 @@ export const CreatePlaylistDialog = (prop: any) => {
           :
           prop.httpStatus == 201 ?
             <div>
-              {parse(getOembed())}
+              <iframe style={styles.playlist} src={'https://open.spotify.com/embed/playlist/' + context.playlistId + "?utm_source=generator"} width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" rel="preload"></iframe>
             </div>
             :
             prop.httpStatus == 404 ?
