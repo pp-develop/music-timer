@@ -1,3 +1,2 @@
-export const API_URL = process.env.BASE_URL as string;
-console.log(API_URL)
-console.log(process.env.BASE_URL)
+export const API_URL = process.env.API_URL as string;
+export const BASE_URL = process.env.BASE_URL as string;
