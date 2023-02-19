@@ -5,10 +5,15 @@ import {
 import { View, StyleSheet } from 'react-native';
 import { ResponseContext } from '../hooks/useContext';
 import { Text } from "@rneui/base";
+import parse from 'html-react-parser';
 
 
 export const CreatePlaylistDialog = (prop: any) => {
   const context = React.useContext(ResponseContext);
+  
+  const getOembed = () => {
+    return context.playlistId
+  }
 
   const toggleDialog = () => {
     prop.toggle()
@@ -22,7 +27,7 @@ export const CreatePlaylistDialog = (prop: any) => {
           :
           prop.httpStatus == 201 ?
             <div>
-              <iframe style={styles.playlist} src={'https://open.spotify.com/embed/playlist/' + context.playlistId + "?utm_source=generator"} width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+              {parse(getOembed())}
             </div>
             :
             prop.httpStatus == 404 ?
