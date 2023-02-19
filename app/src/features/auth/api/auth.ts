@@ -14,12 +14,7 @@ export function authz(): Promise<AuthzResponse> {
             httpStatus: 0,
         };
 
-        axios.get('/authz-url', {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Headers': '*',
-            },
-        })
+        axios.get('/authz-url')
             .then(function (res) {
                 response.authzUrl = res.data.url;
                 response.httpStatus = res.status
@@ -37,18 +32,11 @@ export function authz(): Promise<AuthzResponse> {
 export function auth(): Promise<Response> {
     return new Promise((resolve) => {
 
-        const response :Response = {
-            httpStatus : 0
+        const response: Response = {
+            httpStatus: 0
         }
 
-        axios.get('/auth', {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Headers': '*',
-                "Access-Control-Allow-Credentials": 'true',
-            },
-            withCredentials: true,
-        })
+        axios.get('/auth')
             .then(function (res) {
                 response.httpStatus = res.status
             })
@@ -68,14 +56,7 @@ export function logout(): Promise<Response> {
             httpStatus: 0,
         };
 
-        axios.delete('/session', {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Headers': '*',
-                "Access-Control-Allow-Credentials": 'true',
-            },
-            withCredentials: true,
-        })
+        axios.delete('/session')
             .then(function (res) {
                 response.httpStatus = res.status
             })

@@ -11,14 +11,7 @@ export function deletePlaylist(): Promise<Response> {
             httpStatus: 0
         };
 
-        axios.delete('/playlist', {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Headers': '*',
-                "Access-Control-Allow-Credentials": 'true',
-            },
-            withCredentials: true,
-        })
+        axios.delete('/playlist')
             .then(function (res) {
                 response.httpStatus = res.status
             })
