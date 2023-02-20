@@ -31,7 +31,7 @@ export const CreatePlaylistDialog = (prop: any) => {
       console.log(prop.playlistId);
       setUpdata(update ? false : true)
     },
-    [prop.playlistId]
+    [prop.isLoading]
   );
 
   return (
