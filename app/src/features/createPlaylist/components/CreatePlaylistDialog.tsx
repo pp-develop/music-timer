@@ -51,7 +51,7 @@ export const CreatePlaylistDialog = (prop: any) => {
           <Dialog.Loading />
           :
           prop.httpStatus == 201 ?
-            <iframe style={styles.playlist} src={'https://open.spotify.com/embed/playlist/' + prop.playlistId + "?utm_source=generator"} width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" rel={rel != "" ? "preload" : ""}></iframe>
+            <iframe style={styles.playlist} src={'https://open.spotify.com/embed/playlist/' + prop.playlistId + "?utm_source=generator"} width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" rel={rel}></iframe>
             :
             prop.httpStatus == 404 ?
               <Text
