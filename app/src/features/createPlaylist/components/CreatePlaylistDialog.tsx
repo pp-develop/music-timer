@@ -24,6 +24,7 @@ export const CreatePlaylistDialog = (prop: any) => {
 
   useEffect(
     () => {
+      setSrc("https://open.spotify.com/playlist/" + prop.playlistId)
       let timeoutId: NodeJS.Timeout
       if (prop.playlistId != "") {
         timeoutId = setTimeout(() => {
@@ -34,7 +35,7 @@ export const CreatePlaylistDialog = (prop: any) => {
         clearTimeout(timeoutId)
       }
     },
-    [prop.isLoading]
+    [prop.playlistId]
   );
 
   return (
