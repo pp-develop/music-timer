@@ -16,7 +16,7 @@ if (width > 800) {
 
 export const CreatePlaylistDialog = (prop: any) => {
   const context = React.useContext(ResponseContext);
-  const [src, setSrc] = useState("https://open.spotify.com/album/0fUy6IdLHDpGNwavIlhEsl?si=mTiITmlHQpaGkoivGTv8Jw")
+  const [src, setSrc] = useState("")
 
   const toggleDialog = () => {
     prop.toggle()
