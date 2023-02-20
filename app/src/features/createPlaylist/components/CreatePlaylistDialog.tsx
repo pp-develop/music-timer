@@ -16,7 +16,7 @@ if (width > 800) {
 
 export const CreatePlaylistDialog = (prop: any) => {
   const context = React.useContext(ResponseContext);
-  const [update, setUpdata] = useState<boolean>(false)
+  const [rel, setRel] = useState("")
 
   const getOembed = () => {
     return "https://open.spotify.com/playlist/" + context.playlistId
@@ -29,7 +29,16 @@ export const CreatePlaylistDialog = (prop: any) => {
   useEffect(
     () => {
       console.log(prop.playlistId);
-      setUpdata(update ? false : true)
+
+      let timeoutId : NodeJS.Timeout
+      if (prop.playlistId != "") {
+        timeoutId = setTimeout(() => {
+          // setRel("test")
+        }, 3000)
+      }
+      return () => {
+        clearTimeout(timeoutId)
+      }
     },
     [prop.isLoading]
   );
@@ -41,7 +50,7 @@ export const CreatePlaylistDialog = (prop: any) => {
           <Dialog.Loading />
           :
           prop.httpStatus == 201 ?
-          <iframe style={styles.playlist} src={'https://open.spotify.com/embed/playlist/' + prop.playlistId + "?utm_source=generator"} width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" rel={prop.playlistId!="" ? "preload" : ""}></iframe>
+            <iframe style={styles.playlist} src={'https://open.spotify.com/embed/playlist/' + prop.playlistId + "?utm_source=generator"} width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" rel={rel != "" ? "preload" : ""}></iframe>
             :
             prop.httpStatus == 404 ?
               <Text
