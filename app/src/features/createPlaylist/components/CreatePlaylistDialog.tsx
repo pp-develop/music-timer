@@ -5,7 +5,6 @@ import {
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { ResponseContext } from '../hooks/useContext';
 import { Text } from "@rneui/base";
-import parse from 'html-react-parser';
 import { Spotify } from 'react-spotify-embed';
 
 let { width, height, scale } = Dimensions.get('window');
