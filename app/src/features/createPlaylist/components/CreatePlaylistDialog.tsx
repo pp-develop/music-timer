@@ -26,7 +26,7 @@ export const CreatePlaylistDialog = (prop: any) => {
       if (prop.playlistId != "") {
         timeoutId = setTimeout(() => {
           setSrc("https://open.spotify.com/playlist/" + prop.playlistId)
-        }, 800)
+        }, 1500)
       }
       return () => {
         clearTimeout(timeoutId)
