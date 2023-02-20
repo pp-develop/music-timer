@@ -3,7 +3,6 @@ import {
   Dialog,
 } from '@rneui/themed';
 import { View, StyleSheet, Dimensions } from 'react-native';
-import { ResponseContext } from '../hooks/useContext';
 import { Text } from "@rneui/base";
 import { Spotify } from 'react-spotify-embed';
 
@@ -15,7 +14,6 @@ if (width > 800) {
 }
 
 export const CreatePlaylistDialog = (prop: any) => {
-  const context = React.useContext(ResponseContext);
   const [src, setSrc] = useState("https://open.spotify.com/playlist/")
 
   const toggleDialog = () => {
@@ -28,7 +26,7 @@ export const CreatePlaylistDialog = (prop: any) => {
       if (prop.playlistId != "") {
         timeoutId = setTimeout(() => {
           setSrc("https://open.spotify.com/playlist/" + prop.playlistId)
-        }, 1)
+        }, 500)
       }
       return () => {
         clearTimeout(timeoutId)
@@ -93,8 +91,5 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     color: 'black',
-  },
-  playlist: {
-    borderRadius: 12,
   }
 });
