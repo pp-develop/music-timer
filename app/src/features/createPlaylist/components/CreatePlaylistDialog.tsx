@@ -32,12 +32,12 @@ export const CreatePlaylistDialog = (prop: any) => {
           <Dialog.Loading />
           :
           prop.httpStatus == 201 ?
-            <div>
+            // <div>
               <Spotify
                 link={getOembed()}
                 width={width * 0.8}
               />
-            </div>
+            // </div>
             :
             prop.httpStatus == 404 ?
               <Text
