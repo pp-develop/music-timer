@@ -41,10 +41,7 @@ export const CreatePlaylistDialog = (prop: any) => {
           <Dialog.Loading />
           :
           prop.httpStatus == 201 ?
-            <Spotify
-              link={"https://open.spotify.com/playlist/" + prop.playlistId}
-              width={width * 0.8}
-            />
+          <iframe style={styles.playlist} src={'https://open.spotify.com/embed/playlist/' + prop.playlistId + "?utm_source=generator"} width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" rel="preload"></iframe>
             :
             prop.httpStatus == 404 ?
               <Text
@@ -88,5 +85,8 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     color: 'black',
+  },
+  playlist: {
+    borderRadius: 12,
   }
 });
