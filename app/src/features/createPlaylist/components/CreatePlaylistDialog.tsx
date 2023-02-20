@@ -2,17 +2,24 @@ import React from 'react';
 import {
   Dialog,
 } from '@rneui/themed';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import { ResponseContext } from '../hooks/useContext';
 import { Text } from "@rneui/base";
 import parse from 'html-react-parser';
+import { Spotify } from 'react-spotify-embed';
 
+let { width, height, scale } = Dimensions.get('window');
+if (width > 800) {
+  width = width * 0.6;
+} else {
+  width = width * 0.8;
+}
 
 export const CreatePlaylistDialog = (prop: any) => {
   const context = React.useContext(ResponseContext);
-  
+
   const getOembed = () => {
-    return context.playlistId
+    return "https://open.spotify.com/playlist/" + context.playlistId
   }
 
   const toggleDialog = () => {
@@ -27,23 +34,17 @@ export const CreatePlaylistDialog = (prop: any) => {
           :
           prop.httpStatus == 201 ?
             <div>
-              <iframe style={styles.playlist} src={'https://open.spotify.com/embed/playlist/' + context.playlistId + "?utm_source=generator"} width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" rel="preload"></iframe>
+              <Spotify
+                link={getOembed()}
+                width={width * 0.8}
+              />
             </div>
             :
             prop.httpStatus == 404 ?
               <Text
                 h2
-                h2Style={{
-                  fontSize: 30,
-                  fontWeight: 'bold',
-                  color: 'black',
-                }}
-                style={{
-                  marginTop: 10,
-                  marginBottom: 10,
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                }}
+                h2Style={styles.textFont}
+                style={styles.text}
               >
                 The playlist could not be created.<br />
                 Please try again
@@ -52,17 +53,8 @@ export const CreatePlaylistDialog = (prop: any) => {
               <div>
                 <Text
                   h2
-                  h2Style={{
-                    fontSize: 30,
-                    fontWeight: 'bold',
-                    color: 'black',
-                  }}
-                  style={{
-                    marginTop: 10,
-                    marginBottom: 10,
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                  }}
+                  h2Style={styles.textFont}
+                  style={styles.text}
                 >
                   Server error.<br />
                   Please try again later
@@ -76,9 +68,19 @@ export const CreatePlaylistDialog = (prop: any) => {
 
 const styles = StyleSheet.create({
   dialog: {
+    alignItems: 'center',
     borderRadius: 12,
+    width: width,
   },
-  playlist: {
-    borderRadius: 12
+  text: {
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
+  textFont: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: 'black',
+  }
 });
