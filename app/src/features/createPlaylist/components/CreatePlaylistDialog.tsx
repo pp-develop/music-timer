@@ -16,11 +16,7 @@ if (width > 800) {
 
 export const CreatePlaylistDialog = (prop: any) => {
   const context = React.useContext(ResponseContext);
-  const [src, setSrc] = useState("https://open.spotify.com/album/0fUy6IdLHDpGNwavIlhEsl?si=mTiITmlHQpaGkoivGTv8Jw")
-
-  const getOembed = () => {
-    return "https://open.spotify.com/playlist/" + context.playlistId
-  }
+  const [src, setSrc] = useState("")
 
   const toggleDialog = () => {
     prop.toggle()
@@ -28,19 +24,11 @@ export const CreatePlaylistDialog = (prop: any) => {
 
   useEffect(
     () => {
-      console.log(prop.playlistId);
-
-      let timeoutId: NodeJS.Timeout
       if (prop.playlistId != "") {
-        timeoutId = setTimeout(() => {
-          setSrc("https://open.spotify.com/playlist/" + prop.playlistId)
-        }, 5000)
-      }
-      return () => {
-        clearTimeout(timeoutId)
+        setSrc("https://open.spotify.com/playlist/" + prop.playlistId)
       }
     },
-    [prop.isLoading]
+    [prop.playlistId]
   );
 
   return (
