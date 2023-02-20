@@ -33,7 +33,7 @@ export const CreatePlaylistDialog = (prop: any) => {
       let timeoutId : NodeJS.Timeout
       if (prop.playlistId != "") {
         timeoutId = setTimeout(() => {
-          // setRel("test")
+          setRel("test")
         }, 3000)
       }
       return () => {
