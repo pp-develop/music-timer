@@ -32,7 +32,7 @@ export const CreatePlaylistDialog = (prop: any) => {
         clearTimeout(timeoutId)
       }
     },
-    [prop.isLoading]
+    [prop.playlistId]
   );
 
   return (
@@ -42,12 +42,10 @@ export const CreatePlaylistDialog = (prop: any) => {
           <Dialog.Loading />
           :
           prop.httpStatus == 201 ?
-            <>
               <Spotify
                 link={src}
                 width={width * 0.8}
               />
-            </>
             :
             prop.httpStatus == 404 ?
               <Text
