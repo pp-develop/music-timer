@@ -32,7 +32,7 @@ export const CreatePlaylistDialog = (prop: any) => {
         clearTimeout(timeoutId)
       }
     },
-    [prop.playlistId]
+    [prop.isLoading]
   );
 
   return (
