@@ -33,7 +33,7 @@ export const CreatePlaylistDialog = (prop: any) => {
           :
           prop.httpStatus == 201 ?
             <Spotify
-              link="https://open.spotify.com/album/0fUy6IdLHDpGNwavIlhEsl?si=mTiITmlHQpaGkoivGTv8Jw"
+              link={"https://open.spotify.com/playlist/" + prop.playlistId}
               width={width * 0.8}
             />
             :
