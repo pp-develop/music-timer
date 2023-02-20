@@ -16,7 +16,7 @@ if (width > 800) {
 
 export const CreatePlaylistDialog = (prop: any) => {
   const context = React.useContext(ResponseContext);
-  const [rel, setRel] = useState("")
+  const src = "https://open.spotify.com/album/0fUy6IdLHDpGNwavIlhEsl"
 
   const getOembed = () => {
     return "https://open.spotify.com/playlist/" + context.playlistId
@@ -26,24 +26,6 @@ export const CreatePlaylistDialog = (prop: any) => {
     prop.toggle()
   };
 
-  useEffect(
-    () => {
-      console.log(prop.playlistId);
-
-      let timeoutId : NodeJS.Timeout
-      if (prop.playlistId != "") {
-        setRel("test")
-        timeoutId = setTimeout(() => {
-          setRel("")
-        }, 5000)
-      }
-      return () => {
-        clearTimeout(timeoutId)
-      }
-    },
-    [prop.isLoading]
-  );
-
   return (
     <View>
       <Dialog isVisible={prop.isOpen} onBackdropPress={toggleDialog} overlayStyle={styles.dialog}>
@@ -51,7 +33,16 @@ export const CreatePlaylistDialog = (prop: any) => {
           <Dialog.Loading />
           :
           prop.httpStatus == 201 ?
-            <iframe style={styles.playlist} src={'https://open.spotify.com/embed/playlist/' + prop.playlistId + "?utm_source=generator"} width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" rel={rel}></iframe>
+            <>
+              <Spotify
+                link={"https://open.spotify.com/playlist/" + prop.playlistId + "?si=mTiITmlHQpaGkoivGTv8Jw"}
+                width={width * 0.8}
+              />
+              <Spotify
+                link={src}
+                width={width * 0.8}
+              />
+            </>
             :
             prop.httpStatus == 404 ?
               <Text
