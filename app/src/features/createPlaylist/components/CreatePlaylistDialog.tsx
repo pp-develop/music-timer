@@ -49,10 +49,6 @@ export const CreatePlaylistDialog = (prop: any) => {
                 link={src}
                 width={width * 0.8}
               />
-              <Spotify
-                link={src}
-                width={width * 0.8}
-              />
             </>
             :
             prop.httpStatus == 404 ?
