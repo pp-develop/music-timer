@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dialog,
 } from '@rneui/themed';
@@ -16,6 +16,7 @@ if (width > 800) {
 
 export const CreatePlaylistDialog = (prop: any) => {
   const context = React.useContext(ResponseContext);
+  const [update, setUpdata] = useState<boolean>(false)
 
   const getOembed = () => {
     return "https://open.spotify.com/playlist/" + context.playlistId
@@ -24,6 +25,14 @@ export const CreatePlaylistDialog = (prop: any) => {
   const toggleDialog = () => {
     prop.toggle()
   };
+
+  useEffect(
+    () => {
+      console.log(prop.playlistId);
+      setUpdata(update ? false : true)
+    },
+    [prop.playlistId]
+  );
 
   return (
     <View>
