@@ -16,7 +16,8 @@ if (width > 800) {
 
 export const CreatePlaylistDialog = (prop: any) => {
   const context = React.useContext(ResponseContext);
-  const src = "https://open.spotify.com/album/0fUy6IdLHDpGNwavIlhEsl"
+  const src = "https://open.spotify.com/album/0fUy6IdLHDpGNwavIlhEsl?si=mTiITmlHQpaGkoivGTv8Jw"
+  const [query, setQuery] = useState("")
 
   const getOembed = () => {
     return "https://open.spotify.com/playlist/" + context.playlistId
@@ -35,7 +36,7 @@ export const CreatePlaylistDialog = (prop: any) => {
           prop.httpStatus == 201 ?
             <>
               <Spotify
-                link={"https://open.spotify.com/playlist/" + prop.playlistId + "?si=mTiITmlHQpaGkoivGTv8Jw"}
+                link={"https://open.spotify.com/playlist/" + prop.playlistId}
                 width={width * 0.8}
               />
               <Spotify
