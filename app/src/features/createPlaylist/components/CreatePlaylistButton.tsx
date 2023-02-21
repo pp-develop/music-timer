@@ -16,20 +16,15 @@ export const CreatePlaylistButton = (prop: any) => {
         open()
 
         const response = await CreatePlaylist(minute)
-        if (response.httpStatus == 201) {
-        }
         setPlaylistId(response.playlistId)
         setHttpStatus(response.httpStatus)
     }
 
     const createPlaylistWithFavoriteArtists = async (minute: string) => {
+        
         open()
-
         const response = await CreatePlaylistWithFavoriteArtists(minute)
-        if (response.httpStatus == 201) {
-            setPlaylistId(response.playlistId)
-        }
-
+        setPlaylistId(response.playlistId)
         setHttpStatus(response.httpStatus)
     }
 
