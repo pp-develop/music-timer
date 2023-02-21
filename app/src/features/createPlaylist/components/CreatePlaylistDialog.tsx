@@ -38,7 +38,7 @@ export const CreatePlaylistDialog = (prop: any) => {
         let timeoutId: NodeJS.Timeout
         timeoutId = setTimeout(() => {
           setIsLoading(false)
-        }, 3000)
+        }, 1500)
 
         return () => {
           clearTimeout(timeoutId)
