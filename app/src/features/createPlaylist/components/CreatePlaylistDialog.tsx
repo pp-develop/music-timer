@@ -25,6 +25,14 @@ export const CreatePlaylistDialog = (prop: any) => {
     () => {
       if (prop.isOpen) {
         setIsLoading(true)
+      }
+    },
+    [prop.isOpen]
+  );
+
+  useEffect(
+    () => {
+      if (prop.isOpen) {
         setSrc("https://open.spotify.com/playlist/" + prop.playlistId)
 
         let timeoutId: NodeJS.Timeout

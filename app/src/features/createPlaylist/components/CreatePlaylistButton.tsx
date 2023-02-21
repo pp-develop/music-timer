@@ -8,26 +8,21 @@ import { ResponseContext } from '../hooks/useContext';
 
 export const CreatePlaylistButton = (prop: any) => {
     const { toggle, open, isOpen } = useDisclosure();
-    const [isLoading, setIsLoading] = useState(false);
     const [httpStatus, setHttpStatus] = useState(0);
     const [playlistId, setPlaylistId] = useState("");
     const context = React.useContext(ResponseContext);
 
     const createPlaylist = async (minute: string) => {
-        setIsLoading(true)
         open()
 
         const response = await CreatePlaylist(minute)
         if (response.httpStatus == 201) {
-            setPlaylistId(response.playlistId)
         }
-
+        setPlaylistId(response.playlistId)
         setHttpStatus(response.httpStatus)
-        setIsLoading(false)
     }
 
     const createPlaylistWithFavoriteArtists = async (minute: string) => {
-        setIsLoading(true)
         open()
 
         const response = await CreatePlaylistWithFavoriteArtists(minute)
@@ -36,7 +31,6 @@ export const CreatePlaylistButton = (prop: any) => {
         }
 
         setHttpStatus(response.httpStatus)
-        setIsLoading(false)
     }
 
     return (
@@ -63,7 +57,6 @@ export const CreatePlaylistButton = (prop: any) => {
             />
             <CreatePlaylistDialog
                 isOpen={isOpen}
-                isLoading={isLoading}
                 httpStatus={httpStatus}
                 toggle={toggle}
                 playlistId={playlistId}
