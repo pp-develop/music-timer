@@ -14,6 +14,7 @@ if (width > 800) {
 }
 
 export const CreatePlaylistDialog = (prop: any) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [src, setSrc] = useState("https://open.spotify.com/playlist/")
 
   const toggleDialog = () => {
@@ -22,30 +23,35 @@ export const CreatePlaylistDialog = (prop: any) => {
 
   useEffect(
     () => {
-      let timeoutId: NodeJS.Timeout
-      if (prop.playlistId != "") {
+      if (prop.isOpen) {
+        setIsLoading(true)
+        setSrc("https://open.spotify.com/playlist/" + prop.playlistId)
+
+        let timeoutId: NodeJS.Timeout
         timeoutId = setTimeout(() => {
-          setSrc("https://open.spotify.com/playlist/" + prop.playlistId)
-        }, 1500)
+          setIsLoading(false)
+        }, 3000)
+
+        return () => {
+          clearTimeout(timeoutId)
+        }
       }
-      return () => {
-        clearTimeout(timeoutId)
-      }
+
     },
-    [prop.isLoading]
+    [prop.playlistId]
   );
 
   return (
     <View>
       <Dialog isVisible={prop.isOpen} onBackdropPress={toggleDialog} overlayStyle={styles.dialog}>
-        {prop.isLoading ?
+        {isLoading ?
           <Dialog.Loading />
           :
           prop.httpStatus == 201 ?
-              <Spotify
-                link={src}
-                width={width * 0.8}
-              />
+            <Spotify
+              link={src}
+              width={width * 0.8}
+            />
             :
             prop.httpStatus == 404 ?
               <Text
