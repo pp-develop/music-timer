@@ -8,7 +8,7 @@ import { ResponseContext } from '../hooks/useContext';
 
 export const CreatePlaylistButton = (prop: any) => {
     const { toggle, open, isOpen } = useDisclosure();
-    const [isLoading, setIsLoding] = useState(false);
+    const [isLoading, setIsLoding] = useState(true);
     const [httpStatus, setHttpStatus] = useState(0);
     const [playlistId, setPlaylistId] = useState("");
     const context = React.useContext(ResponseContext);

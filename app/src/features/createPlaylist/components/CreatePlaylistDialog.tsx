@@ -27,7 +27,7 @@ export const CreatePlaylistDialog = (prop: any) => {
       // 本番環境だと、遅延を発生させないとコンテンツが正常に読み込めないため
       let timeoutId: NodeJS.Timeout
       timeoutId = setTimeout(() => {
-      }, 2000)
+      }, 3000)
 
       return () => {
         clearTimeout(timeoutId)
