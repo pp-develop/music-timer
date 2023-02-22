@@ -10,3 +10,12 @@ export const axios = Axios.create({
   },
   withCredentials: true,
 });
+
+// axios.interceptors.request.use(response => {
+//   // 同様にresponseをreturnする必要がある
+//   console.log("test")
+//   return response
+// }, err => {
+//   // 何らかのエラー処理
+//   return Promise.reject(err)
+// })

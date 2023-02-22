@@ -14,7 +14,6 @@ if (width > 800) {
 }
 
 export const CreatePlaylistDialog = (prop: any) => {
-  const [isLoading, setIsLoading] = useState(true);
   const [src, setSrc] = useState("https://open.spotify.com/playlist/")
 
   const toggleDialog = () => {
@@ -23,28 +22,16 @@ export const CreatePlaylistDialog = (prop: any) => {
 
   useEffect(
     () => {
-      if (prop.isOpen) {
-        setIsLoading(true)
+      setSrc("https://open.spotify.com/playlist/" + prop.playlistId)
+
+      // 本番環境だと、遅延を発生させないとコンテンツが正常に読み込めないため
+      let timeoutId: NodeJS.Timeout
+      timeoutId = setTimeout(() => {
+      }, 2000)
+
+      return () => {
+        clearTimeout(timeoutId)
       }
-    },
-    [prop.isOpen]
-  );
-
-  useEffect(
-    () => {
-      if (prop.isOpen) {
-        setSrc("https://open.spotify.com/playlist/" + prop.playlistId)
-
-        let timeoutId: NodeJS.Timeout
-        timeoutId = setTimeout(() => {
-          setIsLoading(false)
-        }, 2000)
-
-        return () => {
-          clearTimeout(timeoutId)
-        }
-      }
-
     },
     [prop.playlistId]
   );
@@ -52,7 +39,7 @@ export const CreatePlaylistDialog = (prop: any) => {
   return (
     <View>
       <Dialog isVisible={prop.isOpen} onBackdropPress={toggleDialog} overlayStyle={styles.dialog}>
-        {isLoading ?
+        {prop.isLoading ?
           <Dialog.Loading />
           :
           prop.httpStatus == 201 ?
