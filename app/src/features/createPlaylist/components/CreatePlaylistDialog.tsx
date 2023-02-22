@@ -14,27 +14,9 @@ if (width > 800) {
 }
 
 export const CreatePlaylistDialog = (prop: any) => {
-  const [src, setSrc] = useState("https://open.spotify.com/playlist/")
-
   const toggleDialog = () => {
     prop.toggle()
   };
-
-  useEffect(
-    () => {
-      setSrc("https://open.spotify.com/playlist/" + prop.playlistId)
-
-      // 本番環境だと、遅延を発生させないとコンテンツが正常に読み込めないため
-      let timeoutId: NodeJS.Timeout
-      timeoutId = setTimeout(() => {
-      }, 3000)
-
-      return () => {
-        clearTimeout(timeoutId)
-      }
-    },
-    [prop.playlistId]
-  );
 
   return (
     <View>
@@ -44,7 +26,7 @@ export const CreatePlaylistDialog = (prop: any) => {
           :
           prop.httpStatus == 201 ?
             <Spotify
-              link={src}
+              link={"https://open.spotify.com/playlist/" + prop.playlistId}
               width={width * 0.8}
             />
             :

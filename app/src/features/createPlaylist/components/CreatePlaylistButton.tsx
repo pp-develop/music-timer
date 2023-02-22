@@ -18,9 +18,17 @@ export const CreatePlaylistButton = (prop: any) => {
         setIsLoding(true)
 
         const response = await CreatePlaylist(minute)
-        if (response.httpStatus == 201) setPlaylistId(response.playlistId)
+        if (response.httpStatus == 201) {
+            setPlaylistId(response.playlistId)
+            // 本番環境だと、遅延を発生させないとコンテンツが正常に読み込めないため
+            let timeoutId: NodeJS.Timeout
+            timeoutId = setTimeout(() => {
+                setIsLoding(false)
+            }, 2000)
+        } else {
+            setIsLoding(false)
+        }
         setHttpStatus(response.httpStatus)
-        setIsLoding(false)
     }
 
     const createPlaylistWithFavoriteArtists = async (minute: string) => {
@@ -28,9 +36,17 @@ export const CreatePlaylistButton = (prop: any) => {
         setIsLoding(true)
 
         const response = await CreatePlaylistWithFavoriteArtists(minute)
-        if (response.httpStatus == 201) setPlaylistId(response.playlistId)
+        if (response.httpStatus == 201) {
+            setPlaylistId(response.playlistId)
+            // 本番環境だと、遅延を発生させないとコンテンツが正常に読み込めないため
+            let timeoutId: NodeJS.Timeout
+            timeoutId = setTimeout(() => {
+                setIsLoding(false)
+            }, 3000)
+        } else {
+            setIsLoding(false)
+        }
         setHttpStatus(response.httpStatus)
-        setIsLoding(false)
     }
 
     return (
