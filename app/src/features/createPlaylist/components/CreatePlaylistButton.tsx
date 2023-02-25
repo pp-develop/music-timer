@@ -42,7 +42,7 @@ export const CreatePlaylistButton = (prop: any) => {
             let timeoutId: NodeJS.Timeout
             timeoutId = setTimeout(() => {
                 setIsLoding(false)
-            }, 3000)
+            }, 2000)
         } else {
             setIsLoding(false)
         }
