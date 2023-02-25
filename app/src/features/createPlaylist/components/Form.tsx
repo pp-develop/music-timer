@@ -32,7 +32,9 @@ export const Form = () => {
                     width: '100%'
                 }}
                 errorProps={{}}
-                inputStyle={{}}
+                inputStyle={{
+                    paddingLeft: 10,
+                }}
                 label="Specify Time"
                 labelStyle={{
                     paddingTop: 10,
