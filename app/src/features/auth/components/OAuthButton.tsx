@@ -3,8 +3,6 @@ import { Text, StyleSheet, Pressable, ActivityIndicator, View } from 'react-nati
 import { authz, auth, logout as Logout } from '../api/auth'
 import { useLocalStorage } from "../../../hooks/useLocalStorage";
 
-const image = { uri: 'https://reactjs.org/logo-og.png' };
-
 export const OAuthButton = () => {
     const [localStorage, setLocalStorage] = useLocalStorage("isLogin", "");
     const [isLogin, setIsLogin] = useState(localStorage != "")
