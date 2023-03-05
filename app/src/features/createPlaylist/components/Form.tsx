@@ -4,9 +4,25 @@ import { Input } from "@rneui/base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CreatePlaylistButton } from "./CreatePlaylistButton"
 import { SwitchFavoriteArtists } from "./SwitchFavoriteArtists"
+import { useValidation } from 'react-native-form-validator';
+import defaultRules from '../types/defaultRules';
+import defaultMessages from '../types/defaultMessages';
 
 export const Form = () => {
     const [minute, setMinute] = useState("");
+
+    const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
+        useValidation({
+            state: { minute },
+            rules: defaultRules,
+            messages: defaultMessages
+        });
+
+    const formValidate = () => {
+        return validate({
+            minute: { numbers: true, required: true, range: true },
+        })
+    };
 
     return (
         <>
@@ -23,7 +39,7 @@ export const Form = () => {
                     marginRight: 'auto',
                     width: '100%'
                 }}
-                errorMessage="Oops! that's not correct."
+                errorMessage={getErrorsInField("minute")[0]}
                 errorStyle={{
                     backgroundColor: "white",
                     maxWidth: 1000,
@@ -49,12 +65,12 @@ export const Form = () => {
                 leftIconContainerStyle={{}}
                 rightIcon={<Icon name="close" size={20} />}
                 rightIconContainerStyle={{}}
-                placeholder="Enter Minute"
+                placeholder="Please enter a value between 3 and 100."
                 onChangeText={setMinute}
                 value={minute}
             />
             <SwitchFavoriteArtists />
-            <CreatePlaylistButton minute={minute} />
+            <CreatePlaylistButton minute={minute} validate={formValidate} />
         </>
     );
 };

@@ -14,6 +14,9 @@ export const CreatePlaylistButton = (prop: any) => {
     const context = React.useContext(ResponseContext);
 
     const createPlaylist = async (minute: string) => {
+        if (!prop.validate()) {
+            return
+        }
         open()
         setIsLoding(true)
 
