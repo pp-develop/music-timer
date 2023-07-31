@@ -18,9 +18,14 @@ export const CreatePlaylistDialog = (prop: any) => {
     prop.toggle()
   };
 
+  const handleBackdropPress = prop.isLoading ? () => { } : toggleDialog;
+
   return (
     <View>
-      <Dialog isVisible={prop.isOpen} onBackdropPress={toggleDialog} overlayStyle={styles.dialog}>
+      <Dialog
+        isVisible={prop.isOpen}
+        onBackdropPress={handleBackdropPress}
+        overlayStyle={styles.dialog}>
         {prop.isLoading ?
           <Dialog.Loading />
           :
