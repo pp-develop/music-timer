@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import { useDisclosure } from '../../../hooks/useDisclosure';
 import { DeletePlaylistDialog } from "./DeletePlaylistDialog"
 import { deletePlaylist } from '../api/DeletePlaylist';
+import { t } from '../../../locales/i18n';
 
 export const DeletePlaylist = (props: any) => {
     const { toggle, open, isOpen } = useDisclosure();
@@ -23,7 +24,7 @@ export const DeletePlaylist = (props: any) => {
     return (
         <>
             <Button
-                title="Delete Playlist"
+                title={t('form.deletePlaylist')}
                 buttonStyle={{
                     backgroundColor: 'black',
                     borderWidth: 2,

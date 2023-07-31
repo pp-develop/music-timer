@@ -5,6 +5,7 @@ import { CreatePlaylistWithFavoriteArtists } from "../api/createPlaylistWithFavo
 import { CreatePlaylistDialog } from "./CreatePlaylistDialog"
 import { useDisclosure } from '../../../hooks/useDisclosure';
 import { ResponseContext } from '../hooks/useContext';
+import { t } from '../../../locales/i18n';
 
 export const CreatePlaylistButton = (prop: any) => {
     const { toggle, open, isOpen } = useDisclosure();
@@ -58,7 +59,7 @@ export const CreatePlaylistButton = (prop: any) => {
     return (
         <>
             <Button
-                title="Create Playlist"
+                title={t('form.createPlaylist')}
                 buttonStyle={{
                     backgroundColor: 'black',
                     borderWidth: 2,
