@@ -1,6 +1,7 @@
 import React from "react";
 import { Header as HeaderComponent } from "@rneui/base";
 import { OAuthButton } from "../../features/auth/";
+import {t} from '../../locales/i18n';
 
 export const Header = () => {
     return (
@@ -11,7 +12,7 @@ export const Header = () => {
             }}
             barStyle="default"
             centerComponent={{
-                text: "Specify",
+                text: t('appName'),
                 style: {
                     color: "white",
                     fontSize: 32,

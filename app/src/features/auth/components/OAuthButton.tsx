@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, StyleSheet, Pressable, ActivityIndicator, View } from 'react-native';
 import { authz, auth, logout as Logout } from '../api/auth'
 import { useLocalStorage } from "../../../hooks/useLocalStorage";
+import { t } from '../../../locales/i18n';
 
 export const OAuthButton = () => {
     const [localStorage, setLocalStorage] = useLocalStorage("isLogin", "");
@@ -55,7 +56,7 @@ export const OAuthButton = () => {
                     <View style={styles.indicator}>
                         <ActivityIndicator size="large" color="white" />
                     </View> :
-                    <Text style={styles.text}>Logout</Text>
+                    <Text style={styles.text}>{t('auth.logout')}</Text>
                 }
             </Pressable>
         )
@@ -67,7 +68,7 @@ export const OAuthButton = () => {
                         <ActivityIndicator size="large" color="white" />
                     </View>
                     :
-                    <Text style={styles.text}>Login</Text>
+                    <Text style={styles.text}>{t('auth.login')}</Text>
                 }
             </Pressable>
         )

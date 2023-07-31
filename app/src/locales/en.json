@@ -1,0 +1,15 @@
+{
+    "greeting": "Hello!",
+    "buttonText": "Click Me",
+    "appName": "Specify",
+    "top.description": "Create a playlist by specifying the time.",
+    "auth.login": "Login",
+    "auth.logout": "Logout",
+    "form.specifyTime": "Specify Time",
+    "form.specifyTime.placeholder": "Please enter a value between 3 and 100.",
+    "form.includeFavoriteArtists": "Create a playlist from your favorite artist's songs.",
+    "form.createPlaylist": "Create Playlist",
+    "form.deletePlaylist": "Delete Playlist",
+    "form.deletePlaylistExplan": "I will delete the playlist created with Specify."
+  }
+  

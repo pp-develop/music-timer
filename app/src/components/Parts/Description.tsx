@@ -1,5 +1,6 @@
 import React from "react";
 import { Text } from "@rneui/base";
+import {t} from '../../locales/i18n';
 
 export const Description = () => {
   return (

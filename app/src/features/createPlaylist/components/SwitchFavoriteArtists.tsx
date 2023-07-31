@@ -3,6 +3,7 @@ import { Switch } from '@rneui/themed';
 import { Text } from "@rneui/base";
 import { ResponseContext } from '../hooks/useContext';
 import { View, StyleSheet } from 'react-native';
+import { t } from '../../../locales/i18n';
 
 export const SwitchFavoriteArtists = (prop: any) => {
     const context = React.useContext(ResponseContext);
@@ -31,7 +32,7 @@ export const SwitchFavoriteArtists = (prop: any) => {
                     width: '100%'
                 }}
             >
-                Prioritize inclusion of songs from your favorite artists
+                {t('form.includeFavoriteArtists')}
             </Text>
             <Switch
                 value={checked}

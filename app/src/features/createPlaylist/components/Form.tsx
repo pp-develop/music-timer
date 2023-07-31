@@ -7,6 +7,7 @@ import { SwitchFavoriteArtists } from "./SwitchFavoriteArtists"
 import { useValidation } from 'react-native-form-validator';
 import defaultRules from '../types/defaultRules';
 import defaultMessages from '../types/defaultMessages';
+import { t } from '../../../locales/i18n';
 
 export const Form = () => {
     const [minute, setMinute] = useState("");
@@ -51,7 +52,7 @@ export const Form = () => {
                 inputStyle={{
                     paddingLeft: 10,
                 }}
-                label="Specify Time"
+                label={t('form.specifyTime')}
                 labelStyle={{
                     paddingTop: 10,
                     backgroundColor: "white",
@@ -65,7 +66,7 @@ export const Form = () => {
                 leftIconContainerStyle={{}}
                 rightIcon={<Icon name="close" size={20} />}
                 rightIconContainerStyle={{}}
-                placeholder="Please enter a value between 3 and 100."
+                placeholder={t('form.specifyTime.placeholder')}
                 onChangeText={setMinute}
                 value={minute}
             />
