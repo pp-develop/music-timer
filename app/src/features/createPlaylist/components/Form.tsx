@@ -59,7 +59,7 @@ export const Form = () => {
                 }}
                 label={t('form.specifyTime')}
                 labelStyle={{
-                    paddingTop: 10,
+                    paddingTop: 30,
                     color: theme.tertiary,
                     maxWidth: 500,
                     marginLeft: 20,

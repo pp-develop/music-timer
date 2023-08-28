@@ -75,6 +75,8 @@ export const CreatePlaylistButton = (prop: any) => {
                     maxWidth: 1000,
                     marginLeft: 'auto',
                     marginRight: 'auto',
+                    marginTop: 30,
+                    marginBottom: 15,
                 }}
                 titleStyle={{ fontWeight: 'bold' }}
                 onPress={() => context.isFavoriteArtists

@@ -31,7 +31,7 @@ export const SwitchFavoriteArtists = (prop: any) => {
                     color: theme.tertiary,
                 }}
                 style={{
-                    paddingTop: 10,
+                    paddingTop: 20,
                     paddingBottom: 10,
                     maxWidth: 1000,
                     marginLeft: 'auto',
