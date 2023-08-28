@@ -29,7 +29,7 @@ export const Description = () => {
       <Text
         h3
         h3Style={{
-          fontSize: 18,
+          fontSize: 14,
           color: theme.tertiary,
         }}
         style={{

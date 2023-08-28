@@ -35,7 +35,7 @@ export const LogoutButton = () => {
         <>
             {isLoading ?
                 <View style={styles.indicator}>
-                    <ActivityIndicator size="large" color="white" />
+                    <ActivityIndicator size="large" color={theme.tertiary} />
                 </View> :
                 <Text style={{
                     fontSize: 18,
@@ -50,5 +50,6 @@ export const LogoutButton = () => {
 const styles = StyleSheet.create({
     indicator: {
         justifyContent: 'center',
+        marginRight: '10px'
     },
 });
