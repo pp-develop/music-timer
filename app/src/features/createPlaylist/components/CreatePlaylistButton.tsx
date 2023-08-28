@@ -6,8 +6,10 @@ import { CreatePlaylistDialog } from "./CreatePlaylistDialog"
 import { useDisclosure } from '../../../hooks/useDisclosure';
 import { ResponseContext } from '../hooks/useContext';
 import { t } from '../../../locales/i18n';
+import { useTheme } from '../../../assets/ThemeContext';
 
 export const CreatePlaylistButton = (prop: any) => {
+    const theme = useTheme()
     const { toggle, open, isOpen } = useDisclosure();
     const [isLoading, setIsLoding] = useState(true);
     const [httpStatus, setHttpStatus] = useState(0);
@@ -61,9 +63,9 @@ export const CreatePlaylistButton = (prop: any) => {
             <Button
                 title={t('form.createPlaylist')}
                 buttonStyle={{
-                    backgroundColor: 'black',
+                    backgroundColor: theme.tertiary,
                     borderWidth: 2,
-                    borderColor: 'white',
+                    borderColor: theme.primaryColor,
                     borderRadius: 30,
                 }}
                 containerStyle={{

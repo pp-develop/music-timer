@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Input } from "@rneui/base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CreatePlaylistButton } from "./CreatePlaylistButton"
@@ -8,10 +8,11 @@ import { useValidation } from 'react-native-form-validator';
 import defaultRules from '../types/defaultRules';
 import defaultMessages from '../types/defaultMessages';
 import { t } from '../../../locales/i18n';
+import { useTheme } from '../../../assets/ThemeContext';
 
 export const Form = () => {
+    const theme = useTheme()
     const [minute, setMinute] = useState("");
-
     const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
         useValidation({
             state: { minute },
@@ -26,40 +27,44 @@ export const Form = () => {
     };
 
     return (
-        <>
+        <View style={{
+            alignItems: 'center'
+        }}>
             <Input
                 keyboardType='numeric'
-                containerStyle={{}}
-                disabledInputStyle={{
-                    backgroundColor: 'black',
-                }}
-                inputContainerStyle={{
-                    backgroundColor: "white",
-                    maxWidth: 1000,
+                containerStyle={{
+                    maxWidth: 500,
                     marginLeft: 'auto',
                     marginRight: 'auto',
-                    width: '100%'
+                }}
+                disabledInputStyle={{
+                }}
+                inputContainerStyle={{
+                    maxWidth: 500,
+                    marginLeft: 20,
+                    marginRight: 20,
+                    // width: '100%'
                 }}
                 errorMessage={getErrorsInField("minute")[0]}
                 errorStyle={{
-                    backgroundColor: "white",
-                    maxWidth: 1000,
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                    width: '100%'
+                    maxWidth: 500,
+                    marginLeft: 20,
+                    marginRight: 20,
+                    // width: '100%'
                 }}
                 errorProps={{}}
                 inputStyle={{
+                    color: theme.tertiary,
                     paddingLeft: 10,
                 }}
                 label={t('form.specifyTime')}
                 labelStyle={{
                     paddingTop: 10,
-                    backgroundColor: "white",
-                    maxWidth: 1000,
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                    width: '100%'
+                    color: theme.tertiary,
+                    maxWidth: 500,
+                    marginLeft: 20,
+                    marginRight: 20,
+                    // width: '100%'
                 }}
                 labelProps={{}}
                 leftIcon={<Icon name="clock-outline" size={20} />}
@@ -67,30 +72,12 @@ export const Form = () => {
                 rightIcon={<Icon name="close" size={20} />}
                 rightIconContainerStyle={{}}
                 placeholder={t('form.specifyTime.placeholder')}
+                placeholderTextColor={theme.tertiary}
                 onChangeText={setMinute}
                 value={minute}
             />
             <SwitchFavoriteArtists />
             <CreatePlaylistButton minute={minute} validate={formValidate} />
-        </>
+        </View>
     );
 };
-
-const styles = StyleSheet.create({
-    button: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 32,
-        borderRadius: 4,
-        elevation: 3,
-        backgroundColor: 'black',
-    },
-    text: {
-        fontSize: 16,
-        lineHeight: 21,
-        fontWeight: 'bold',
-        letterSpacing: 0.25,
-        color: 'white',
-    },
-});

@@ -1,32 +1,32 @@
 import React from "react";
 import { Header as HeaderComponent } from "@rneui/base";
-import { OAuthButton } from "../../features/auth/";
-import {t} from '../../locales/i18n';
+import { LogoutButton } from "../../features/auth/";
+import { t } from '../../locales/i18n';
 
 export const Header = () => {
     return (
         <HeaderComponent
-            backgroundColor="black"
+            backgroundColor="#D7E6EF"
             backgroundImageStyle={{
-                backgroundColor: "black"
+                backgroundColor: "#D7E6EF"
             }}
             barStyle="default"
             centerComponent={{
                 text: t('appName'),
                 style: {
-                    color: "white",
-                    fontSize: 32,
-                    fontWeight: "bold",
+                    color: "#454C50",
+                    fontSize: 38,
+                    fontWeight: "800",
                     marginTop: 'auto',
                     marginBottom: 'auto',
                 },
             }}
             centerContainerStyle={{}}
             containerStyle={{
-                paddingTop: 30,
+                paddingTop: 40,
                 paddingBottom: 12,
                 borderBottomWidth: 0,
-                maxWidth: 1000,
+                maxWidth: 600,
                 marginLeft: 'auto',
                 marginRight: 'auto',
                 width: '100%'
@@ -34,8 +34,10 @@ export const Header = () => {
             leftContainerStyle={{}}
             linearGradientProps={{}}
             placement="left"
-            rightComponent={<OAuthButton />}
-            rightContainerStyle={{}}
+            rightComponent={<LogoutButton />}
+            rightContainerStyle={{
+                justifyContent: 'center'
+            }}
             statusBarProps={{}}
         />
     );

@@ -5,8 +5,10 @@ import { useDisclosure } from '../../../hooks/useDisclosure';
 import { DeletePlaylistDialog } from "./DeletePlaylistDialog"
 import { deletePlaylist } from '../api/DeletePlaylist';
 import { t } from '../../../locales/i18n';
+import { useTheme } from '../../../assets/ThemeContext';
 
 export const DeletePlaylist = (props: any) => {
+    const theme = useTheme();
     const { toggle, open, isOpen } = useDisclosure();
     const [isLoading, setIsLoading] = useState(false);
     const [httpStatus, setHttpStatus] = useState(0);
@@ -26,9 +28,9 @@ export const DeletePlaylist = (props: any) => {
             <Button
                 title={t('form.deletePlaylist')}
                 buttonStyle={{
-                    backgroundColor: 'black',
+                    backgroundColor: theme.tertiary,
                     borderWidth: 2,
-                    borderColor: 'white',
+                    borderColor: theme.primaryColor,
                     borderRadius: 30,
                 }}
                 containerStyle={{
