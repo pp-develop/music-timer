@@ -1,6 +1,6 @@
 {
     "appName": "Specify",
-    "top.description1": "時間を指定してプレイリストを作成するツールです。\n30分、1時間、あるいは他の時間でも構いません。\n時間に合わせて曲をランダムで選び、プレイリストを提供します。",
+    "top.description1": "時間を指定してSpotifyのプレイリストを作成するツールです。\n30分、1時間、あるいは他の時間でも構いません。\n時間に合わせて曲をランダムで選び、プレイリストを提供します。",
     "top.description2": "※Spotify無料プランユーザーは以下の理由でプレイリストの終了時間が指定した時間と異なる場合があります\n ・広告が再生される\n ・プレイリストにSpotifyがおすすめする曲が追加される",
     "auth.login": "Spotifyでログイン",
     "auth.logout": "ログアウト",
@@ -9,6 +9,6 @@
     "form.includeFavoriteArtists": "お気に入りのアーティストの曲からプレイリストを作成する",
     "form.createPlaylist": "プレイリストを作成",
     "form.deletePlaylist": "プレイリストを削除",
-    "form.deletePlaylistExplan": "Specifyで作成したプレイリストを削除します"
+    "form.deletePlaylistExplan": "※アプリ内で作成したプレイリストのみ削除します"
   }
   

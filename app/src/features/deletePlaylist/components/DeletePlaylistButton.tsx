@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from "@rneui/base";
+import { Button, Text } from "@rneui/base";
 import { StyleSheet } from 'react-native';
 import { useDisclosure } from '../../../hooks/useDisclosure';
 import { DeletePlaylistDialog } from "./DeletePlaylistDialog"
@@ -36,7 +36,7 @@ export const DeletePlaylist = (props: any) => {
                 containerStyle={{
                     width: 200,
                     marginHorizontal: 50,
-                    marginVertical: 10,
+                    marginTop: 10,
 
                     maxWidth: 1000,
                     marginLeft: 'auto',
@@ -51,6 +51,22 @@ export const DeletePlaylist = (props: any) => {
                 httpStatus={httpStatus}
                 changeVisible={toggle}
             />
+            <Text
+                h3
+                h3Style={{
+                    fontSize: 14,
+                    color: theme.tertiary,
+                }}
+                style={{
+                    width: 180,
+                    marginHorizontal: 50,
+                    marginTop: 5,
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                }}
+            >
+                {t('form.deletePlaylistExplan')}
+            </Text>
         </>
     );
 }
