@@ -19,7 +19,7 @@ export const App = () => {
         <div style={{
           backgroundColor: theme.primaryColor, height: '100%', width: '100%'
         }}>
-          <StatusBar style="auto" />
+          <StatusBar style="auto" backgroundColor={theme.primaryColor} />
           <Layout />
         </div>
       </AuthProvider>
