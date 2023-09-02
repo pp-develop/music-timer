@@ -1,7 +1,6 @@
 import React from 'react';
 import { App as Layout } from "./components/Layout"
 import { setDefaultLanguage } from './locales/i18n';
-import './assets/App.module.css';
 import { ThemeProvider } from './assets/ThemeContext';
 import { AuthProvider } from "./hooks/useContext";
 
@@ -16,7 +15,9 @@ export const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>
-        <div style={{ backgroundColor: theme.primaryColor, height: '100%' }}>
+        <div style={{
+          backgroundColor: theme.primaryColor, height: '100%', width: '100%'
+        }}>
           <Layout />
         </div>
       </AuthProvider>
