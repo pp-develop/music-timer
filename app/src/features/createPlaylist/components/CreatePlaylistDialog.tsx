@@ -5,6 +5,8 @@ import {
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { Text } from "@rneui/base";
 import { Spotify } from 'react-spotify-embed';
+import { t } from '../../../locales/i18n';
+import { useTheme } from '../../../assets/ThemeContext';
 
 let { width, height, scale } = Dimensions.get('window');
 if (width > 800) {
@@ -14,6 +16,7 @@ if (width > 800) {
 }
 
 export const CreatePlaylistDialog = (prop: any) => {
+  const theme = useTheme()
   const toggleDialog = () => {
     prop.toggle()
   };
@@ -38,21 +41,24 @@ export const CreatePlaylistDialog = (prop: any) => {
             prop.httpStatus == 404 ?
               <Text
                 h2
-                h2Style={styles.textFont}
+                h2Style={{
+                  fontSize: 20,
+                  color: theme.tertiary
+                }}
                 style={styles.text}
               >
-                The playlist could not be created.<br />
-                Please try again
+                {t('dialog.createPlaylist.not.created')}
               </Text>
               :
               <div>
                 <Text
                   h2
-                  h2Style={styles.textFont}
-                  style={styles.text}
+                  h2Style={{
+                    fontSize: 20,
+                    color: theme.tertiary
+                  }} style={styles.text}
                 >
-                  Server error.<br />
-                  Please try again later
+                  {t('dialog.createPlaylist.server.error')}
                 </Text>
               </div>
         }

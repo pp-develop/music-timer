@@ -72,7 +72,7 @@ export const Form = () => {
                 rightIcon={<Icon name="close" size={20} />}
                 rightIconContainerStyle={{}}
                 placeholder={t('form.specifyTime.placeholder')}
-                placeholderTextColor={theme.tertiary}
+                placeholderTextColor={'#454c5091'}
                 onChangeText={setMinute}
                 value={minute}
             />
