@@ -28,9 +28,26 @@ export const CreatePlaylistDialog = (prop: any) => {
       <Dialog
         isVisible={prop.isOpen}
         onBackdropPress={handleBackdropPress}
-        overlayStyle={styles.dialog}>
+        overlayStyle={{
+          alignItems: 'center',
+          borderRadius: 12,
+          width: width,
+          backgroundColor: theme.primaryColor,
+        }}>
         {prop.isLoading ?
-          <Dialog.Loading />
+          <>
+            <Dialog.Loading />
+            <Text
+              h2
+              h2Style={{
+                fontSize: 20,
+                color: theme.tertiary
+              }}
+              style={styles.text}
+            >
+              {t('dialog.createPlaylist.loading')}
+            </Text>
+          </>
           :
           prop.httpStatus == 201 ?
             <Spotify
@@ -50,17 +67,15 @@ export const CreatePlaylistDialog = (prop: any) => {
                 {t('dialog.createPlaylist.not.created')}
               </Text>
               :
-              <div>
-                <Text
-                  h2
-                  h2Style={{
-                    fontSize: 20,
-                    color: theme.tertiary
-                  }} style={styles.text}
-                >
-                  {t('dialog.createPlaylist.server.error')}
-                </Text>
-              </div>
+              <Text
+                h2
+                h2Style={{
+                  fontSize: 20,
+                  color: theme.tertiary
+                }} style={styles.text}
+              >
+                {t('dialog.createPlaylist.server.error')}
+              </Text>
         }
       </Dialog>
     </View>
@@ -68,20 +83,10 @@ export const CreatePlaylistDialog = (prop: any) => {
 };
 
 const styles = StyleSheet.create({
-  dialog: {
-    alignItems: 'center',
-    borderRadius: 12,
-    width: width,
-  },
   text: {
     marginTop: 10,
     marginBottom: 10,
     marginLeft: 'auto',
     marginRight: 'auto',
-  },
-  textFont: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: 'black',
   }
 });
