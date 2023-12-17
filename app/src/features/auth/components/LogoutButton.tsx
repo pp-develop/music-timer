@@ -25,7 +25,6 @@ export const LogoutButton = () => {
             setLogoutStatus()
             setIsLoading(false)
         } else {
-            alert("サーバーエラー")
             logout()
             setIsLoading(false)
         }

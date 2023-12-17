@@ -16,7 +16,6 @@ export const LoginButton = () => {
         if (response.httpStatus == 200) {
             window.location.href = response.authzUrl;
         } else {
-            alert("サーバーエラー")
             setIsLoading(false)
             logout()
         }
