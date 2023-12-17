@@ -2,29 +2,60 @@ import React, { useState } from 'react';
 import { Button, Text } from "@rneui/base";
 import { StyleSheet } from 'react-native';
 import { useDisclosure } from '../../../hooks/useDisclosure';
-import { DeletePlaylistDialog } from "./DeletePlaylistDialog"
 import { deletePlaylist } from '../api/DeletePlaylist';
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../assets/ThemeContext';
+import toast, { Toaster } from 'react-hot-toast';
 
 export const DeletePlaylist = (props: any) => {
     const theme = useTheme();
-    const { toggle, open, isOpen } = useDisclosure();
-    const [isLoading, setIsLoading] = useState(false);
-    const [httpStatus, setHttpStatus] = useState(0);
 
-    const onclick = async () => {
-        setIsLoading(true)
-        open()
+    const notifi = async () => {
+        toast.promise(deletePlaylist(), {
+            loading: '',
+            success: () => t('toast.playlistDeleted'),
+            error: () => t('toast.playlistDeleteError'),
+        },
+            // {
+            //     style: {
+            //         minWidth: '250px',
+            //     },
+            //     success: {
+            //         duration: 5000,
+            //         icon: '🔥',
+            //     }
+            // }
+        );
 
-        const response = await deletePlaylist()
-
-        setHttpStatus(response.httpStatus)
-        setIsLoading(false)
     }
 
     return (
         <>
+            <Toaster
+                position="top-center"
+                reverseOrder={false}
+                gutter={8}
+                containerClassName=""
+                containerStyle={{}}
+                toastOptions={{
+                    // Define default options
+                    className: '',
+                    duration: 5000,
+                    style: {
+                        background: '#363636',
+                        color: '#fff',
+                    },
+
+                    // Default options for specific types
+                    success: {
+                        duration: 3000,
+                        theme: {
+                            primary: 'green',
+                            secondary: 'black',
+                        },
+                    },
+                }}
+            />
             <Button
                 title={t('form.deletePlaylist')}
                 buttonStyle={{
@@ -43,13 +74,7 @@ export const DeletePlaylist = (props: any) => {
                     marginRight: 'auto',
                 }}
                 titleStyle={{ fontWeight: 'bold' }}
-                onPress={onclick}
-            />
-            <DeletePlaylistDialog
-                visible={isOpen}
-                isLoading={isLoading}
-                httpStatus={httpStatus}
-                changeVisible={toggle}
+                onPress={notifi}
             />
             <Text
                 h3

@@ -20,6 +20,10 @@ export const setDefaultLanguage = (language) => {
     defaultLanguage = language;
 };
 
+export const getDefaultLanguage = () => {
+    return defaultLanguage;
+  };
+
 export const t = (key) => {
     const selectedLocale = getLanguageResource(defaultLanguage);
     return selectedLocale[key] || key;
