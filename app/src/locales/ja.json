@@ -10,7 +10,7 @@
     "form.createPlaylist": "プレイリストを作成",
     "form.deletePlaylist": "プレイリストを削除",
     "form.deletePlaylistExplan": "※アプリ内で作成したプレイリストのみ削除します",
-    "dialog.createPlaylist.loading": "プレイリストを作成中です。\n完了まで最大30秒かかる場合がありますので、ご了承ください。",
+    "dialog.createPlaylist.loading": "完了まで最大30秒かかる場合がありますので、ご了承ください。",
     "dialog.createPlaylist.not.created": "プレイリストの作成に失敗しました。\n指定した条件に問題があった可能性があります。\n条件を見直し再度お試しください。",
     "dialog.createPlaylist.server.error": "現在サーバーにアクセスできません。\nしばらく時間を置いてから再度試してください。",
     "toast.playlistDeleted": "プレイリストが削除されました。",
