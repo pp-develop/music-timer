@@ -9,13 +9,16 @@ import defaultRules from '../types/defaultRules';
 import defaultMessages from '../types/defaultMessages';
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../assets/ThemeContext';
+import { getDefaultLanguage } from '../../../locales/i18n';
 
 export const Form = () => {
     const theme = useTheme()
     const [minute, setMinute] = useState("");
     const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
         useValidation({
+            deviceLocale: getDefaultLanguage(),
             state: { minute },
+            labels: { minute: t('form.specifyTime') },
             rules: defaultRules,
             messages: defaultMessages
         });
