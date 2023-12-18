@@ -2,9 +2,9 @@
 
 const defaultMessages = {
   ja: {
-    numbers: '入力された再生時間が無効です。数値のみを入力してください。',
+    numbers: '数値のみを入力してください。',
     email: '"{0}" は有効なメールアドレスでなければなりません。',
-    required: 'この項目は必須です。再生時間を分単位で入力してください。',
+    required: '再生時間を分単位で入力してください。',
     date: '"{0}" は有効な日付である必要があります ({1}).',
     minlength: '"{0}" の長さは {1} より大きい必要があります。',
     maxlength: '"{0}" の長さは {1} より小さい必要があります。',
@@ -13,7 +13,7 @@ const defaultMessages = {
     hasLowerCase: '"{0}" に小文字が含まれている必要があります。',
     hasNumber: '"{0}" に数字が含まれている必要があります。',
     hasSpecialCharacter: '"{0}" に特殊文字が含まれている必要があります。',
-    range: 'プレイリストの再生時間は3分から100分の間で指定してください。'
+    range: '再生時間は3分から100分の間で指定してください。'
   },
   en: {
     numbers: 'The field "{0}" must be a valid number.',
