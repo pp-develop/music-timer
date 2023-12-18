@@ -17,12 +17,7 @@ export const SwitchFavoriteArtists = (prop: any) => {
     };
 
     return (
-        <View style={{
-            backgroundColor: theme.primaryColor,
-            maxWidth: 500,
-            marginLeft: 20,
-            marginRight: 20,
-        }}>
+        <>
             <Text
                 h3
                 h3Style={{
@@ -33,18 +28,25 @@ export const SwitchFavoriteArtists = (prop: any) => {
                 style={{
                     paddingTop: 20,
                     paddingBottom: 10,
-                    maxWidth: 1000,
+                    maxWidth: 500,
                     marginLeft: 'auto',
                     marginRight: 'auto',
-                    width: '100%'
                 }}
             >
                 {t('form.includeFavoriteArtists')}
             </Text>
-            <Switch
-                value={checked}
-                onValueChange={toggleSwitch}
-            />
-        </View>
+            <View style={{
+                width: 200,
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                alignItems: 'flex-end'
+            }}>
+                <Switch
+                    value={checked}
+                    onValueChange={toggleSwitch}
+                />
+            </View>
+
+        </>
     );
 }

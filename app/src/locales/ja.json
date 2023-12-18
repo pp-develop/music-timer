@@ -6,7 +6,7 @@
     "auth.logout": "ログアウト",
     "form.specifyTime": "プレイリストの再生時間（分）",
     "form.specifyTime.placeholder": "3 ～ 100",
-    "form.includeFavoriteArtists": "お気に入りのアーティストの曲からプレイリストを作成する",
+    "form.includeFavoriteArtists": "フォロー中のアーティストから選曲",
     "form.createPlaylist": "プレイリストを作成",
     "form.deletePlaylist": "プレイリストを削除",
     "form.deletePlaylistExplan": "※アプリ内で作成したプレイリストのみ削除します",
