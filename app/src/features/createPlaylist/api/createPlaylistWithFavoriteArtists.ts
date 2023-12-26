@@ -9,9 +9,10 @@ export function CreatePlaylistWithFavoriteArtists(minute: string): Promise<Respo
             httpStatus: 0
         };
 
-        axios.post('/playlist-with-favorite-artists',
+        axios.post('/playlist',
             {
-                'minute': parseInt(minute)
+                'minute': parseInt(minute),
+                'includeFavoriteArtists': true
             },
         )
             .then(function (response) {
