@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { Input } from "@rneui/base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -10,6 +10,7 @@ import defaultMessages from '../types/defaultMessages';
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../assets/ThemeContext';
 import { getDefaultLanguage } from '../../../locales/i18n';
+import { SaveTracks } from '../api/saveTracks';
 
 export const Form = () => {
     const theme = useTheme()
@@ -28,6 +29,13 @@ export const Form = () => {
             minute: { numbers: true, required: true, range: true },
         })
     };
+
+    useEffect(() => {
+        if (!sessionStorage.getItem('tracksSaved')) {
+            SaveTracks();
+            sessionStorage.setItem('tracksSaved', 'true');
+        }
+    }, []); // 空の依存配列を指定して、コンポーネントのマウント時にのみ実行する
 
     return (
         <View style={{
