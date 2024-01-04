@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Dialog,
 } from '@rneui/themed';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { Dimensions, StyleSheet, Pressable, View, Image } from 'react-native';
 import { Text } from "@rneui/base";
 import { Spotify } from 'react-spotify-embed';
 import { t } from '../../../locales/i18n';
@@ -22,6 +22,10 @@ export const CreatePlaylistDialog = (prop: any) => {
   };
 
   const handleBackdropPress = prop.isLoading ? () => { } : toggleDialog;
+
+  const openSpotify = async () => {
+    window.open("https://open.spotify.com/playlist/" + prop.playlistId + '?go=1', '_blank');
+  };
 
   return (
     <View>
@@ -50,10 +54,35 @@ export const CreatePlaylistDialog = (prop: any) => {
           </>
           :
           prop.httpStatus == 201 ?
-            <Spotify
-              link={"https://open.spotify.com/playlist/" + prop.playlistId}
-              width={width * 0.8}
-            />
+            <>
+              <Spotify
+                link={"https://open.spotify.com/playlist/" + prop.playlistId}
+                width={width * 0.8}
+              />
+              <Pressable style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingVertical: 14,
+                paddingHorizontal: 24,
+                borderRadius: 30,
+                elevation: 3,
+                backgroundColor: theme.tertiary,
+                marginTop: 10,
+                marginLeft: 'auto',
+                marginRight: 'auto'
+              }} onPress={openSpotify}>
+                <View style={{
+                  flexDirection: 'row',
+                  alignItems: 'center'
+                }}>
+                  <Image
+                    source={require('../../../../assets/images/spotify-icon.png')}
+                    style={{ width: 25, height: 25, marginRight: 10 }}
+                  />
+                  <Text style={styles.buttonText}>{t('dialog.createPlaylist.button')}</Text>
+                </View>
+              </Pressable>
+            </>
             :
             prop.httpStatus == 404 ?
               <Text
@@ -88,5 +117,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 'auto',
     marginRight: 'auto',
-  }
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'white',
+  },
 });
