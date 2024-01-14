@@ -5,16 +5,16 @@ import { setLogoutStatus } from "../../../hooks/useLoginStatus";
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../assets/ThemeContext';
 import { AuthContext } from "../../../hooks/useContext";
+import { Link, router } from 'expo-router';
 
 export const LogoutButton = () => {
     const theme = useTheme()
+    const [isLoading, setIsLoading] = useState(false);
     const { isLogin, logout } = useContext(AuthContext);
 
     if (!isLogin) {
         return null;  // ログインしていない場合は何も表示しない
     }
-
-    const [isLoading, setIsLoading] = useState(false);
 
     const requestLogout = async () => {
         setIsLoading(true)
@@ -28,6 +28,7 @@ export const LogoutButton = () => {
             logout()
             setIsLoading(false)
         }
+        router.replace("/")
     };
 
     return (

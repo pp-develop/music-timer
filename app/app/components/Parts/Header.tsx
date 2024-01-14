@@ -1,6 +1,6 @@
 import React from "react";
 import { Header as HeaderComponent } from "@rneui/base";
-import { LogoutButton } from "../../features/auth/";
+import { LogoutButton } from "../../features/auth";
 import { t } from '../../locales/i18n';
 
 export const Header = () => {
