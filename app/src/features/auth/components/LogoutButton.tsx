@@ -3,7 +3,7 @@ import { Text, StyleSheet, ActivityIndicator, View } from 'react-native';
 import { logout as Logout } from '../api/auth'
 import { setLogoutStatus } from "../../../hooks/useLoginStatus";
 import { t } from '../../../locales/i18n';
-import { useTheme } from '../../../assets/ThemeContext';
+import { useTheme } from '../../../config/ThemeContext';
 import { AuthContext } from "../../../hooks/useContext";
 import { Link, router } from 'expo-router';
 

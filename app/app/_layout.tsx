@@ -1,8 +1,8 @@
-import { setDefaultLanguage } from './locales/i18n';
-import { ThemeProvider } from './assets/ThemeContext';
-import { AuthProvider } from "./hooks/useContext";
-import { Header } from "./components/Parts/Header"
-import { Head } from "./components/Parts/Head"
+import { setDefaultLanguage } from '../src/locales/i18n';
+import { ThemeProvider } from '../src/config/ThemeContext';
+import { AuthProvider } from "../src/hooks/useContext";
+import { Header } from "../src/components/Parts/Header"
+import { Head } from "../src/components/Parts/Head"
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { HelmetProvider } from 'react-helmet-async'
 import { StatusBar } from 'expo-status-bar';
@@ -31,7 +31,6 @@ export default function Layout() {
             <Header />
             <Slot />
           </SafeAreaProvider>
-
         </div>
       </AuthProvider>
     </ThemeProvider>

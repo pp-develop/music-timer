@@ -1,7 +1,7 @@
 import React from "react";
 import { Text } from "@rneui/base";
 import { t } from '../../locales/i18n';
-import { useTheme } from '../../assets/ThemeContext';
+import { useTheme } from '../../config/ThemeContext';
 
 export const Description = () => {
   const theme = useTheme()

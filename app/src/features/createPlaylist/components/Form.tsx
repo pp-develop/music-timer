@@ -8,7 +8,7 @@ import { useValidation } from 'react-native-form-validator';
 import defaultRules from '../types/defaultRules';
 import defaultMessages from '../types/defaultMessages';
 import { t } from '../../../locales/i18n';
-import { useTheme } from '../../../assets/ThemeContext';
+import { useTheme } from '../../../config/ThemeContext';
 import { getDefaultLanguage } from '../../../locales/i18n';
 import { SaveTracks } from '../api/saveTracks';
 

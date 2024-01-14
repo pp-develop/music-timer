@@ -6,7 +6,7 @@ import { Dimensions, StyleSheet, Pressable, View, Image } from 'react-native';
 import { Text } from "@rneui/base";
 import { Spotify } from 'react-spotify-embed';
 import { t } from '../../../locales/i18n';
-import { useTheme } from '../../../assets/ThemeContext';
+import { useTheme } from '../../../config/ThemeContext';
 
 let { width, height, scale } = Dimensions.get('window');
 if (width > 800) {

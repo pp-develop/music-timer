@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 import { useDisclosure } from '../../../hooks/useDisclosure';
 import { deletePlaylist } from '../api/DeletePlaylist';
 import { t } from '../../../locales/i18n';
-import { useTheme } from '../../../assets/ThemeContext';
+import { useTheme } from '../../../config/ThemeContext';
 import toast, { Toaster } from 'react-hot-toast';
 
 export const DeletePlaylist = (props: any) => {

@@ -4,7 +4,7 @@ import { Text } from "@rneui/base";
 import { ResponseContext } from '../hooks/useContext';
 import { View, StyleSheet } from 'react-native';
 import { t } from '../../../locales/i18n';
-import { useTheme } from '../../../assets/ThemeContext';
+import { useTheme } from '../../../config/ThemeContext';
 
 export const SwitchFavoriteArtists = (prop: any) => {
     const theme = useTheme()

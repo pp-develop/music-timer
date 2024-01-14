@@ -6,7 +6,7 @@ import { CreatePlaylistDialog } from "./CreatePlaylistDialog"
 import { useDisclosure } from '../../../hooks/useDisclosure';
 import { ResponseContext } from '../hooks/useContext';
 import { t } from '../../../locales/i18n';
-import { useTheme } from '../../../assets/ThemeContext';
+import { useTheme } from '../../../config/ThemeContext';
 
 export const CreatePlaylistButton = (prop: any) => {
     const theme = useTheme()

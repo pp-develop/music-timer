@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
 import { StyleSheet, ActivityIndicator, View } from 'react-native';
-import { auth } from '../features/auth/api/auth'
-import { Form } from "../features/createPlaylist";
-import { DeletePlaylist } from "../features/deletePlaylist/components/DeletePlaylistButton";
-import { setLoginStatus, setLogoutStatus } from "../hooks/useLoginStatus";
-import { AuthContext } from "../hooks/useContext";
-import { useTheme } from '../assets/ThemeContext';
-import { Link, router } from 'expo-router';
+import { auth } from '../../src/features/auth/api/auth'
+import { Form } from "../../src/features/createPlaylist";
+import { DeletePlaylist } from "../../src/features/deletePlaylist/components/DeletePlaylistButton";
+import { setLoginStatus, setLogoutStatus } from "../../src/hooks/useLoginStatus";
+import { AuthContext } from "../../src/hooks/useContext";
+import { useTheme } from '../../src/config/ThemeContext';
+import { router } from 'expo-router';
 
 export default function Layout() {
     const theme = useTheme()

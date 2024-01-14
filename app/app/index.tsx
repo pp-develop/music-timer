@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
 import { StyleSheet, ActivityIndicator, View } from 'react-native';
-import { auth } from './features/auth/api/auth'
-import { Description } from "./components/Parts/Description";
-import { LoginButton } from "./features/auth";
-import { setLoginStatus, setLogoutStatus } from "./hooks/useLoginStatus";
-import { AuthContext } from "./hooks/useContext";
-import { useTheme } from './assets/ThemeContext';
-import { Link, router } from 'expo-router';
+import { auth } from '../src/features/auth/api/auth'
+import { Description } from "../src/components/Parts/Description";
+import { LoginButton } from "../src/features/auth";
+import { setLoginStatus, setLogoutStatus } from "../src/hooks/useLoginStatus";
+import { AuthContext } from "../src/hooks/useContext";
+import { useTheme } from '../src/config/ThemeContext';
+import { router, Link } from 'expo-router';
 
 export default function Page() {
     const theme = useTheme()
@@ -45,6 +45,7 @@ export default function Page() {
                         <>
                             <Description />
                             <LoginButton />
+                            <Link href="/gest-playlist">About</Link>
                         </>
                     )}
                 </>
