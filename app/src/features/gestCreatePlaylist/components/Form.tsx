@@ -11,7 +11,7 @@ import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
 import { getDefaultLanguage } from '../../../locales/i18n';
 
-export const GestForm = () => {
+export const Form = () => {
     const theme = useTheme()
     const [minute, setMinute] = useState("");
     const { validate, isFieldInError, getErrorsInField, getErrorMessages } =

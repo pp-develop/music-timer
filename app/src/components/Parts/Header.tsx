@@ -2,6 +2,7 @@ import React from "react";
 import { Header as HeaderComponent } from "@rneui/base";
 import { LogoutButton } from "../../features/auth";
 import { t } from '../../locales/i18n';
+import { router } from 'expo-router';
 
 export const Header = () => {
     return (
@@ -20,7 +21,9 @@ export const Header = () => {
                     marginTop: 'auto',
                     marginBottom: 'auto',
                 },
-            }}
+                onPress: () => router.replace('/')
+            }
+            }
             centerContainerStyle={{}}
             containerStyle={{
                 paddingTop: 40,
