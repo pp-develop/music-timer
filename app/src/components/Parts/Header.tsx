@@ -2,9 +2,12 @@ import React from "react";
 import { Header as HeaderComponent } from "@rneui/base";
 import { LogoutButton } from "../../features/auth";
 import { t } from '../../locales/i18n';
-import { router } from 'expo-router';
+import { router, usePathname } from 'expo-router';
 
 export const Header = () => {
+    const handleTitlePress = () => {
+        router.replace('/');
+    };
     return (
         <HeaderComponent
             backgroundColor="#D7E6EF"
@@ -21,7 +24,7 @@ export const Header = () => {
                     marginTop: 'auto',
                     marginBottom: 'auto',
                 },
-                onPress: () => router.replace('/')
+                onPress: usePathname() == '/playlist' ? undefined : () => handleTitlePress()
             }
             }
             centerContainerStyle={{}}

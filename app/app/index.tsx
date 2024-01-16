@@ -1,12 +1,13 @@
 import React, { useContext, useState, useEffect } from "react";
-import { StyleSheet, ActivityIndicator, View } from 'react-native';
+import { Text, StyleSheet, Pressable, ActivityIndicator, View } from 'react-native';
 import { auth } from '../src/features/auth/api/auth'
 import { Description } from "../src/components/Parts/Description";
 import { LoginButton } from "../src/features/auth";
-import { setLoginStatus, setLogoutStatus } from "../src/hooks/useLoginStatus";
 import { AuthContext } from "../src/hooks/useContext";
 import { useTheme } from '../src/config/ThemeContext';
-import { router, Link } from 'expo-router';
+import { router } from 'expo-router';
+import { t } from '../src/locales/i18n';
+import TextLink from 'react-native-text-link';
 
 export default function Page() {
     const theme = useTheme()
@@ -19,11 +20,9 @@ export default function Page() {
             try {
                 const response = await auth();
                 if (response.httpStatus === 200) {
-                    setLoginStatus();
                     login();
                     router.push('/playlist');
                 } else {
-                    setLogoutStatus();
                     logout();
                 }
             } finally {
@@ -44,14 +43,28 @@ export default function Page() {
                     {!isLogin && (
                         <>
                             <Description />
+                            <Pressable style={styles.button} onPress={() => router.push("/gest-playlist")}>
+                                <View style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center'
+                                }}>
+                                    <Text style={styles.text}>{t('auth.gest')}</Text>
+                                </View>
+                            </Pressable>
                             <LoginButton />
-                            <Link href="/gest-playlist">About</Link>
+                            <TextLink textStyle={styles.desc} textLinkStyle={styles.descLink} links={[
+                                {
+                                    text: t('auth.login.desc.link'),
+                                    onPress: () => window.open('https://forms.gle/p4CofyS2JfVaHadw9', '_blank', 'noopener,noreferrer')
+                                },
+                            ]}>
+                                {t('auth.login.desc')}
+                            </TextLink>
                         </>
                     )}
                 </>
             )}
-        </>
-    );
+        </>)
 }
 
 const styles = StyleSheet.create({
@@ -62,4 +75,33 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    text: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'white',
+    },
+    button: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 18,
+        paddingHorizontal: 28,
+        borderRadius: 30,
+        elevation: 3,
+        backgroundColor: '#6E777C',
+        marginTop: 30,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+    },
+    desc: {
+        paddingTop: 15,
+        paddingBottom: 12,
+        maxWidth: 250,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        width: '100%',
+        color: "#454C50"
+    },
+    descLink: {
+        color: "#4d4dff"
+    }
 });

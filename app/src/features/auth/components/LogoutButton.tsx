@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Text, StyleSheet, ActivityIndicator, View } from 'react-native';
-import { logout as Logout } from '../api/auth'
-import { setLogoutStatus } from "../../../hooks/useLoginStatus";
+import { logout as RequestLogout } from '../api/auth'
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
 import { AuthContext } from "../../../hooks/useContext";
@@ -18,11 +17,10 @@ export const LogoutButton = () => {
 
     const requestLogout = async () => {
         setIsLoading(true)
-        const response = await Logout()
+        const response = await RequestLogout()
 
         if (response.httpStatus == 200) {
             logout()
-            setLogoutStatus()
             setIsLoading(false)
         } else {
             logout()

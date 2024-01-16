@@ -46,8 +46,20 @@ export const SwitchFavoriteArtists = (prop: any) => {
                     onValueChange={toggleSwitch}
                     disabled={true}
                 />
+                <Text style={styles.desc}>{t('form.gest.includeFavoriteArtists.desc')}</Text>
             </View>
 
         </>
     );
 }
+
+
+const styles = StyleSheet.create({
+    desc: {
+        paddingTop: 3,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        width: '100%',
+        color: "red"
+    }
+});

@@ -3,7 +3,6 @@ import { StyleSheet, ActivityIndicator, View } from 'react-native';
 import { auth } from '../../src/features/auth/api/auth'
 import { Form } from "../../src/features/createPlaylist";
 import { DeletePlaylist } from "../../src/features/deletePlaylist/components/DeletePlaylistButton";
-import { setLoginStatus, setLogoutStatus } from "../../src/hooks/useLoginStatus";
 import { AuthContext } from "../../src/hooks/useContext";
 import { useTheme } from '../../src/config/ThemeContext';
 import { router } from 'expo-router';
@@ -19,10 +18,8 @@ export default function Layout() {
             try {
                 const response = await auth();
                 if (response.httpStatus === 200) {
-                    setLoginStatus();
                     login();
                 } else {
-                    setLogoutStatus();
                     logout();
                     router.replace('/');
                 }
