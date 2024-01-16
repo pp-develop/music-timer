@@ -14,7 +14,7 @@
     "form.createPlaylist": "プレイリストを作成",
     "form.deletePlaylist": "プレイリストを削除",
     "form.deletePlaylistExplan": "※アプリ内で作成したプレイリストのみ削除します",
-    "dialog.createPlaylist.loading": "完了まで最大30秒かかる場合があります。",
+    "dialog.createPlaylist.loading": "完了まで最大約30秒かかる場合があります。",
     "dialog.createPlaylist.button": "Spotifyで開く",
     "dialog.createPlaylist.not.created": "プレイリストの作成に失敗しました。\n指定した条件に問題があった可能性があります。\n条件を見直し再度お試しください。",
     "dialog.createPlaylist.server.error": "現在サーバーにアクセスできません。\nしばらく時間を置いてから再度試してください。",
