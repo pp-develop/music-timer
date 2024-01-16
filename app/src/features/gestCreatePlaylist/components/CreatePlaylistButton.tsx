@@ -37,27 +37,6 @@ export const CreatePlaylistButton = (prop: any) => {
         setHttpStatus(response.httpStatus)
     }
 
-    const createPlaylistWithFavoriteArtists = async (minute: string) => {
-        if (!prop.validate()) {
-            return
-        }
-        open()
-        setIsLoding(true)
-
-        const response = await CreatePlaylistWithFavoriteArtists(minute)
-        if (response.httpStatus == 201) {
-            setPlaylistId(response.playlistId)
-            // 本番環境だと、遅延を発生させないとコンテンツが正常に読み込めないため
-            let timeoutId: NodeJS.Timeout
-            timeoutId = setTimeout(() => {
-                setIsLoding(false)
-            }, 2000)
-        } else {
-            setIsLoding(false)
-        }
-        setHttpStatus(response.httpStatus)
-    }
-
     return (
         <>
             <Button
@@ -79,8 +58,7 @@ export const CreatePlaylistButton = (prop: any) => {
                     marginBottom: 15,
                 }}
                 titleStyle={{ fontWeight: 'bold' }}
-                onPress={() => context.isFavoriteArtists
-                    ? createPlaylistWithFavoriteArtists(prop.minute) : createPlaylist(prop.minute)}
+                onPress={() => createPlaylist(prop.minute)}
             />
             <CreatePlaylistDialog
                 isOpen={isOpen}
