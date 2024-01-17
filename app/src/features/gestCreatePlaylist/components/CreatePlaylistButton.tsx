@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "@rneui/base";
 import { CreatePlaylist } from "../api/createPlaylist"
-import { CreatePlaylistWithFavoriteArtists } from "../api/createPlaylistWithFavoriteArtists"
 import { CreatePlaylistDialog } from "./CreatePlaylistDialog"
 import { useDisclosure } from '../../../hooks/useDisclosure';
 import { ResponseContext } from '../hooks/useContext';

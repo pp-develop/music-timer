@@ -1,44 +1,31 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, ActivityIndicator, View } from 'react-native';
-import { auth } from '../../src/features/auth/api/auth'
 import { Form } from "../../src/features/createPlaylist";
 import { DeletePlaylist } from "../../src/features/deletePlaylist/components/DeletePlaylistButton";
-import { AuthContext } from "../../src/hooks/useContext";
+import { useAuth } from "../../src/hooks/useAuth";
 import { useTheme } from '../../src/config/ThemeContext';
 import { router } from 'expo-router';
 
 export default function Layout() {
     const theme = useTheme()
-    const { isLogin, login, logout } = useContext(AuthContext);
-    const [isLoading, setLoading] = useState(false);
+    const { loading, isAuthenticated } = useAuth();
 
     useEffect(() => {
-        setLoading(true);
-        (async () => {
-            try {
-                const response = await auth();
-                if (response.httpStatus === 200) {
-                    login();
-                } else {
-                    logout();
-                    router.replace('/');
-                }
-            } finally {
-                setLoading(false);
-            }
-        })();
-    }, [])
+        if (!loading && !isAuthenticated) {
+          router.replace('/');
+        }
+      }, [loading, isAuthenticated]);
 
     return (
         <>
-            {isLoading && (
+            {loading && (
                 <View style={styles.indicator}>
                     <ActivityIndicator size="large" color={theme.tertiary} />
                 </View>
             )}
-            {!isLoading && (
+            {!loading && (
                 <>
-                    {isLogin && (
+                    {isAuthenticated && (
                         <>
                             <Form />
                             <DeletePlaylist />

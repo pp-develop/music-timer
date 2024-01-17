@@ -1,6 +1,5 @@
 import { setDefaultLanguage } from '../src/locales/i18n';
 import { ThemeProvider } from '../src/config/ThemeContext';
-import { AuthProvider } from "../src/hooks/useContext";
 import { Header } from "../src/components/Parts/Header"
 import { Head } from "../src/components/Parts/Head"
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -19,7 +18,6 @@ export default function Layout() {
 
   return (
     <ThemeProvider theme={theme}>
-      <AuthProvider>
         <div style={{
           backgroundColor: theme.primaryColor, height: '100%', width: '100%'
         }}>
@@ -32,7 +30,6 @@ export default function Layout() {
             <Slot />
           </SafeAreaProvider>
         </div>
-      </AuthProvider>
     </ThemeProvider>
   )
 }

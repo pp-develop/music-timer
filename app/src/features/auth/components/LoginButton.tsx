@@ -1,12 +1,12 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Text, StyleSheet, Pressable, ActivityIndicator, View, Image } from 'react-native';
 import { authz } from '../api/auth'
 import { t } from '../../../locales/i18n';
-import { AuthContext } from "../../../hooks/useContext";
+import { useAuth } from "../../../hooks/useAuth";
 
 export const LoginButton = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const { login, logout } = useContext(AuthContext);
+    const { setAuthState } = useAuth();
 
 
     const requestLogin = async () => {
@@ -17,7 +17,7 @@ export const LoginButton = () => {
             window.location.href = response.authzUrl;
         } else {
             setIsLoading(false)
-            logout()
+            setAuthState(false)
         }
     };
     return (

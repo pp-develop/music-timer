@@ -1,31 +1,25 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Text, StyleSheet, ActivityIndicator, View } from 'react-native';
 import { logout as RequestLogout } from '../api/auth'
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
-import { AuthContext } from "../../../hooks/useContext";
-import { Link, router } from 'expo-router';
+import { useAuth } from "../../../../src/hooks/useAuth";
+import { router } from 'expo-router';
 
 export const LogoutButton = () => {
     const theme = useTheme()
     const [isLoading, setIsLoading] = useState(false);
-    const { isLogin, logout } = useContext(AuthContext);
+    const { isAuthenticated, setAuthState } = useAuth();
 
-    if (!isLogin) {
+    if (!isAuthenticated) {
         return null;  // ログインしていない場合は何も表示しない
     }
 
     const requestLogout = async () => {
         setIsLoading(true)
-        const response = await RequestLogout()
-
-        if (response.httpStatus == 200) {
-            logout()
-            setIsLoading(false)
-        } else {
-            logout()
-            setIsLoading(false)
-        }
+        await RequestLogout()
+        setAuthState(false)
+        setIsLoading(false)
         router.replace("/")
     };
 

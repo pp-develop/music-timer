@@ -1,9 +1,8 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Text, StyleSheet, Pressable, ActivityIndicator, View } from 'react-native';
-import { auth } from '../src/features/auth/api/auth'
 import { Description } from "../src/components/Parts/Description";
 import { LoginButton } from "../src/features/auth";
-import { AuthContext } from "../src/hooks/useContext";
+import { useAuth } from "../src/hooks/useAuth";
 import { useTheme } from '../src/config/ThemeContext';
 import { router } from 'expo-router';
 import { t } from '../src/locales/i18n';
@@ -11,36 +10,24 @@ import TextLink from 'react-native-text-link';
 
 export default function Page() {
     const theme = useTheme()
-    const { isLogin, login, logout } = useContext(AuthContext);
-    const [isLoading, setLoading] = useState(false);
+    const { loading, isAuthenticated } = useAuth();
 
     useEffect(() => {
-        setLoading(true);
-        (async () => {
-            try {
-                const response = await auth();
-                if (response.httpStatus === 200) {
-                    login();
-                    router.push('/playlist');
-                } else {
-                    logout();
-                }
-            } finally {
-                setLoading(false);
-            }
-        })();
-    }, [])
+        if (!loading && isAuthenticated) {
+            router.replace('/playlist');
+        }
+    }, [loading, isAuthenticated]);
 
     return (
         <>
-            {isLoading && (
+            {loading && (
                 <View style={styles.indicator}>
                     <ActivityIndicator size="large" color={theme.tertiary} />
                 </View>
             )}
-            {!isLoading && (
+            {!loading && (
                 <>
-                    {!isLogin && (
+                    {!isAuthenticated && (
                         <>
                             <Description />
                             <Pressable style={styles.button} onPress={() => router.push("/gest-playlist")}>
