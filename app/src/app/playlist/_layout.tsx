@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { StyleSheet, ActivityIndicator, View } from 'react-native';
-import { Form } from "../../src/features/createPlaylist";
-import { DeletePlaylist } from "../../src/features/deletePlaylist/components/DeletePlaylistButton";
-import { useAuth } from "../../src/hooks/useAuth";
-import { useTheme } from '../../src/config/ThemeContext';
+import { Form } from "../../features/createPlaylist";
+import { DeletePlaylist } from "../../features/deletePlaylist/components/DeletePlaylistButton";
+import { useAuth } from "../../hooks/useAuth";
+import { useTheme } from '../../config/ThemeContext';
 import { router } from 'expo-router';
 
 export default function Layout() {
@@ -12,9 +12,9 @@ export default function Layout() {
 
     useEffect(() => {
         if (!loading && !isAuthenticated) {
-          router.replace('/');
+            router.replace('/');
         }
-      }, [loading, isAuthenticated]);
+    }, [loading, isAuthenticated]);
 
     return (
         <>

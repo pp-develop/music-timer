@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { Text, StyleSheet, Pressable, ActivityIndicator, View } from 'react-native';
-import { Description } from "../src/components/Parts/Description";
-import { LoginButton } from "../src/features/auth";
-import { useAuth } from "../src/hooks/useAuth";
-import { useTheme } from '../src/config/ThemeContext';
+import { Description } from "../components/Parts/Description";
+import { LoginButton } from "../features/auth";
+import { useAuth } from "../hooks/useAuth";
+import { useTheme } from '../config/ThemeContext';
 import { router } from 'expo-router';
-import { t } from '../src/locales/i18n';
+import { t } from '../locales/i18n';
 import TextLink from 'react-native-text-link';
 
 export default function Page() {

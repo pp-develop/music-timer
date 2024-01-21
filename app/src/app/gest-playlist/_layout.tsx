@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet } from 'react-native';
-import { Form } from "../../src/features/gestCreatePlaylist";
-import { useTheme } from '../../src/config/ThemeContext';
+import { Form } from "../../features/gestCreatePlaylist";
+import { useTheme } from '../../config/ThemeContext';
 
 export default function Layout() {
     const theme = useTheme()
