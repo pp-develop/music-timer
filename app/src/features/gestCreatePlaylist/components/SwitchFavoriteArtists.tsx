@@ -1,20 +1,11 @@
-import React, { useState } from "react";
-import { Switch } from '@rneui/themed';
+import React from "react";
 import { Text } from "@rneui/base";
-import { ResponseContext } from '../hooks/useContext';
 import { View, StyleSheet } from 'react-native';
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
 
 export const SwitchFavoriteArtists = (prop: any) => {
     const theme = useTheme()
-    const context = React.useContext(ResponseContext);
-    const [checked, setChecked] = useState(false);
-
-    const toggleSwitch = () => {
-        context.isFavoriteArtists = !checked
-        setChecked(!checked);
-    };
 
     return (
         <>
@@ -27,7 +18,7 @@ export const SwitchFavoriteArtists = (prop: any) => {
                 }}
                 style={{
                     paddingTop: 20,
-                    paddingBottom: 10,
+                    paddingBottom: 5,
                     maxWidth: 500,
                     marginLeft: 'auto',
                     marginRight: 'auto',
@@ -41,11 +32,6 @@ export const SwitchFavoriteArtists = (prop: any) => {
                 marginRight: 'auto',
                 alignItems: 'flex-end'
             }}>
-                <Switch
-                    value={checked}
-                    onValueChange={toggleSwitch}
-                    disabled={true}
-                />
                 <Text style={styles.desc}>{t('form.gest.includeFavoriteArtists.desc')}</Text>
             </View>
 

@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Input } from "@rneui/base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CreatePlaylistButton } from "./CreatePlaylistButton"
-import { SwitchFavoriteArtists } from "./SwitchFavoriteArtists"
+import { SelectFollowedArtists } from "./SelectFollowedArtists"
 import { useValidation } from 'react-native-form-validator';
 import defaultRules from '../types/defaultRules';
 import defaultMessages from '../types/defaultMessages';
@@ -80,14 +80,12 @@ export const Form = () => {
                 labelProps={{}}
                 leftIcon={<Icon name="clock-outline" size={20} />}
                 leftIconContainerStyle={{}}
-                // rightIcon={<Icon name="close" size={20} />}
-                // rightIconContainerStyle={{}}
                 placeholder={t('form.specifyTime.placeholder')}
                 placeholderTextColor={'#454c5091'}
                 onChangeText={setMinute}
                 value={minute}
             />
-            <SwitchFavoriteArtists />
+            <SelectFollowedArtists />
             <CreatePlaylistButton minute={minute} validate={formValidate} />
         </View>
     );

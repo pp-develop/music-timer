@@ -1,9 +1,12 @@
 import { axios } from '../../../lib/axos';
-import { Response } from '../types/index'
 
-export function CreatePlaylistWithFavoriteArtists(minute: string): Promise<Response> {
+type Response = {
+    playlistId: string;
+    httpStatus: number;
+};
+
+export function CreatePlaylistWithSpecifyArtists(minute: string, followedArtistIds: any[]): Promise<Response> {
     return new Promise((resolve) => {
-
         const createPlaylist: Response = {
             playlistId: "",
             httpStatus: 0
@@ -12,18 +15,17 @@ export function CreatePlaylistWithFavoriteArtists(minute: string): Promise<Respo
         axios.post('/playlist',
             {
                 'minute': parseInt(minute),
-                'includeFavoriteArtists': true
+                'includeFavoriteArtists': true,
+                'artistIds': followedArtistIds
             },
         )
             .then(function (response) {
-                console.log(response);
                 if (response.status == 201) {
                     createPlaylist.playlistId = response.data
                     createPlaylist.httpStatus = response.status
                 }
             })
             .catch(function (error) {
-                console.error(error);
                 createPlaylist.httpStatus = error.response.status
             })
             .finally(function () {

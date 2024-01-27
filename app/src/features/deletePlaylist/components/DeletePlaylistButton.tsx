@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Text } from "@rneui/base";
 import { StyleSheet } from 'react-native';
-import { useDisclosure } from '../../../hooks/useDisclosure';
 import { deletePlaylist } from '../api/DeletePlaylist';
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
@@ -62,17 +61,24 @@ export const DeletePlaylist = (props: any) => {
                     borderWidth: 2,
                     borderColor: theme.primaryColor,
                     borderRadius: 30,
+                    paddingTop: 15,
+                    paddingBottom: 15,
+                    paddingRight: 5,
+                    paddingLeft: 5,
                 }}
                 containerStyle={{
                     width: 200,
                     marginHorizontal: 50,
                     marginTop: 10,
-
                     maxWidth: 1000,
                     marginLeft: 'auto',
                     marginRight: 'auto',
                 }}
-                titleStyle={{ fontWeight: 'bold' }}
+                titleStyle={{
+                    fontWeight: 'bold',
+                    fontSize: 18,
+                    color: 'white'
+                }}
                 onPress={notifi}
             />
             <Text

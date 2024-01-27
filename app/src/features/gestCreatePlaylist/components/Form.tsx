@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Input } from "@rneui/base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -72,8 +72,6 @@ export const Form = () => {
                 labelProps={{}}
                 leftIcon={<Icon name="clock-outline" size={20} />}
                 leftIconContainerStyle={{}}
-                // rightIcon={<Icon name="close" size={20} />}
-                // rightIconContainerStyle={{}}
                 placeholder={t('form.specifyTime.placeholder')}
                 placeholderTextColor={'#454c5091'}
                 onChangeText={setMinute}
