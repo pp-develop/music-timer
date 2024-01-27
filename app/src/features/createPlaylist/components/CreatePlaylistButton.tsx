@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "@rneui/base";
 import { CreatePlaylist } from "../api/createPlaylist"
-import { CreatePlaylistWithFavoriteArtists } from "../api/createPlaylistWithFavoriteArtists"
+import { CreatePlaylistWithSpecifyArtists } from "../api/createPlaylistWithSpecifyArtists"
 import { CreatePlaylistDialog } from "./CreatePlaylistDialog"
 import { useDisclosure } from '../../../hooks/useDisclosure';
 import { ResponseContext } from '../hooks/useContext';
@@ -37,14 +37,15 @@ export const CreatePlaylistButton = (prop: any) => {
         setHttpStatus(response.httpStatus)
     }
 
-    const createPlaylistWithFavoriteArtists = async (minute: string) => {
+    const createPlaylistWithSpecifyArtists = async (minute: string) => {
         if (!prop.validate()) {
             return
         }
         open()
         setIsLoding(true)
 
-        const response = await CreatePlaylistWithFavoriteArtists(minute)
+        const artistIds = context.followedArtistIds.map((item: any) => (item));
+        const response = await CreatePlaylistWithSpecifyArtists(minute, artistIds)
         if (response.httpStatus == 201) {
             setPlaylistId(response.playlistId)
             // 本番環境だと、遅延を発生させないとコンテンツが正常に読み込めないため
@@ -67,6 +68,10 @@ export const CreatePlaylistButton = (prop: any) => {
                     borderWidth: 2,
                     borderColor: theme.primaryColor,
                     borderRadius: 30,
+                    paddingTop: 15,
+                    paddingBottom: 15,
+                    paddingRight: 5,
+                    paddingLeft: 5,
                 }}
                 containerStyle={{
                     width: 200,
@@ -78,9 +83,20 @@ export const CreatePlaylistButton = (prop: any) => {
                     marginTop: 30,
                     marginBottom: 15,
                 }}
-                titleStyle={{ fontWeight: 'bold' }}
-                onPress={() => context.isFavoriteArtists
-                    ? createPlaylistWithFavoriteArtists(prop.minute) : createPlaylist(prop.minute)}
+                titleStyle={{
+                    fontWeight: 'bold',
+                    fontSize: 18,
+                    color: 'white'
+                }}
+                onPress={
+                    () => {
+                        if (context.followedArtistIds && context.followedArtistIds.length > 0) {
+                            createPlaylistWithSpecifyArtists(prop.minute)
+                        } else {
+                            createPlaylist(prop.minute)
+                        }
+                    }
+                }
             />
             <CreatePlaylistDialog
                 isOpen={isOpen}

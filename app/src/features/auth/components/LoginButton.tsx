@@ -32,7 +32,7 @@ export const LoginButton = () => {
                     alignItems: 'center'
                 }}>
                     <Image
-                        source={require('../../../../assets/images/spotify-icon.png')}
+                        source={require('../../../../assets/images/spotify-icon-green.png')}
                         style={{ width: 30, height: 30, marginRight: 10 }}
                     />
                     <Text style={styles.text}>{t('auth.login')}</Text>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Switch } from '@rneui/themed';
 import { Text } from "@rneui/base";
 import { ResponseContext } from '../hooks/useContext';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
 
@@ -12,7 +12,7 @@ export const SwitchFavoriteArtists = (prop: any) => {
     const [checked, setChecked] = useState(false);
 
     const toggleSwitch = () => {
-        context.isFavoriteArtists = !checked
+        context.isFollowedArtists = !checked
         setChecked(!checked);
     };
 

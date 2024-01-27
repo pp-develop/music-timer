@@ -2,8 +2,9 @@ import * as React from 'react';
 
 const response = {
   createPlaylist: {
-      playlistId: '',
-      isFavoriteArtists: false,
+    playlistId: '',
+    isSpecifyFollowedArtists: false,
+    followedArtistIds: [],
   },
 };
 

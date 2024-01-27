@@ -3,7 +3,6 @@ import { Button } from "@rneui/base";
 import { CreatePlaylist } from "../api/createPlaylist"
 import { CreatePlaylistDialog } from "./CreatePlaylistDialog"
 import { useDisclosure } from '../../../hooks/useDisclosure';
-import { ResponseContext } from '../hooks/useContext';
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
 
@@ -13,7 +12,6 @@ export const CreatePlaylistButton = (prop: any) => {
     const [isLoading, setIsLoding] = useState(true);
     const [httpStatus, setHttpStatus] = useState(0);
     const [playlistId, setPlaylistId] = useState("");
-    const context = React.useContext(ResponseContext);
 
     const createPlaylist = async (minute: string) => {
         if (!prop.validate()) {
@@ -41,10 +39,14 @@ export const CreatePlaylistButton = (prop: any) => {
             <Button
                 title={t('form.createPlaylist')}
                 buttonStyle={{
-                    backgroundColor: theme.tertiary,
+                    backgroundColor: 'black',
                     borderWidth: 2,
                     borderColor: theme.primaryColor,
                     borderRadius: 30,
+                    paddingTop: 15,
+                    paddingBottom: 15,
+                    paddingRight: 5,
+                    paddingLeft: 5,
                 }}
                 containerStyle={{
                     width: 200,
@@ -69,4 +71,3 @@ export const CreatePlaylistButton = (prop: any) => {
         </>
     );
 }
-

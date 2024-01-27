@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { Text, StyleSheet, Pressable, ActivityIndicator, View } from 'react-native';
-import { Description } from "../components/Parts/Description";
+import { StyleSheet, ActivityIndicator, View } from 'react-native';
 import { LoginButton } from "../features/auth";
 import { useAuth } from "../hooks/useAuth";
 import { useTheme } from '../config/ThemeContext';
 import { router } from 'expo-router';
 import { t } from '../locales/i18n';
+import { Form } from "../features/gestCreatePlaylist";
 import TextLink from 'react-native-text-link';
 
 export default function Page() {
@@ -29,15 +29,7 @@ export default function Page() {
                 <>
                     {!isAuthenticated && (
                         <>
-                            <Description />
-                            <Pressable style={styles.button} onPress={() => router.push("/gest-playlist")}>
-                                <View style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center'
-                                }}>
-                                    <Text style={styles.text}>{t('auth.gest')}</Text>
-                                </View>
-                            </Pressable>
+                            <Form />
                             <LoginButton />
                             <TextLink textStyle={styles.desc} textLinkStyle={styles.descLink} links={[
                                 {

@@ -1,0 +1,31 @@
+import { axios } from '../../../lib/axos';
+import { Response } from '../types/index';
+
+export function CreatePlaylistWithSpecifyArtists(minute: string, followedArtistIds: any[]): Promise<Response> {
+    return new Promise((resolve) => {
+        const createPlaylist: Response = {
+            playlistId: "",
+            httpStatus: 0
+        };
+
+        axios.post('/playlist',
+            {
+                'minute': parseInt(minute),
+                'includeFavoriteArtists': true,
+                'artistIds': followedArtistIds
+            },
+        )
+            .then(function (response) {
+                if (response.status == 201) {
+                    createPlaylist.playlistId = response.data
+                    createPlaylist.httpStatus = response.status
+                }
+            })
+            .catch(function (error) {
+                createPlaylist.httpStatus = error.response.status
+            })
+            .finally(function () {
+                resolve(createPlaylist)
+            });
+    });
+};
