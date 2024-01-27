@@ -1,5 +1,9 @@
 import { axios } from '../../../lib/axos';
-import { Response } from '../types/index';
+
+type Response = {
+    playlistId: string;
+    httpStatus: number;
+};
 
 export function CreatePlaylistWithSpecifyArtists(minute: string, followedArtistIds: any[]): Promise<Response> {
     return new Promise((resolve) => {
