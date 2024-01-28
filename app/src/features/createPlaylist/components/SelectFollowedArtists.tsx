@@ -57,38 +57,43 @@ export const SelectFollowedArtists = () => {
                 {t('form.includeFavoriteArtists')}
             </Text>
 
-            <ScrollView horizontal={true} style={{
-                width: '80%',
-                maxWidth: 400,
-            }}>
-                <View style={{}}>
-                    <View style={{
-                        flexDirection: 'row',
-                    }}>
-                        {artists.slice(0, Math.ceil(artists.length / 2)).map(artist => (
-                            <Chip
-                                key={artist.ID}
-                                title={artist.Name}
-                                onPress={() => toggleChip(artist.ID)}
-                                type={selectedChips.includes(artist.ID) ? 'solid' : 'outline'}
-                                containerStyle={chipStyle}
-                            />
-                        ))}
+            {artists.length > 0 ? (
+                <ScrollView horizontal={true} style={{
+                    width: '80%',
+                    maxWidth: 400,
+                }}>
+                    <View style={{}}>
+                        <View style={{
+                            flexDirection: 'row',
+                        }}>
+                            {artists.slice(0, Math.ceil(artists.length / 2)).map(artist => (
+                                <Chip
+                                    key={artist.ID}
+                                    title={artist.Name}
+                                    onPress={() => toggleChip(artist.ID)}
+                                    type={selectedChips.includes(artist.ID) ? 'solid' : 'outline'}
+                                    containerStyle={chipStyle}
+                                />
+                            ))}
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            {artists.slice(Math.ceil(artists.length / 2)).map(artist => (
+                                <Chip
+                                    key={artist.ID}
+                                    title={artist.Name}
+                                    onPress={() => toggleChip(artist.ID)}
+                                    type={selectedChips.includes(artist.ID) ? 'solid' : 'outline'}
+                                    containerStyle={chipStyle}
+                                />
+                            ))}
+                        </View>
                     </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        {artists.slice(Math.ceil(artists.length / 2)).map(artist => (
-                            <Chip
-                                key={artist.ID}
-                                title={artist.Name}
-                                onPress={() => toggleChip(artist.ID)}
-                                type={selectedChips.includes(artist.ID) ? 'solid' : 'outline'}
-                                containerStyle={chipStyle}
-                            />
-                        ))}
-                    </View>
-                </View>
-            </ScrollView>
-
+                </ScrollView>
+            ) : (
+                <Text style={{ textAlign: 'center' }}>
+                    {t('form.noFollowedArtists')}
+                </Text>
+            )}
         </>
     );
 };

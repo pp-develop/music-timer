@@ -79,7 +79,7 @@ export const CreatePlaylistDialog = (prop: any) => {
                     source={require('../../../../assets/images/spotify-icon.png')}
                     style={{ width: 25, height: 25, marginRight: 10 }}
                   />
-                  <Text style={styles.buttonText}>{t('dialog.createPlaylist.button')}</Text>
+                  <Text style={styles.buttonText}>{t('dialog.createPlaylist.open')}</Text>
                 </View>
               </Pressable>
             </>
