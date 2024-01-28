@@ -20,7 +20,6 @@ export function authz(): Promise<AuthzResponse> {
                 response.httpStatus = res.status
             })
             .catch(function (error) {
-                console.log(error);
                 response.httpStatus = error.status
             })
             .finally(function () {

@@ -32,7 +32,6 @@ export const useLoginStatus = () => {
 
   const checkLoginStatus = async () => {
     const status = await AsyncStorage.getItem('isLoggedIn');
-    console.log(status)
     setIsLoggedIn(status == 'true');
   };
 

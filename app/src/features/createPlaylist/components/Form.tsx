@@ -11,10 +11,20 @@ import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
 import { getDefaultLanguage } from '../../../locales/i18n';
 import { SaveTracks } from '../api/saveTracks';
+import { useDisclosure } from '../../../hooks/useDisclosure';
+import { ResponseContext } from '../hooks/useContext';
+import { CreatePlaylist } from "../api/createPlaylist"
+import { CreatePlaylistWithSpecifyArtists } from "../api/createPlaylistWithSpecifyArtists"
+import { CreatePlaylistDialog } from "./CreatePlaylistDialog"
 
 export const Form = () => {
     const theme = useTheme()
     const [minute, setMinute] = useState("");
+    const { toggle, open, isOpen } = useDisclosure();
+    const [isLoading, setIsLoding] = useState(true);
+    const [httpStatus, setHttpStatus] = useState(0);
+    const [playlistId, setPlaylistId] = useState("");
+    const context = React.useContext(ResponseContext);
     const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
         useValidation({
             deviceLocale: getDefaultLanguage(),
@@ -36,6 +46,49 @@ export const Form = () => {
             sessionStorage.setItem('tracksSaved', 'true');
         }
     }, []); // 空の依存配列を指定して、コンポーネントのマウント時にのみ実行する
+
+    const createPlaylist = async (minute: string) => {
+        if (!formValidate()) {
+            return
+        }
+        open()
+        setIsLoding(true)
+
+        const response = await CreatePlaylist(minute)
+        if (response.httpStatus == 201) {
+            setPlaylistId(response.playlistId)
+            // 本番環境だと、遅延を発生させないとコンテンツが正常に読み込めないため
+            let timeoutId: NodeJS.Timeout
+            timeoutId = setTimeout(() => {
+                setIsLoding(false)
+            }, 2000)
+        } else {
+            setIsLoding(false)
+        }
+        setHttpStatus(response.httpStatus)
+    }
+
+    const createPlaylistWithSpecifyArtists = async (minute: string) => {
+        if (!formValidate()) {
+            return
+        }
+        open()
+        setIsLoding(true)
+
+        const artistIds = context.followedArtistIds.map((item: any) => (item));
+        const response = await CreatePlaylistWithSpecifyArtists(minute, artistIds)
+        if (response.httpStatus == 201) {
+            setPlaylistId(response.playlistId)
+            // 本番環境だと、遅延を発生させないとコンテンツが正常に読み込めないため
+            let timeoutId: NodeJS.Timeout
+            timeoutId = setTimeout(() => {
+                setIsLoding(false)
+            }, 2000)
+        } else {
+            setIsLoding(false)
+        }
+        setHttpStatus(response.httpStatus)
+    }
 
     return (
         <View style={{
@@ -84,9 +137,28 @@ export const Form = () => {
                 placeholderTextColor={'#454c5091'}
                 onChangeText={setMinute}
                 value={minute}
+                onSubmitEditing={() => {
+                    if (context.followedArtistIds && context.followedArtistIds.length > 0) {
+                        createPlaylistWithSpecifyArtists(minute)
+                    } else {
+                        createPlaylist(minute)
+                    }
+                }
+                }
             />
             <SelectFollowedArtists />
-            <CreatePlaylistButton minute={minute} validate={formValidate} />
+            <CreatePlaylistButton
+                createPlaylist={createPlaylist}
+                createPlaylistWithSpecifyArtists={createPlaylistWithSpecifyArtists}
+                minute={minute}
+            />
+            <CreatePlaylistDialog
+                isOpen={isOpen}
+                httpStatus={httpStatus}
+                toggle={toggle}
+                playlistId={playlistId}
+                isLoading={isLoading}
+            />
         </View>
     );
 };

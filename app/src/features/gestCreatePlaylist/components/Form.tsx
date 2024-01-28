@@ -10,10 +10,17 @@ import defaultMessages from '../types/defaultMessages';
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
 import { getDefaultLanguage } from '../../../locales/i18n';
+import { CreatePlaylist } from "../api/createPlaylist"
+import { useDisclosure } from '../../../hooks/useDisclosure';
+import { CreatePlaylistDialog } from "./CreatePlaylistDialog"
 
 export const Form = () => {
     const theme = useTheme()
     const [minute, setMinute] = useState("");
+    const { toggle, open, isOpen } = useDisclosure();
+    const [isLoading, setIsLoading] = useState(true);
+    const [httpStatus, setHttpStatus] = useState(0);
+    const [playlistId, setPlaylistId] = useState("");
     const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
         useValidation({
             deviceLocale: getDefaultLanguage(),
@@ -28,6 +35,27 @@ export const Form = () => {
             minute: { numbers: true, required: true, range: true },
         })
     };
+
+    const createPlaylist = async (minute: string) => {
+        if (!formValidate()) {
+            return
+        }
+        open()
+        setIsLoading(true)
+
+        const response = await CreatePlaylist(minute)
+        if (response.httpStatus == 201) {
+            setPlaylistId(response.playlistId)
+            // 本番環境だと、遅延を発生させないとコンテンツが正常に読み込めないため
+            let timeoutId: NodeJS.Timeout
+            timeoutId = setTimeout(() => {
+                setIsLoading(false)
+            }, 2000)
+        } else {
+            setIsLoading(false)
+        }
+        setHttpStatus(response.httpStatus)
+    }
 
     return (
         <View style={{
@@ -76,9 +104,20 @@ export const Form = () => {
                 placeholderTextColor={'#454c5091'}
                 onChangeText={setMinute}
                 value={minute}
+                onSubmitEditing={() => createPlaylist(minute)}
             />
             <SwitchFavoriteArtists />
-            <CreatePlaylistButton minute={minute} validate={formValidate} />
+            <CreatePlaylistButton
+                createPlaylist={createPlaylist}
+                minute={minute}
+            />
+            <CreatePlaylistDialog
+                isOpen={isOpen}
+                httpStatus={httpStatus}
+                toggle={toggle}
+                playlistId={playlistId}
+                isLoading={isLoading}
+            />
         </View>
     );
 };
