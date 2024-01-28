@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, ActivityIndicator, View } from 'react-native';
 import { LoginButton } from "../features/auth";
 import { useAuth } from "../hooks/useAuth";
@@ -7,14 +7,21 @@ import { router } from 'expo-router';
 import { t } from '../locales/i18n';
 import { Form } from "../features/gestCreatePlaylist";
 import TextLink from 'react-native-text-link';
+import { Text } from "@rneui/base";
 
 export default function Page() {
     const theme = useTheme()
     const { loading, isAuthenticated } = useAuth();
+    const [pressAuth, setPressAuth] = useState(false);
 
     useEffect(() => {
         if (!loading && isAuthenticated) {
             router.replace('/playlist');
+        }
+        // TODO:: ドメイン統一後に削除
+        const pressAuthSession = sessionStorage.getItem('pressAuth');
+        if (pressAuthSession === 'true') {
+            setPressAuth(true);
         }
     }, [loading, isAuthenticated]);
 
@@ -39,6 +46,41 @@ export default function Page() {
                             ]}>
                                 {t('auth.login.desc')}
                             </TextLink>
+                            <Text
+                                h3
+                                h3Style={{
+                                    fontSize: 14,
+                                    color: theme.tertiary,
+                                }}
+                                style={{
+                                    maxWidth: 250,
+                                    marginLeft: 'auto',
+                                    marginRight: 'auto',
+                                    width: '100%'
+                                }}
+                            >
+                                {t('top.description2')}
+                            </Text>
+
+                            {/* TODO:: ドメイン統一後に削除 */}
+                            {pressAuth && (
+                                <Text
+                                    h3
+                                    h3Style={{
+                                        fontSize: 14,
+                                        color: theme.tertiary,
+                                    }}
+                                    style={{
+                                        maxWidth: 250,
+                                        marginTop: 10,
+                                        marginLeft: 'auto',
+                                        marginRight: 'auto',
+                                        width: '100%'
+                                    }}
+                                >
+                                    {t('top.description3')}
+                                </Text>
+                            )}
                         </>
                     )}
                 </>

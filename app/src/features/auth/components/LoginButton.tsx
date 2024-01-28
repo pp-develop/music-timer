@@ -14,6 +14,10 @@ export const LoginButton = () => {
         const response = await authz()
 
         if (response.httpStatus == 200) {
+            // TODO::　ドメイン統一後に削除
+            if (!sessionStorage.getItem('pressAuth')) {
+                sessionStorage.setItem('pressAuth', 'true');
+            }
             window.location.href = response.authzUrl;
         } else {
             setIsLoading(false)

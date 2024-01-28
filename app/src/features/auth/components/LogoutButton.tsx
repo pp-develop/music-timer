@@ -20,6 +20,10 @@ export const LogoutButton = () => {
         await RequestLogout()
         setAuthState(false)
         setIsLoading(false)
+
+        // TODO:: ドメイン統一後に削除
+        sessionStorage.setItem('pressAuth', 'false');
+
         router.replace("/")
     };
 
