@@ -11,10 +11,6 @@ export const LogoutButton = () => {
     const [isLoading, setIsLoading] = useState(false);
     const { setAuthState } = useAuth();
 
-    // if (!isAuthenticated) {
-    //     return null;  // ログインしていない場合は何も表示しない
-    // }
-
     const requestLogout = async () => {
         setIsLoading(true)
         await RequestLogout()

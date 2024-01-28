@@ -80,7 +80,7 @@ export const Header = () => {
                                         // width: '100%'
                                     }}
                                     placement="left"
-                                    rightComponent={<LogoutButton />}
+                                    rightComponent={pathname == '/' ? undefined : <LogoutButton />}
                                     rightContainerStyle={{
                                         justifyContent: 'center'
                                     }}
