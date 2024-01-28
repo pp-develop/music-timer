@@ -9,11 +9,11 @@ import { router } from 'expo-router';
 export const LogoutButton = () => {
     const theme = useTheme()
     const [isLoading, setIsLoading] = useState(false);
-    const { isAuthenticated, setAuthState } = useAuth();
+    const { setAuthState } = useAuth();
 
-    if (!isAuthenticated) {
-        return null;  // ログインしていない場合は何も表示しない
-    }
+    // if (!isAuthenticated) {
+    //     return null;  // ログインしていない場合は何も表示しない
+    // }
 
     const requestLogout = async () => {
         setIsLoading(true)
