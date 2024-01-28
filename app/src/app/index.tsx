@@ -38,6 +38,25 @@ export default function Page() {
                         <>
                             <Form />
                             <LoginButton />
+                            {/* TODO:: ドメイン統一後に削除 */}
+                            {pressAuth && (
+                                <Text
+                                    h3
+                                    h3Style={{
+                                        fontSize: 14,
+                                        color: 'red'
+                                    }}
+                                    style={{
+                                        maxWidth: 250,
+                                        marginTop: 10,
+                                        marginLeft: 'auto',
+                                        marginRight: 'auto',
+                                        width: '100%'
+                                    }}
+                                >
+                                    {t('top.description3')}
+                                </Text>
+                            )}
                             <TextLink textStyle={styles.desc} textLinkStyle={styles.descLink} links={[
                                 {
                                     text: t('auth.login.desc.link'),
@@ -61,26 +80,6 @@ export default function Page() {
                             >
                                 {t('top.description2')}
                             </Text>
-
-                            {/* TODO:: ドメイン統一後に削除 */}
-                            {pressAuth && (
-                                <Text
-                                    h3
-                                    h3Style={{
-                                        fontSize: 14,
-                                        color: theme.tertiary,
-                                    }}
-                                    style={{
-                                        maxWidth: 250,
-                                        marginTop: 10,
-                                        marginLeft: 'auto',
-                                        marginRight: 'auto',
-                                        width: '100%'
-                                    }}
-                                >
-                                    {t('top.description3')}
-                                </Text>
-                            )}
                         </>
                     )}
                 </>
