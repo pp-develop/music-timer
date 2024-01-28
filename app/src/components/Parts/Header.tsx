@@ -21,7 +21,7 @@ export const Header = () => {
             onPress={pathname == '/playlist' ? undefined : () => handleTitlePress()}
             style={{
                 color: theme.tertiary,
-                fontSize: 38,
+                fontSize: 18,
                 fontWeight: "800",
                 marginTop: 'auto',
                 marginBottom: 'auto',
