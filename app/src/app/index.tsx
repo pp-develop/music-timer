@@ -57,14 +57,6 @@ export default function Page() {
                                     {t('top.description3')}
                                 </Text>
                             )}
-                            <TextLink textStyle={styles.desc} textLinkStyle={styles.descLink} links={[
-                                {
-                                    text: t('auth.login.desc.link'),
-                                    onPress: () => window.open('https://forms.gle/p4CofyS2JfVaHadw9', '_blank', 'noopener,noreferrer')
-                                },
-                            ]}>
-                                {t('auth.login.desc')}
-                            </TextLink>
                             <Text
                                 h3
                                 h3Style={{
@@ -72,6 +64,7 @@ export default function Page() {
                                     color: theme.tertiary,
                                 }}
                                 style={{
+                                    marginTop: 30,
                                     maxWidth: 250,
                                     marginLeft: 'auto',
                                     marginRight: 'auto',
