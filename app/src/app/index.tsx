@@ -5,9 +5,8 @@ import { useAuth } from "../hooks/useAuth";
 import { useTheme } from '../config/ThemeContext';
 import { router } from 'expo-router';
 import { t } from '../locales/i18n';
-import { Form } from "../features/gestCreatePlaylist";
-import TextLink from 'react-native-text-link';
 import { Text } from "@rneui/base";
+import { Description } from "../components/Parts/Description"
 
 export default function Page() {
     const theme = useTheme()
@@ -36,7 +35,7 @@ export default function Page() {
                 <>
                     {!isAuthenticated && (
                         <>
-                            <Form />
+                            <Description />
                             <LoginButton />
                             {/* TODO:: ドメイン統一後に削除 */}
                             {pressAuth && (
@@ -57,22 +56,6 @@ export default function Page() {
                                     {t('top.description3')}
                                 </Text>
                             )}
-                            <Text
-                                h3
-                                h3Style={{
-                                    fontSize: 14,
-                                    color: theme.tertiary,
-                                }}
-                                style={{
-                                    marginTop: 30,
-                                    maxWidth: 250,
-                                    marginLeft: 'auto',
-                                    marginRight: 'auto',
-                                    width: '100%'
-                                }}
-                            >
-                                {t('top.description2')}
-                            </Text>
                         </>
                     )}
                 </>
