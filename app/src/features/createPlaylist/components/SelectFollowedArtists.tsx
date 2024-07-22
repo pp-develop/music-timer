@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { ScrollView, ActivityIndicator } from 'react-native';
 import { Chip } from '@rneui/themed';
 import { Text } from "@rneui/base";
@@ -7,9 +7,10 @@ import { useTheme } from '../../../config/ThemeContext';
 import { t } from '../../../locales/i18n';
 import { ResponseContext } from '../hooks/useContext';
 import { GetFollowedArtists, Artist } from '../api/getFollowedArtists';
+import useHorizontalScroll from '../hooks/useHorizontalScroll';
 
 export const SelectFollowedArtists = () => {
-    const theme = useTheme()
+    const theme = useTheme();
     const context = React.useContext(ResponseContext);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedChips, setSelectedChips] = useState([]);
@@ -18,6 +19,9 @@ export const SelectFollowedArtists = () => {
         margin: 0, // チップの周囲のスペース
         padding: 1, // チップ内のスペース
     };
+    const scrollViewRef = useRef(null);
+
+    useHorizontalScroll(scrollViewRef);
 
     useEffect(() => {
         const fetchArtists = async () => {
@@ -40,6 +44,7 @@ export const SelectFollowedArtists = () => {
             return newSelectedChips;
         });
     };
+
     return (
         <>
             <Text
@@ -66,10 +71,14 @@ export const SelectFollowedArtists = () => {
                     <>
                         {
                             artists.length > 0 ? (
-                                <ScrollView horizontal={true} style={{
-                                    width: '80%',
-                                    maxWidth: 400,
-                                }}>
+                                <ScrollView
+                                    ref={scrollViewRef}
+                                    horizontal={true}
+                                    style={{
+                                        width: '80%',
+                                        maxWidth: 400,
+                                    }}
+                                >
                                     <View style={{}}>
                                         <View style={{
                                             flexDirection: 'row',
