@@ -40,17 +40,11 @@ export const CreatePlaylistDialog = (prop: any) => {
         }}>
         {prop.isLoading ?
           <>
-            <Dialog.Loading />
-            <Text
-              h2
-              h2Style={{
-                fontSize: 20,
-                color: theme.tertiary
+            <Dialog.Loading
+              loadingProps={{
+                color: 'black',
               }}
-              style={styles.text}
-            >
-              {t('dialog.createPlaylist.loading')}
-            </Text>
+            />
           </>
           :
           prop.httpStatus == 201 ?
@@ -82,29 +76,42 @@ export const CreatePlaylistDialog = (prop: any) => {
                   <Text style={styles.buttonText}>{t('dialog.createPlaylist.open')}</Text>
                 </View>
               </Pressable>
+              <Dialog.Actions>
+                <Dialog.Button title="閉じる" onPress={handleBackdropPress} />
+              </Dialog.Actions>
             </>
             :
             prop.httpStatus == 404 ?
-              <Text
-                h2
-                h2Style={{
-                  fontSize: 20,
-                  color: theme.tertiary
-                }}
-                style={styles.text}
-              >
-                {t('dialog.createPlaylist.not.created')}
-              </Text>
+              <>
+                <Text
+                  h2
+                  h2Style={{
+                    fontSize: 20,
+                    color: theme.tertiary
+                  }}
+                  style={styles.text}
+                >
+                  {t('dialog.createPlaylist.not.created')}
+                </Text>
+                <Dialog.Actions>
+                  <Dialog.Button title="閉じる" onPress={handleBackdropPress} />
+                </Dialog.Actions>
+              </>
               :
-              <Text
-                h2
-                h2Style={{
-                  fontSize: 20,
-                  color: theme.tertiary
-                }} style={styles.text}
-              >
-                {t('dialog.createPlaylist.server.error')}
-              </Text>
+              <>
+                <Text
+                  h2
+                  h2Style={{
+                    fontSize: 20,
+                    color: theme.tertiary
+                  }} style={styles.text}
+                >
+                  {t('dialog.createPlaylist.server.error')}
+                </Text>
+                <Dialog.Actions>
+                  <Dialog.Button title="閉じる" onPress={handleBackdropPress} />
+                </Dialog.Actions>
+              </>
         }
       </Dialog>
     </View>
