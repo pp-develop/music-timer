@@ -1,6 +1,9 @@
 # 　make-playlist-by-specify
 
-## Overview
-Check out the live site here
-[music-timer](https://music-timer.netlify.app/).  
-create spotify playlist by specifying time  
+## Live URL
+
+Check out the live site here:  
+[music-timer](https://music-timer.netlify.app/)
+
+Create a Spotify playlist by specifying the time.
+
