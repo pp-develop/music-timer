@@ -9,6 +9,7 @@
   "auth.gest": "ゲストユーザー利用",
   "auth.logout": "ログアウト",
   "form.specifyTime": "プレイリストの再生時間（分）",
+  "form.specifyTime.minute": "分",
   "form.specifyTime.placeholder": "3 ～ 100",
   "form.includeFavoriteArtists": "フォロー中のアーティストから選曲",
   "form.noFollowedArtists": "フォローしているアーティストがいません。",

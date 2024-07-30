@@ -6,6 +6,7 @@
     "auth.login": "Login",
     "auth.logout": "Logout",
     "form.specifyTime": "Specify Time",
+    "form.specifyTime.minute": "Min",
     "form.specifyTime.placeholder": "Please enter a value between 3 and 100.",
     "form.includeFavoriteArtists": "Create a playlist from your favorite artist's songs.",
     "form.createPlaylist": "Create Playlist",

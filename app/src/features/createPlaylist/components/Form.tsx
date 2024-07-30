@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { Input } from "@rneui/base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CreatePlaylistButton } from "./CreatePlaylistButton"
@@ -19,7 +19,7 @@ import { CreatePlaylistDialog } from "./CreatePlaylistDialog"
 
 export const Form = () => {
     const theme = useTheme()
-    const [minute, setMinute] = useState("");
+    const [minute, setMinute] = useState("25");
     const { toggle, open, isOpen } = useDisclosure();
     const [isLoading, setIsLoding] = useState(true);
     const [httpStatus, setHttpStatus] = useState(0);
@@ -97,21 +97,21 @@ export const Form = () => {
             <Input
                 keyboardType='numeric'
                 containerStyle={{
-                    maxWidth: 500,
+                    maxWidth: 300,
                     marginLeft: 'auto',
                     marginRight: 'auto',
                 }}
                 disabledInputStyle={{
                 }}
                 inputContainerStyle={{
-                    maxWidth: 500,
+                    maxWidth: 300,
                     marginLeft: 20,
                     marginRight: 20,
                     // width: '100%'
                 }}
                 errorMessage={getErrorsInField("minute")[0]}
                 errorStyle={{
-                    maxWidth: 500,
+                    maxWidth: 300,
                     marginLeft: 20,
                     marginRight: 20,
                     // width: '100%'
@@ -119,20 +119,22 @@ export const Form = () => {
                 errorProps={{}}
                 inputStyle={{
                     color: theme.tertiary,
-                    paddingLeft: 10,
+                    marginRight: 5,
+                    textAlign: 'center'
                 }}
-                label={t('form.specifyTime')}
-                labelStyle={{
-                    paddingTop: 30,
-                    color: theme.tertiary,
-                    maxWidth: 500,
-                    marginLeft: 20,
-                    marginRight: 20,
-                    // width: '100%'
-                }}
+                // label={t('form.specifyTime')}
+                // labelStyle={{
+                //     paddingTop: 30,
+                //     color: theme.tertiary,
+                //     maxWidth: 300,
+                //     marginLeft: 20,
+                //     marginRight: 20,
+                //     // width: '100%'
+                // }}
                 labelProps={{}}
                 leftIcon={<Icon name="clock-outline" size={20} />}
                 leftIconContainerStyle={{}}
+                rightIcon={<View style={{ paddingRight: 10 }}><Text style={{ color: theme.tertiary }}>分</Text></View>}
                 placeholder={t('form.specifyTime.placeholder')}
                 placeholderTextColor={'#454c5091'}
                 onChangeText={setMinute}
