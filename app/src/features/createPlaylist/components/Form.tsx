@@ -97,21 +97,21 @@ export const Form = () => {
             <Input
                 keyboardType='numeric'
                 containerStyle={{
-                    maxWidth: 300,
+                    maxWidth: 400,
                     marginLeft: 'auto',
                     marginRight: 'auto',
                 }}
                 disabledInputStyle={{
                 }}
                 inputContainerStyle={{
-                    maxWidth: 300,
+                    maxWidth: 400,
                     marginLeft: 20,
                     marginRight: 20,
                     // width: '100%'
                 }}
                 errorMessage={getErrorsInField("minute")[0]}
                 errorStyle={{
-                    maxWidth: 300,
+                    maxWidth: 400,
                     marginLeft: 20,
                     marginRight: 20,
                     // width: '100%'
@@ -122,15 +122,6 @@ export const Form = () => {
                     marginRight: 5,
                     textAlign: 'center'
                 }}
-                // label={t('form.specifyTime')}
-                // labelStyle={{
-                //     paddingTop: 30,
-                //     color: theme.tertiary,
-                //     maxWidth: 300,
-                //     marginLeft: 20,
-                //     marginRight: 20,
-                //     // width: '100%'
-                // }}
                 labelProps={{}}
                 leftIcon={<Icon name="clock-outline" size={20} />}
                 leftIconContainerStyle={{}}
