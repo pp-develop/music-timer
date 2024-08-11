@@ -1,13 +1,14 @@
-import { useEffect } from 'react';
-import { ScrollView } from 'react-native';
+import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 
 const useHorizontalScroll = (scrollViewRef) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   useEffect(() => {
     if (Platform.OS !== 'web') return;
 
     const handleWheel = (event) => {
-      if (scrollViewRef.current) {
+      if (isHovered && scrollViewRef.current) {
         scrollViewRef.current.scrollTo({
           x: scrollViewRef.current.scrollLeft + event.deltaY,
           animated: false,
@@ -20,7 +21,9 @@ const useHorizontalScroll = (scrollViewRef) => {
     return () => {
       window.removeEventListener('wheel', handleWheel);
     };
-  }, [scrollViewRef]);
+  }, [scrollViewRef, isHovered]);
+
+  return { onMouseEnter: () => setIsHovered(true), onMouseLeave: () => setIsHovered(false) };
 };
 
 export default useHorizontalScroll;
