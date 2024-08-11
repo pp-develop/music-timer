@@ -22,8 +22,7 @@ export const SelectFollowedArtists = () => {
         borderRadius: 25,
     };
     const scrollViewRef = useRef(null);
-
-    useHorizontalScroll(scrollViewRef);
+    const { onMouseEnter, onMouseLeave } = useHorizontalScroll(scrollViewRef);
 
     useEffect(() => {
         const fetchArtists = async () => {
@@ -101,6 +100,8 @@ export const SelectFollowedArtists = () => {
                                     width: '80%',
                                     maxWidth: 400,
                                 }}
+                                onMouseEnter={onMouseEnter}
+                                onMouseLeave={onMouseLeave}
                             >
                                 <View>
                                     {renderArtistChips(0, Math.ceil(artists.length / 3))}
