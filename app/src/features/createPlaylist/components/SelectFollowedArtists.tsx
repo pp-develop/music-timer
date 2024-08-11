@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ScrollView, ActivityIndicator } from 'react-native';
-import { Chip } from '@rneui/themed';
+import { Chip, Avatar } from '@rneui/themed';
 import { Text } from "@rneui/base";
 import { View } from 'react-native';
 import { useTheme } from '../../../config/ThemeContext';
@@ -16,8 +16,10 @@ export const SelectFollowedArtists = () => {
     const [selectedChips, setSelectedChips] = useState([]);
     const [artists, setArtists] = useState<Artist[]>([]);
     const chipStyle = {
-        margin: 0, // チップの周囲のスペース
-        padding: 1, // チップ内のスペース
+        marginRight: 1,
+        marginLeft: 1,
+        height: 65,
+        borderRadius: 25,
     };
     const scrollViewRef = useRef(null);
 
@@ -45,6 +47,28 @@ export const SelectFollowedArtists = () => {
         });
     };
 
+    const renderArtistChips = (startIndex, endIndex) => (
+        <View style={{ flexDirection: 'row' }}>
+            {artists.slice(startIndex, endIndex).map(artist => (
+                <Chip
+                    key={artist.ID}
+                    title={artist.Name}
+                    onPress={() => toggleChip(artist.ID)}
+                    type={selectedChips.includes(artist.ID) ? 'solid' : 'outline'}
+                    containerStyle={chipStyle}
+                    titleStyle={{ fontSize: 16 }}
+                    icon={
+                        <Avatar
+                            source={{ uri: artist.ImageUrl }}
+                            size={40}
+                            rounded
+                        />
+                    }
+                />
+            ))}
+        </View>
+    );
+
     return (
         <>
             <Text
@@ -69,49 +93,26 @@ export const SelectFollowedArtists = () => {
                     <ActivityIndicator size="large" color={theme.tertiary} />
                 ) : (
                     <>
-                        {
-                            artists.length > 0 ? (
-                                <ScrollView
-                                    ref={scrollViewRef}
-                                    horizontal={true}
-                                    style={{
-                                        width: '80%',
-                                        maxWidth: 400,
-                                    }}
-                                >
-                                    <View style={{}}>
-                                        <View style={{
-                                            flexDirection: 'row',
-                                        }}>
-                                            {artists.slice(0, Math.ceil(artists.length / 2)).map(artist => (
-                                                <Chip
-                                                    key={artist.ID}
-                                                    title={artist.Name}
-                                                    onPress={() => toggleChip(artist.ID)}
-                                                    type={selectedChips.includes(artist.ID) ? 'solid' : 'outline'}
-                                                    containerStyle={chipStyle}
-                                                />
-                                            ))}
-                                        </View>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            {artists.slice(Math.ceil(artists.length / 2)).map(artist => (
-                                                <Chip
-                                                    key={artist.ID}
-                                                    title={artist.Name}
-                                                    onPress={() => toggleChip(artist.ID)}
-                                                    type={selectedChips.includes(artist.ID) ? 'solid' : 'outline'}
-                                                    containerStyle={chipStyle}
-                                                />
-                                            ))}
-                                        </View>
-                                    </View>
-                                </ScrollView>
-                            ) : (
-                                <Text style={{ textAlign: 'center' }}>
-                                    {t('form.noFollowedArtists')}
-                                </Text>
-                            )
-                        }
+                        {artists.length > 0 ? (
+                            <ScrollView
+                                ref={scrollViewRef}
+                                horizontal={true}
+                                style={{
+                                    width: '80%',
+                                    maxWidth: 400,
+                                }}
+                            >
+                                <View>
+                                    {renderArtistChips(0, Math.ceil(artists.length / 3))}
+                                    {renderArtistChips(Math.ceil(artists.length / 3), Math.ceil(2 * artists.length / 3))}
+                                    {renderArtistChips(Math.ceil(2 * artists.length / 3), artists.length)}
+                                </View>
+                            </ScrollView>
+                        ) : (
+                            <Text style={{ textAlign: 'center' }}>
+                                {t('form.noFollowedArtists')}
+                            </Text>
+                        )}
                     </>
                 )}
             </>
