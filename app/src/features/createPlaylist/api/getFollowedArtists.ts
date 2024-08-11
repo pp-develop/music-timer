@@ -27,7 +27,8 @@ export function GetFollowedArtists(): Promise<Response> {
                     getArtists.artists = response.data.map((item: any) => (
                         {
                             ID: item.ID,
-                            Name: item.Name
+                            Name: item.Name,
+                            ImageUrl: item.ImageUrl
                         }));
                     getArtists.httpStatus = response.status;
                 }
