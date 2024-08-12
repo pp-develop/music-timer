@@ -12,6 +12,7 @@
     "form.deletePlaylist": "Delete Playlist",
     "form.deletePlaylistExplan": "I will delete the playlist created with Specify.",
     "dialog.not.created": "The playlist could not be created.\nPlease try again.",
-    "dialog.createPlaylist.server.error": "A server error has occurred.\nWe apologize for the inconvenience, but please try again later."
+    "dialog.createPlaylist.server.error": "A server error has occurred.\nWe apologize for the inconvenience, but please try again later.",
+    "toast.playlistDeleting": "Deleting..."
   }
   

@@ -8,24 +8,31 @@ import toast, { Toaster } from 'react-hot-toast';
 
 export const DeletePlaylist = (props: any) => {
     const theme = useTheme();
+    const [loading, setLoading] = useState(false);
 
     const notifi = async () => {
-        toast.promise(deletePlaylist(), {
-            loading: '',
-            success: () => t('toast.playlistDeleted'),
-            error: () => t('toast.playlistDeleteError'),
-        },
-            // {
-            //     style: {
-            //         minWidth: '250px',
-            //     },
-            //     success: {
-            //         duration: 5000,
-            //         icon: '🔥',
-            //     }
-            // }
-        );
-
+        setLoading(true);
+        try {
+            await toast.promise(deletePlaylist(), {
+                loading: '',
+                success: () => t('toast.playlistDeleted'),
+                error: () => t('toast.playlistDeleteError'),
+            },
+                // {
+                //     style: {
+                //         minWidth: '250px',
+                //     },
+                //     success: {
+                //         duration: 5000,
+                //         icon: '🔥',
+                //     }
+                // }
+            );
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -43,7 +50,6 @@ export const DeletePlaylist = (props: any) => {
                         background: '#363636',
                         color: '#fff',
                     },
-
                     // Default options for specific types
                     success: {
                         duration: 3000,
@@ -80,6 +86,7 @@ export const DeletePlaylist = (props: any) => {
                     color: 'white'
                 }}
                 onPress={notifi}
+                disabled={loading}  // 通信中はボタンを無効化
             />
             <Text
                 h3
