@@ -14,7 +14,7 @@ export const DeletePlaylist = (props: any) => {
         setLoading(true);
         try {
             await toast.promise(deletePlaylist(), {
-                loading: '',
+                loading: t('toast.playlistDeleting'),
                 success: () => t('toast.playlistDeleted'),
                 error: () => t('toast.playlistDeleteError'),
             },
