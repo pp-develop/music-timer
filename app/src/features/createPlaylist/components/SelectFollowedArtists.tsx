@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
-import { ScrollView, ActivityIndicator } from 'react-native';
+import { ScrollView, ActivityIndicator, View } from 'react-native';
 import { Chip, Avatar } from '@rneui/themed';
 import { Text } from "@rneui/base";
-import { View } from 'react-native';
 import { useTheme } from '../../../config/ThemeContext';
 import { t } from '../../../locales/i18n';
 import { ResponseContext } from '../hooks/useContext';
@@ -15,6 +14,7 @@ export const SelectFollowedArtists = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedChips, setSelectedChips] = useState([]);
     const [artists, setArtists] = useState<Artist[]>([]);
+    const [error, setError] = useState<string | null>(null);
     const chipStyle = {
         marginRight: 1,
         marginLeft: 1,
@@ -27,13 +27,24 @@ export const SelectFollowedArtists = () => {
     useEffect(() => {
         const fetchArtists = async () => {
             setIsLoading(true);
-            const artistsData = await GetFollowedArtists();
-            setArtists(artistsData.artists);
-            setIsLoading(false);
+            setError(null);
+
+            try {
+                const artistsData = await GetFollowedArtists();
+                if (artistsData.httpStatus == 200) {
+                    setArtists(artistsData.artists);
+                } else {
+                    setError(`Error: ${artistsData.httpStatus}`);
+                }
+            } catch (err) {
+                setError('Network error');
+            } finally {
+                setIsLoading(false);
+            }
         };
 
         fetchArtists();
-    }, []); // 空の依存配列を指定して、コンポーネントのマウント時にのみ実行する
+    }, []);
 
     const toggleChip = (chip) => {
         setSelectedChips(currentSelectedChips => {
@@ -97,6 +108,10 @@ export const SelectFollowedArtists = () => {
             <>
                 {isLoading ? (
                     <ActivityIndicator size="large" color={theme.tertiary} />
+                ) : error ? (
+                    <Text style={{ textAlign: 'center' }}>
+                        {t('form.get.followedArtists.error')}
+                    </Text>
                 ) : (
                     <>
                         {artists.length > 0 ? (

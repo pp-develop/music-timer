@@ -12,6 +12,7 @@
   "form.specifyTime.placeholder": "3 ～ 100",
   "form.includeFavoriteArtists": "フォロー中のアーティストから選曲",
   "form.noFollowedArtists": "フォローしているアーティストがいません。",
+  "form.get.followedArtists.error": "フォローしているアーティストの取得に失敗しました。\nしばらく時間を置いてから再度試してください。",
   "form.gest.includeFavoriteArtists.desc": "※ログインユーザーのみ利用可",
   "form.createPlaylist": "プレイリストを作成",
   "form.deletePlaylist": "プレイリストを削除",

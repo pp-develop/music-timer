@@ -8,6 +8,7 @@
     "form.specifyTime.minute": "Min",
     "form.specifyTime.placeholder": "Please enter a value between 3 and 100.",
     "form.includeFavoriteArtists": "Create a playlist from your favorite artist's songs.",
+    "form.get.followedArtists.error": "Failed to retrieve followed artists.\nPlease try again after some time.",
     "form.createPlaylist": "Create Playlist",
     "form.deletePlaylist": "Delete Playlist",
     "form.deletePlaylistExplan": "I will delete the playlist created with Specify.",
