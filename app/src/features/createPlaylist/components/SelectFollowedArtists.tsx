@@ -57,11 +57,18 @@ export const SelectFollowedArtists = () => {
                     containerStyle={chipStyle}
                     titleStyle={{ fontSize: 16 }}
                     icon={
-                        <Avatar
-                            source={{ uri: artist.ImageUrl }}
-                            size={40}
-                            rounded
-                        />
+                        artist.ImageUrl ? (
+                            <Avatar
+                                source={{ uri: artist.ImageUrl }}
+                                size={40}
+                                rounded
+                            />
+                        ) : (
+                            <View style={{
+                                width: 0,
+                                height: 40
+                            }} />
+                        )
                     }
                 />
             ))}
