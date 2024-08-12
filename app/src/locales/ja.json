@@ -20,6 +20,7 @@
   "dialog.createPlaylist.close": "閉じる",
   "dialog.createPlaylist.not.created": "指定した条件でプレイリストを作成できませんでした。\n条件を見直し再度お試しください。",
   "dialog.createPlaylist.server.error": "現在サーバーにアクセスできません。\nしばらく時間を置いてから再度試してください。",
+  "toast.playlistDeleting": "削除中...",
   "toast.playlistDeleted": "プレイリストが削除されました。",
   "toast.playlistDeleteError": "プレイリストの削除中に問題が発生しました。\nしばらく時間を置いてから再度試してください。"
 }
