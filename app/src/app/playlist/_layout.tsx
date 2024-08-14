@@ -5,6 +5,7 @@ import { DeletePlaylist } from "../../features/deletePlaylist/components/DeleteP
 import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from '../../config/ThemeContext';
 import { router } from 'expo-router';
+import { PlaylistProvider } from '../../features/deletePlaylist/hooks/useContext';
 
 export default function Layout() {
     const theme = useTheme()
@@ -27,8 +28,10 @@ export default function Layout() {
                 <>
                     {isAuthenticated && (
                         <>
-                            <Form />
-                            <DeletePlaylist />
+                            <PlaylistProvider>
+                                <Form />
+                                <DeletePlaylist />
+                            </PlaylistProvider>
                         </>
                     )}
                 </>

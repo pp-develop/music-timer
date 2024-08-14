@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text } from 'react-native';
 import { Input } from "@rneui/base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -9,7 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
-import { getDefaultLanguage } from '../../../locales/i18n';
+import PlaylistContext from '../../deletePlaylist/hooks/useContext';
 import { SaveTracks } from '../api/saveTracks';
 import { useDisclosure } from '../../../hooks/useDisclosure';
 import { ResponseContext } from '../hooks/useContext';
@@ -35,6 +35,7 @@ export const Form = () => {
     const [httpStatus, setHttpStatus] = useState(0);
     const [playlistId, setPlaylistId] = useState("");
     const context = React.useContext(ResponseContext);
+    const { setShowDeleteButton } = useContext(PlaylistContext);
 
     const { control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
@@ -60,6 +61,7 @@ export const Form = () => {
         if (response.httpStatus === 201) {
             setPlaylistId(response.playlistId);
             setTimeout(() => setIsLoading(false), 2000);
+            setShowDeleteButton(true)
         } else {
             setIsLoading(false);
         }
