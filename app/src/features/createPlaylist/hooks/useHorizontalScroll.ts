@@ -9,6 +9,10 @@ const useHorizontalScroll = (scrollViewRef) => {
 
     const handleWheel = (event) => {
       if (isHovered && scrollViewRef.current) {
+        // ページ全体のスクロールを無効にする
+        event.preventDefault();
+
+        // 横スクロールを実行する
         scrollViewRef.current.scrollTo({
           x: scrollViewRef.current.scrollLeft + event.deltaY,
           animated: false,
@@ -16,7 +20,7 @@ const useHorizontalScroll = (scrollViewRef) => {
       }
     };
 
-    window.addEventListener('wheel', handleWheel);
+    window.addEventListener('wheel', handleWheel, { passive: false });
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
