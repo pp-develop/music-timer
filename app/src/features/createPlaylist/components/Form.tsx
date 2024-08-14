@@ -2,148 +2,97 @@ import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { Input } from "@rneui/base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { CreatePlaylistButton } from "./CreatePlaylistButton"
-import { SelectFollowedArtists } from "./SelectFollowedArtists"
-import { useValidation } from 'react-native-form-validator';
-import defaultRules from '../types/defaultRules';
-import defaultMessages from '../types/defaultMessages';
+import { CreatePlaylistButton } from "./CreatePlaylistButton";
+import { SelectFollowedArtists } from "./SelectFollowedArtists";
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
 import { getDefaultLanguage } from '../../../locales/i18n';
 import { SaveTracks } from '../api/saveTracks';
 import { useDisclosure } from '../../../hooks/useDisclosure';
 import { ResponseContext } from '../hooks/useContext';
-import { CreatePlaylist } from "../api/createPlaylist"
-import { CreatePlaylistWithSpecifyArtists } from "../api/createPlaylistWithSpecifyArtists"
-import { CreatePlaylistDialog } from "./CreatePlaylistDialog"
+import { CreatePlaylist } from "../api/createPlaylist";
+import { CreatePlaylistWithSpecifyArtists } from "../api/createPlaylistWithSpecifyArtists";
+import { CreatePlaylistDialog } from "./CreatePlaylistDialog";
+
+const schema = yup.object().shape({
+    minute: yup
+        .number()
+        .nullable() // 空の入力を許可する
+        .transform((value, originalValue) => (originalValue === '' ? null : value)) // 空の入力をnullに変換する
+        .required(t('form.specifyTime.required'))
+        .typeError(t('form.specifyTime.typeError')) // 数値チェックを行う
+        .min(3, t('form.specifyTime.range'))
+        .max(100, t('form.specifyTime.range'))
+});
 
 export const Form = () => {
-    const theme = useTheme()
-    const [minute, setMinute] = useState("25");
+    const theme = useTheme();
     const { toggle, open, isOpen } = useDisclosure();
-    const [isLoading, setIsLoding] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const [httpStatus, setHttpStatus] = useState(0);
     const [playlistId, setPlaylistId] = useState("");
     const context = React.useContext(ResponseContext);
-    const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
-        useValidation({
-            deviceLocale: getDefaultLanguage(),
-            state: { minute },
-            labels: { minute: t('form.specifyTime') },
-            rules: defaultRules,
-            messages: defaultMessages
-        });
 
-    const formValidate = () => {
-        return validate({
-            minute: { numbers: true, required: true, range: true },
-        })
-    };
+    const { control, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(schema),
+        defaultValues: { minute: "25" },
+    });
 
     useEffect(() => {
         if (!sessionStorage.getItem('tracksSaved')) {
             SaveTracks();
             sessionStorage.setItem('tracksSaved', 'true');
         }
-    }, []); // 空の依存配列を指定して、コンポーネントのマウント時にのみ実行する
+    }, []);
 
-    const createPlaylist = async (minute: string) => {
-        if (!formValidate()) {
-            return
-        }
-        open()
-        setIsLoding(true)
+    const onSubmit = async (data) => {
+        const minute = data.minute;
+        open();
+        setIsLoading(true);
 
-        const response = await CreatePlaylist(minute)
-        if (response.httpStatus == 201) {
-            setPlaylistId(response.playlistId)
-            // 本番環境だと、遅延を発生させないとコンテンツが正常に読み込めないため
-            let timeoutId: NodeJS.Timeout
-            timeoutId = setTimeout(() => {
-                setIsLoding(false)
-            }, 2000)
+        const response = context.followedArtistIds && context.followedArtistIds.length > 0
+            ? await CreatePlaylistWithSpecifyArtists(minute, context.followedArtistIds)
+            : await CreatePlaylist(minute);
+
+        if (response.httpStatus === 201) {
+            setPlaylistId(response.playlistId);
+            setTimeout(() => setIsLoading(false), 2000);
         } else {
-            setIsLoding(false)
+            setIsLoading(false);
         }
-        setHttpStatus(response.httpStatus)
-    }
-
-    const createPlaylistWithSpecifyArtists = async (minute: string) => {
-        if (!formValidate()) {
-            return
-        }
-        open()
-        setIsLoding(true)
-
-        const artistIds = context.followedArtistIds.map((item: any) => (item));
-        const response = await CreatePlaylistWithSpecifyArtists(minute, artistIds)
-        if (response.httpStatus == 201) {
-            setPlaylistId(response.playlistId)
-            // 本番環境だと、遅延を発生させないとコンテンツが正常に読み込めないため
-            let timeoutId: NodeJS.Timeout
-            timeoutId = setTimeout(() => {
-                setIsLoding(false)
-            }, 2000)
-        } else {
-            setIsLoding(false)
-        }
-        setHttpStatus(response.httpStatus)
-    }
+        setHttpStatus(response.httpStatus);
+    };
 
     return (
-        <View style={{
-            alignItems: 'center'
-        }}>
-            <Input
-                keyboardType='numeric'
-                containerStyle={{
-                    maxWidth: 400,
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                }}
-                disabledInputStyle={{
-                }}
-                inputContainerStyle={{
-                    maxWidth: 400,
-                    marginLeft: 20,
-                    marginRight: 20,
-                    // width: '100%'
-                }}
-                errorMessage={getErrorsInField("minute")[0]}
-                errorStyle={{
-                    maxWidth: 400,
-                    marginLeft: 20,
-                    marginRight: 20,
-                    // width: '100%'
-                }}
-                errorProps={{}}
-                inputStyle={{
-                    color: theme.tertiary,
-                    marginRight: 5,
-                    textAlign: 'center'
-                }}
-                labelProps={{}}
-                leftIcon={<Icon name="clock-outline" size={20} />}
-                leftIconContainerStyle={{}}
-                rightIcon={<View style={{ paddingRight: 10 }}><Text style={{ color: theme.tertiary }}>分</Text></View>}
-                placeholder={t('form.specifyTime.placeholder')}
-                placeholderTextColor={'#454c5091'}
-                onChangeText={setMinute}
-                value={minute}
-                onSubmitEditing={() => {
-                    if (context.followedArtistIds && context.followedArtistIds.length > 0) {
-                        createPlaylistWithSpecifyArtists(minute)
-                    } else {
-                        createPlaylist(minute)
-                    }
-                }
-                }
+        <View style={{ alignItems: 'center' }}>
+            <Controller
+                control={control}
+                name="minute"
+                render={({ field: { onChange, value } }) => (
+                    <Input
+                        keyboardType='numeric'
+                        containerStyle={{ maxWidth: 400, marginLeft: 'auto', marginRight: 'auto' }}
+                        inputContainerStyle={{ maxWidth: 400, marginLeft: 20, marginRight: 20 }}
+                        errorMessage={errors.minute?.message}
+                        errorStyle={{ maxWidth: 400, marginLeft: 20, marginRight: 20, }}
+                        inputStyle={{ color: theme.tertiary, marginRight: 5, textAlign: 'center' }}
+                        leftIcon={<Icon name="clock-outline" size={20} />}
+                        placeholder={t('form.specifyTime.placeholder')}
+                        placeholderTextColor={'#454c5091'}
+                        onChangeText={onChange}
+                        value={value}
+                        onSubmitEditing={handleSubmit(onSubmit)}
+                        rightIcon={<Text style={{ color: theme.tertiary, paddingRight: 10 }}>{t('form.specifyTime.minute')}</Text>}
+                    />
+                )}
             />
             <SelectFollowedArtists />
             <CreatePlaylistButton
-                createPlaylist={createPlaylist}
-                createPlaylistWithSpecifyArtists={createPlaylistWithSpecifyArtists}
-                minute={minute}
+                createPlaylist={handleSubmit(onSubmit)}
+                createPlaylistWithSpecifyArtists={handleSubmit(onSubmit)}
             />
             <CreatePlaylistDialog
                 isOpen={isOpen}
