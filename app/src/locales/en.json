@@ -24,5 +24,8 @@
   "dialog.createPlaylist.server.error": "The server is currently unavailable.\nPlease try again after some time.",
   "toast.playlistDeleting": "Deleting...",
   "toast.playlistDeleted": "The playlist has been deleted.",
-  "toast.playlistDeleteError": "There was a problem deleting the playlist.\nPlease try again after some time."
+  "toast.playlistDeleteError": "There was a problem deleting the playlist.\nPlease try again after some time.",
+  "form.specifyTime.required": "Please enter the playback time.",
+  "form.specifyTime.typeError": "Please enter a numeric value only.",
+  "form.specifyTime.range": "Playback time must be between 3 and 100 minutes."
 }
