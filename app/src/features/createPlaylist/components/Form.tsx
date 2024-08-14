@@ -77,6 +77,7 @@ export const Form = () => {
                         containerStyle={{ maxWidth: 400, marginLeft: 'auto', marginRight: 'auto' }}
                         inputContainerStyle={{ maxWidth: 400, marginLeft: 20, marginRight: 20 }}
                         errorMessage={errors.minute?.message}
+                        errorStyle={{ maxWidth: 400, marginLeft: 20, marginRight: 20, }}
                         inputStyle={{ color: theme.tertiary, marginRight: 5, textAlign: 'center' }}
                         leftIcon={<Icon name="clock-outline" size={20} />}
                         placeholder={t('form.specifyTime.placeholder')}
