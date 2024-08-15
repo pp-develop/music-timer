@@ -9,6 +9,7 @@
     "web": "npx expo start --web"
   },
   "dependencies": {
+    "@expo/metro-runtime": "~3.2.3",
     "@hookform/resolvers": "^3.9.0",
     "@react-native-async-storage/async-storage": "1.24.0",
     "@rneui/base": "^4.0.0-rc.7",
@@ -34,8 +35,7 @@
     "react-native-vector-icons": "^10.1.0",
     "react-native-web": "~0.19.12",
     "react-spotify-embed": "^2.0.4",
-    "yup": "^1.4.0",
-    "@expo/metro-runtime": "~3.2.3"
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
