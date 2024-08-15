@@ -29,7 +29,7 @@ export default function Layout() {
   return (
     <ThemeProvider theme={theme}>
       <div style={{
-        backgroundColor: theme.primaryColor, height: '100%', width: '100%'
+        backgroundColor: theme.primaryColor, height: '100%', width: '100%', overflow: "auto"
       }}>
         <StatusBar style="auto" backgroundColor={theme.primaryColor} />
         <SafeAreaProvider>
