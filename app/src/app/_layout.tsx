@@ -7,6 +7,7 @@ import { HelmetProvider } from 'react-helmet-async'
 import { AuthProvider } from '../hooks/useAuth';
 import { StatusBar } from 'expo-status-bar';
 import React from "react";
+import { View } from 'react-native';
 import { Slot } from 'expo-router';
 
 export default function Layout() {
@@ -28,8 +29,11 @@ export default function Layout() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div style={{
-        backgroundColor: theme.primaryColor, height: '100%', width: '100%', overflow: "auto"
+      <View style={{
+        backgroundColor: theme.primaryColor,
+        flex: 1, // heightの代わりにflexを使用
+        width: '100%',
+        overflow: "auto"
       }}>
         <StatusBar style="auto" backgroundColor={theme.primaryColor} />
         <SafeAreaProvider>
@@ -41,7 +45,7 @@ export default function Layout() {
             <Slot />
           </AuthProvider>
         </SafeAreaProvider>
-      </div>
+      </View>
     </ThemeProvider>
   )
 }

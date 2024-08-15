@@ -1,0 +1,28 @@
+{
+  "cli": {
+    "version": ">= 10.2.3"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "API_URL": "https://music-timer-api.onrender.com",
+        "BASE_URL": "https://music-timer.netlify.app"
+      },
+      "node": "22.6.0"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {
+      "env": {
+        "API_URL": "https://music-timer-api.onrender.com",
+        "BASE_URL": "https://music-timer.netlify.app"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

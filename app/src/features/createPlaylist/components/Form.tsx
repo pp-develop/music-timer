@@ -16,6 +16,7 @@ import { ResponseContext } from '../hooks/useContext';
 import { CreatePlaylist } from "../api/createPlaylist";
 import { CreatePlaylistWithSpecifyArtists } from "../api/createPlaylistWithSpecifyArtists";
 import { CreatePlaylistDialog } from "./CreatePlaylistDialog";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const schema = yup.object().shape({
     minute: yup
@@ -43,9 +44,9 @@ export const Form = () => {
     });
 
     useEffect(() => {
-        if (!sessionStorage.getItem('tracksSaved')) {
+        if (!AsyncStorage.getItem('tracksSaved')) {
             SaveTracks();
-            sessionStorage.setItem('tracksSaved', 'true');
+            AsyncStorage.setItem('tracksSaved', 'true');
         }
     }, []);
 

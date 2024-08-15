@@ -4,7 +4,7 @@ import {
 } from '@rneui/themed';
 import { Dimensions, StyleSheet, Pressable, View, Image } from 'react-native';
 import { Text } from "@rneui/base";
-import { Spotify } from 'react-spotify-embed';
+// import { Spotify } from 'react-spotify-embed';
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
 
@@ -49,10 +49,10 @@ export const CreatePlaylistDialog = (prop: any) => {
           :
           prop.httpStatus == 201 ?
             <>
-              <Spotify
+              {/* <Spotify
                 link={"https://open.spotify.com/playlist/" + prop.playlistId}
                 width={width * 0.8}
-              />
+              /> */}
               <Pressable style={{
                 alignItems: 'center',
                 justifyContent: 'center',

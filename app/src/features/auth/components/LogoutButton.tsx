@@ -5,6 +5,7 @@ import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
 import { useAuth } from "../../../../src/hooks/useAuth";
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const LogoutButton = () => {
     const theme = useTheme()
@@ -18,7 +19,7 @@ export const LogoutButton = () => {
         setIsLoading(false)
 
         // TODO:: ドメイン統一後に削除
-        sessionStorage.setItem('pressAuth', 'false');
+        AsyncStorage.setItem('pressAuth', 'false');
 
         router.replace("/")
     };

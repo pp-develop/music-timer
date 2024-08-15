@@ -7,6 +7,7 @@ import { router } from 'expo-router';
 import { t } from '../locales/i18n';
 import { Text } from "@rneui/base";
 import { Description } from "../components/Parts/Description"
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Page() {
     const theme = useTheme()
@@ -18,7 +19,7 @@ export default function Page() {
             router.replace('/playlist');
         }
         // TODO:: ドメイン統一後に削除
-        const pressAuthSession = sessionStorage.getItem('pressAuth');
+        const pressAuthSession = AsyncStorage.getItem('pressAuth');
         if (pressAuthSession === 'true') {
             setPressAuth(true);
         }

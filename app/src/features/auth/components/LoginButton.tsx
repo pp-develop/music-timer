@@ -3,6 +3,8 @@ import { Text, StyleSheet, Pressable, ActivityIndicator, View, Image } from 'rea
 import { authz } from '../api/auth'
 import { t } from '../../../locales/i18n';
 import { useAuth } from "../../../hooks/useAuth";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Linking from 'expo-linking';
 
 export const LoginButton = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -15,10 +17,10 @@ export const LoginButton = () => {
 
         if (response.httpStatus == 200) {
             // TODO::　ドメイン統一後に削除
-            if (!sessionStorage.getItem('pressAuth')) {
-                sessionStorage.setItem('pressAuth', 'true');
+            if (!AsyncStorage.getItem('pressAuth')) {
+                AsyncStorage.setItem('pressAuth', 'true');
             }
-            window.location.href = response.authzUrl;
+            Linking.openURL(response.authzUrl);
         } else {
             setIsLoading(false)
             setAuthState(false)

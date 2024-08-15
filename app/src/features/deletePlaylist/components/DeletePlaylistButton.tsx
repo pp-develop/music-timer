@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Button } from "@rneui/base";
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { deletePlaylist } from '../api/DeletePlaylist';
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
-import toast, { Toaster } from 'react-hot-toast';
+import Toast from 'react-native-toast-message';
 import PlaylistContext from '../hooks/useContext';
 import { getPlaylist } from '../api/GetPlaylist';
 
@@ -33,24 +33,22 @@ export const DeletePlaylist = (props: any) => {
     const notifi = async () => {
         setLoading(true);
         try {
-            await toast.promise(deletePlaylist(), {
-                loading: t('toast.playlistDeleting'),
-                success: () => t('toast.playlistDeleted'),
-                error: () => t('toast.playlistDeleteError'),
-            },
-                // {
-                //     style: {
-                //         minWidth: '250px',
-                //     },
-                //     success: {
-                //         duration: 5000,
-                //         icon: '🔥',
-                //     }
-                // }
-            );
+            await deletePlaylist();
+            Toast.show({
+                type: 'success',
+                position: 'top',
+                text1: t('toast.playlistDeleted'),
+                visibilityTime: 3000,
+            });
             setShowDeleteButton(false)
         } catch (error) {
             setShowDeleteButton(true)
+            Toast.show({
+                type: 'error',
+                position: 'top',
+                text1: t('toast.playlistDeleteError'),
+                visibilityTime: 3000,
+            });
             console.error(error);
         } finally {
             setLoading(false);
@@ -58,31 +56,8 @@ export const DeletePlaylist = (props: any) => {
     }
 
     return (
-        <>
-            <Toaster
-                position="top-center"
-                reverseOrder={false}
-                gutter={8}
-                containerClassName=""
-                containerStyle={{}}
-                toastOptions={{
-                    // Define default options
-                    className: '',
-                    style: {
-                        background: '#363636',
-                        color: '#fff',
-                    },
-                    // Default options for specific types
-                    success: {
-                        duration: 3000,
-                        theme: {
-                            primary: 'green',
-                            secondary: 'black',
-                        },
-                    },
-                }}
-            />
-
+        <View>
+            <Toast ref={(ref) => Toast.setRef(ref)} />
             {showDeleteButton && (
                 <Button
                     title={t('form.deletePlaylist')}
@@ -113,25 +88,6 @@ export const DeletePlaylist = (props: any) => {
                     disabled={loading}  // 通信中はボタンを無効化
                 />
             )}
-        </>
+        </View>
     );
 }
-
-const styles = StyleSheet.create({
-    button: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 32,
-        borderRadius: 4,
-        elevation: 3,
-        backgroundColor: 'black',
-    },
-    text: {
-        fontSize: 16,
-        lineHeight: 21,
-        fontWeight: 'bold',
-        letterSpacing: 0.25,
-        color: 'white',
-    },
-});
