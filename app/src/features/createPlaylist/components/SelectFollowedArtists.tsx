@@ -31,7 +31,7 @@ export const SelectFollowedArtists = () => {
 
             try {
                 const artistsData = await GetFollowedArtists();
-                if (artistsData.httpStatus == 200) {
+                if (artistsData.httpStatus === 200) {
                     setArtists(artistsData.artists);
                 } else {
                     setError(`Error: ${artistsData.httpStatus}`);
@@ -86,6 +86,15 @@ export const SelectFollowedArtists = () => {
         </View>
     );
 
+    const containerStyle = {
+        width: '80%',
+        maxWidth: 400,
+        minHeight: 210,
+        justifyContent: 'center',
+        marginTop: 10,
+        marginBottom: 10,
+    };
+
     return (
         <>
             <Text
@@ -105,7 +114,7 @@ export const SelectFollowedArtists = () => {
             >
                 {t('form.includeFavoriteArtists')}
             </Text>
-            <>
+            <View style={containerStyle}>
                 {isLoading ? (
                     <ActivityIndicator size="large" color={theme.tertiary} />
                 ) : error ? (
@@ -119,8 +128,7 @@ export const SelectFollowedArtists = () => {
                                 ref={scrollViewRef}
                                 horizontal={true}
                                 style={{
-                                    width: '80%',
-                                    maxWidth: 400,
+                                    flex: 1
                                 }}
                                 onMouseEnter={onMouseEnter}
                                 onMouseLeave={onMouseLeave}
@@ -138,7 +146,7 @@ export const SelectFollowedArtists = () => {
                         )}
                     </>
                 )}
-            </>
+            </View>
         </>
     );
 };
