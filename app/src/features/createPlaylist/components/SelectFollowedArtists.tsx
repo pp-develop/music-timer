@@ -11,7 +11,7 @@ import useHorizontalScroll from '../hooks/useHorizontalScroll';
 export const SelectFollowedArtists = () => {
     const theme = useTheme();
     const context = React.useContext(ResponseContext);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [selectedChips, setSelectedChips] = useState([]);
     const [artists, setArtists] = useState<Artist[]>([]);
     const [error, setError] = useState<string | null>(null);

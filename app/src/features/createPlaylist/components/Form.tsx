@@ -49,7 +49,7 @@ export const Form = () => {
         }
     }, []);
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (data: any) => {
         const minute = data.minute;
         open();
         setIsLoading(true);
@@ -76,18 +76,16 @@ export const Form = () => {
                 render={({ field: { onChange, value } }) => (
                     <Input
                         keyboardType='numeric'
-                        containerStyle={{ maxWidth: 400, marginLeft: 'auto', marginRight: 'auto' }}
-                        inputContainerStyle={{ maxWidth: 400, marginLeft: 20, marginRight: 20 }}
+                        containerStyle={{ maxWidth: 400, marginLeft: 'auto', marginRight: 'auto', width: "80%" }}
                         errorMessage={errors.minute?.message}
-                        errorStyle={{ maxWidth: 400, marginLeft: 20, marginRight: 20, }}
-                        inputStyle={{ color: theme.tertiary, marginRight: 5, textAlign: 'center' }}
+                        inputStyle={{ color: theme.tertiary, textAlign: 'center' }}
                         leftIcon={<Icon name="clock-outline" size={20} />}
                         placeholder={t('form.specifyTime.placeholder')}
                         placeholderTextColor={'#454c5091'}
                         onChangeText={onChange}
                         value={value}
                         onSubmitEditing={handleSubmit(onSubmit)}
-                        rightIcon={<Text style={{ color: theme.tertiary, paddingRight: 10 }}>{t('form.specifyTime.minute')}</Text>}
+                        rightIcon={<Text style={{ color: theme.tertiary, marginRight: 10 }}>{t('form.specifyTime.minute')}</Text>}
                     />
                 )}
             />
