@@ -1,14 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, ActivityIndicator, View } from 'react-native';
+import { StyleSheet, ActivityIndicator, View, Platform } from 'react-native';
 import { LoginButton } from "../features/auth";
 import { useAuth } from "../hooks/useAuth";
 import { useTheme } from '../config/ThemeContext';
 import { router } from 'expo-router';
 import { t } from '../locales/i18n';
 import { Text } from "@rneui/base";
-import { Description } from "../components/Parts/Description"
+import { Description } from "../components/Parts/Description";
+import { setDefaultLanguage, getDefaultLanguage } from '../locales/i18n';
+import ReactGA from 'react-ga';
+import { GOOGLE_ANALYTICS_TRACKING_ID } from '../config';
+
+// Google Analyticsの初期化
+ReactGA.initialize(GOOGLE_ANALYTICS_TRACKING_ID);
+
+// Expo Webの場合、ブラウザのURLをトラッキング
+if (Platform.OS === 'web') {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+}
 
 export default function Page() {
+    // 言語が日本語でなければ英語をデフォルトに設定
+    if (getDefaultLanguage() !== 'ja') {
+        setDefaultLanguage('en');
+    } else {
+        setDefaultLanguage('ja');
+    }
+
     const theme = useTheme()
     const { loading, isAuthenticated } = useAuth();
     const [pressAuth, setPressAuth] = useState(false);

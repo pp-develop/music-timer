@@ -2,9 +2,10 @@ version: '3.9'
 
 services:
   react_native:
-    image: react_native:v1
-    build: ./dockerfile/
-    container_name: react_native
+    build:
+      context: ./dockerfile
+      dockerfile: Dockerfile
+    container_name: music-timer
     working_dir: /usr/src/app
     volumes:
       - ./app/:/usr/src/app
