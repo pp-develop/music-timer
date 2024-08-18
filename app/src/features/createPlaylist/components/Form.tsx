@@ -16,6 +16,7 @@ import { ResponseContext } from '../hooks/useContext';
 import { CreatePlaylist } from "../api/createPlaylist";
 import { CreatePlaylistWithSpecifyArtists } from "../api/createPlaylistWithSpecifyArtists";
 import { CreatePlaylistDialog } from "./CreatePlaylistDialog";
+import ReactGA from 'react-ga4';
 
 const schema = yup.object().shape({
     minute: yup
@@ -51,6 +52,12 @@ export const Form = () => {
 
     const onSubmit = async (data: any) => {
         const minute = data.minute;
+        ReactGA.event({
+            category: 'User Interaction',
+            action: 'Click',
+            label: 'Create Playlist Button',
+            value: minute
+          });
         open();
         setIsLoading(true);
 
