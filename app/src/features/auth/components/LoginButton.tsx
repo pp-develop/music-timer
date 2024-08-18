@@ -3,13 +3,20 @@ import { Text, StyleSheet, Pressable, ActivityIndicator, View, Image } from 'rea
 import { authz } from '../api/auth'
 import { t } from '../../../locales/i18n';
 import { useAuth } from "../../../hooks/useAuth";
+import ReactGA from 'react-ga4';
 
 export const LoginButton = () => {
     const [isLoading, setIsLoading] = useState(false);
     const { setAuthState } = useAuth();
 
 
-    const requestLogin = async () => {
+    const handlePress = async () => {
+        ReactGA.event({
+            category: 'User Interaction',
+            action: 'Click',
+            label: 'Login Button'
+          });
+
         setIsLoading(true)
         const response = await authz()
 
@@ -25,7 +32,7 @@ export const LoginButton = () => {
         }
     };
     return (
-        <Pressable style={styles.button} onPress={requestLogin}>
+        <Pressable style={styles.button} onPress={handlePress}>
             {isLoading ?
                 <View style={styles.indicator}>
                     <ActivityIndicator size="large" color="white" />

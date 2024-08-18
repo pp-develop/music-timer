@@ -8,16 +8,7 @@ import { t } from '../locales/i18n';
 import { Text } from "@rneui/base";
 import { Description } from "../components/Parts/Description";
 import { setDefaultLanguage, getDefaultLanguage } from '../locales/i18n';
-import ReactGA from 'react-ga';
-import { GOOGLE_ANALYTICS_TRACKING_ID } from '../config';
-
-// Google Analyticsの初期化
-ReactGA.initialize(GOOGLE_ANALYTICS_TRACKING_ID);
-
-// Expo Webの場合、ブラウザのURLをトラッキング
-if (Platform.OS === 'web') {
-    ReactGA.pageview(window.location.pathname + window.location.search);
-}
+import usePageViewTracking from '../hooks/usePageViewTracking';
 
 export default function Page() {
     // 言語が日本語でなければ英語をデフォルトに設定
@@ -27,6 +18,7 @@ export default function Page() {
         setDefaultLanguage('ja');
     }
 
+    usePageViewTracking(); // ページビューのトラッキングを有効化
     const theme = useTheme()
     const { loading, isAuthenticated } = useAuth();
     const [pressAuth, setPressAuth] = useState(false);

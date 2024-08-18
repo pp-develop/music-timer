@@ -3,12 +3,19 @@ import { Button } from "@rneui/base";
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
 import { ResponseContext } from '../hooks/useContext';
+import ReactGA from 'react-ga4';
 
 export const CreatePlaylistButton = ({ createPlaylist, createPlaylistWithSpecifyArtists }) => {
     const theme = useTheme();
     const context = React.useContext(ResponseContext);
 
     const handlePress = () => {
+        ReactGA.event({
+            category: 'User Interaction',
+            action: 'Click',
+            label: 'Create Playlist Button'
+          });
+
         if (context.followedArtistIds && context.followedArtistIds.length > 0) {
             createPlaylistWithSpecifyArtists();
         } else {

@@ -7,6 +7,7 @@ import { useTheme } from '../../../config/ThemeContext';
 import toast, { Toaster } from 'react-hot-toast';
 import PlaylistContext from '../hooks/useContext';
 import { getPlaylist } from '../api/GetPlaylist';
+import ReactGA from 'react-ga4';
 
 export const DeletePlaylist = (props: any) => {
     const theme = useTheme();
@@ -30,7 +31,13 @@ export const DeletePlaylist = (props: any) => {
         fetchPlaylist();
     }, []);
 
-    const notifi = async () => {
+    const handlePress = async () => {
+        ReactGA.event({
+            category: 'User Interaction',
+            action: 'Click',
+            label: 'Delete Playlist Button'
+          });
+
         setLoading(true);
         try {
             await toast.promise(deletePlaylist(), {
@@ -109,7 +116,7 @@ export const DeletePlaylist = (props: any) => {
                         fontSize: 18,
                         color: 'white'
                     }}
-                    onPress={notifi}
+                    onPress={handlePress}
                     disabled={loading}  // 通信中はボタンを無効化
                 />
             )}

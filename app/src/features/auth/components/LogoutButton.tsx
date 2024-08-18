@@ -5,13 +5,20 @@ import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
 import { useAuth } from "../../../../src/hooks/useAuth";
 import { router } from 'expo-router';
+import ReactGA from 'react-ga4';
 
 export const LogoutButton = () => {
     const theme = useTheme()
     const [isLoading, setIsLoading] = useState(false);
     const { setAuthState } = useAuth();
 
-    const requestLogout = async () => {
+    const handlePress = async () => {
+        ReactGA.event({
+            category: 'User Interaction',
+            action: 'Click',
+            label: 'Logout Button'
+          });
+
         setIsLoading(true)
         await RequestLogout()
         setAuthState(false)
@@ -33,7 +40,7 @@ export const LogoutButton = () => {
                     fontSize: 18,
                     fontWeight: 'bold',
                     color: theme.tertiary,
-                }} onPress={requestLogout}>{t('auth.logout')}</Text>
+                }} onPress={handlePress}>{t('auth.logout')}</Text>
             }
         </>
     )
