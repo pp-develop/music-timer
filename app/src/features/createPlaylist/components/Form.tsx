@@ -17,6 +17,7 @@ import { CreatePlaylist } from "../api/createPlaylist";
 import { CreatePlaylistWithSpecifyArtists } from "../api/createPlaylistWithSpecifyArtists";
 import { CreatePlaylistDialog } from "./CreatePlaylistDialog";
 import ReactGA from 'react-ga4';
+import { router } from 'expo-router';
 
 const schema = yup.object().shape({
     minute: yup
@@ -51,28 +52,38 @@ export const Form = () => {
     }, []);
 
     const onSubmit = async (data: any) => {
-        const minute = data.minute;
-        ReactGA.event({
-            category: 'User Interaction',
-            action: 'Click',
-            label: 'Create Playlist Button',
-            value: minute
-          });
-        open();
-        setIsLoading(true);
+        try {
+            const minute = data.minute;
+            ReactGA.event({
+                category: 'User Interaction',
+                action: 'Click',
+                label: 'Create Playlist Button',
+                value: minute
+            });
+            open();
+            setIsLoading(true);
 
-        const response = context.followedArtistIds && context.followedArtistIds.length > 0
-            ? await CreatePlaylistWithSpecifyArtists(minute, context.followedArtistIds)
-            : await CreatePlaylist(minute);
+            const response = context.followedArtistIds && context.followedArtistIds.length > 0
+                ? await CreatePlaylistWithSpecifyArtists(minute, context.followedArtistIds)
+                : await CreatePlaylist(minute);
 
-        if (response.httpStatus === 201) {
-            setPlaylistId(response.playlistId);
-            setTimeout(() => setIsLoading(false), 2000);
-            setShowDeleteButton(true)
-        } else {
-            setIsLoading(false);
+            if (response.httpStatus === 201) {
+                setPlaylistId(response.playlistId);
+                setTimeout(() => setIsLoading(false), 2000);
+                setShowDeleteButton(true)
+            } else {
+                setIsLoading(false);
+            }
+            setHttpStatus(response.httpStatus);
+        } catch (error) {
+            if (error.httpStatus === 303 || error.httpStatus === 401) {
+                router.replace("/")
+            } else if (error.httpStatus >= 500 && error.httpStatus < 600 || !error.httpStatus
+            ) {
+                // 5xx 系のエラー処理
+                router.replace("/error")
+            }
         }
-        setHttpStatus(response.httpStatus);
     };
 
     return (

@@ -26,5 +26,7 @@
   "toast.playlistDeleteError": "There was a problem deleting the playlist.\nPlease try again after some time.",
   "form.specifyTime.required": "Please enter the playback time.",
   "form.specifyTime.typeError": "Please enter a numeric value only.",
-  "form.specifyTime.range": "Playback time must be between 3 and 100 minutes."
+  "form.specifyTime.range": "Playback time must be between 3 and 100 minutes.",
+  "error.timeout": "No response from the server. Please wait a moment and try again.",
+  "auth.logout.failed": "Logout failed. Please wait a moment and try again."
 }

@@ -8,8 +8,12 @@ import { useTheme } from '../../config/ThemeContext';
 import { useAuth } from "../../../src/hooks/useAuth";
 
 export const Header = () => {
+    const pathname = usePathname();
+    if (pathname == '/error') {
+        return
+    }
+
     const theme = useTheme()
-    const pathname = usePathname()
     const { loading, isAuthenticated } = useAuth();
 
     const handleTitlePress = () => {

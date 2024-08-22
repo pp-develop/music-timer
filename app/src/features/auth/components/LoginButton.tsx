@@ -4,6 +4,7 @@ import { authz } from '../api/auth'
 import { t } from '../../../locales/i18n';
 import { useAuth } from "../../../hooks/useAuth";
 import ReactGA from 'react-ga4';
+import { router } from 'expo-router';
 
 export const LoginButton = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -11,24 +12,29 @@ export const LoginButton = () => {
 
 
     const handlePress = async () => {
-        ReactGA.event({
-            category: 'User Interaction',
-            action: 'Click',
-            label: 'Login Button'
-          });
+        try {
+            ReactGA.event({
+                category: 'User Interaction',
+                action: 'Click',
+                label: 'Login Button'
+            });
 
-        setIsLoading(true)
-        const response = await authz()
+            setIsLoading(true)
+            const response = await authz()
 
-        if (response.httpStatus == 200) {
-            // TODO::　ドメイン統一後に削除
-            if (!sessionStorage.getItem('pressAuth')) {
-                sessionStorage.setItem('pressAuth', 'true');
+            if (response.httpStatus == 200) {
+                // TODO::　ドメイン統一後に削除
+                if (!sessionStorage.getItem('pressAuth')) {
+                    sessionStorage.setItem('pressAuth', 'true');
+                }
+                window.location.href = response.authzUrl;
+            } else {
+                setIsLoading(false)
+                setAuthState(false)
             }
-            window.location.href = response.authzUrl;
-        } else {
-            setIsLoading(false)
-            setAuthState(false)
+        } catch (error) {
+            console.error('Login failed:', error);
+            router.replace("/error")
         }
     };
     return (

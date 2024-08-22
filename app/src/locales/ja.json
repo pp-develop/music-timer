@@ -8,6 +8,7 @@
   "auth.login.desc.link": "こちら",
   "auth.gest": "ゲストユーザー利用",
   "auth.logout": "ログアウト",
+  "auth.logout.failed": "ログアウトに失敗しました。お手数ですが、しばらく時間を置いて再試行してください。",
   "form.specifyTime.required": "再生時間を入力してください。",
   "form.specifyTime.typeError": "数値のみを入力してください。",
   "form.specifyTime.range": "再生時間は3分から100分の間で指定してください。",
@@ -25,5 +26,6 @@
   "dialog.createPlaylist.server.error": "現在サーバーにアクセスできません。\nしばらく時間を置いてから再度試してください。",
   "toast.playlistDeleting": "削除中...",
   "toast.playlistDeleted": "作成したプレイリストが削除されました。",
-  "toast.playlistDeleteError": "プレイリストの削除中に問題が発生しました。\nしばらく時間を置いてから再度試してください。"
+  "toast.playlistDeleteError": "プレイリストの削除中に問題が発生しました。\nしばらく時間を置いてから再度試してください。",
+  "error.timeout": "サーバーからの応答がありません。お手数ですが、しばらく時間を置いて再試行してください。"
 }

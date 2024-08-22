@@ -33,8 +33,6 @@ export const SelectFollowedArtists = () => {
                 const artistsData = await GetFollowedArtists();
                 if (artistsData.httpStatus === 200) {
                     setArtists(artistsData.artists);
-                } else {
-                    setError(`Error: ${artistsData.httpStatus}`);
                 }
             } catch (err) {
                 setError('Network error');
