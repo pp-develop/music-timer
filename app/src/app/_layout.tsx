@@ -7,6 +7,7 @@ import { AuthProvider } from '../hooks/useAuth';
 import { StatusBar } from 'expo-status-bar';
 import React from "react";
 import { Slot } from 'expo-router';
+import { ScrollView } from 'react-native';
 
 export default function Layout() {
   const theme = {
@@ -17,8 +18,10 @@ export default function Layout() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div style={{
-        backgroundColor: theme.primaryColor, height: '100%', width: '100%', overflow: "auto"
+      <ScrollView contentContainerStyle={{
+        backgroundColor: theme.primaryColor,
+        flex: 1,
+        width: '100%',
       }}>
         <StatusBar style="auto" backgroundColor={theme.primaryColor} />
         <SafeAreaProvider>
@@ -30,7 +33,7 @@ export default function Layout() {
             <Slot />
           </AuthProvider>
         </SafeAreaProvider>
-      </div>
+      </ScrollView>
     </ThemeProvider>
   )
 }

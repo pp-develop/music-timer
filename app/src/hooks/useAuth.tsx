@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, FC } from "react";
 import { auth } from '../features/auth/api/auth';
+import { router } from 'expo-router';
 
 interface AuthContextProps {
   loading: boolean;
@@ -22,6 +23,13 @@ const useProvideAuth = () => {
         } else {
           setIsAuthenticated(false);
         }
+      } catch (error) {
+        console.error('Auth failed:', error);
+        if (error.httpStatus === 303) {
+          router.replace("/")
+          return
+        }
+        router.replace("/error")
       } finally {
         setLoading(false);
       }

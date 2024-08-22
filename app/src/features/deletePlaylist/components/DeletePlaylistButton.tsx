@@ -20,8 +20,6 @@ export const DeletePlaylist = (props: any) => {
                 const playlistData = await getPlaylist();
                 if (playlistData.httpStatus == 200 && !playlistData.playlistIDs) {
                     setShowDeleteButton(false)
-                } else {
-                    setShowDeleteButton(true)
                 }
             } catch (err) {
                 setShowDeleteButton(true)

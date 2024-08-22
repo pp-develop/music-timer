@@ -1,4 +1,4 @@
-import { axios } from '../../../lib/axos';
+import { fetchWithRetry } from '../../../lib/axos';
 
 export type Response = {
     playlistIDs: Array<any>;
@@ -12,17 +12,15 @@ export function getPlaylist(): Promise<Response> {
             httpStatus: 0
         };
 
-        axios.get('/playlist')
+        fetchWithRetry('/playlist', 'GET')
             .then(function (res) {
                 response.playlistIDs = res.data
                 response.httpStatus = res.status
                 resolve(response)
             })
             .catch(function (error) {
-                response.httpStatus = error.response.status
+                response.httpStatus = error.response?.status
+                reject(response)
             })
-            .finally(function () {
-                resolve(response)
-            });
     });
 };

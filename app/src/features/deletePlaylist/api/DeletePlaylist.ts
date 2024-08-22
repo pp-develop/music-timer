@@ -1,4 +1,4 @@
-import { axios } from '../../../lib/axos';
+import { fetchWithRetry } from '../../../lib/axos';
 import { t } from '../../../locales/i18n';
 
 export type Response = {
@@ -11,7 +11,7 @@ export function deletePlaylist(): Promise<Response> {
             httpStatus: 0
         };
 
-        axios.delete('/playlist')
+        fetchWithRetry('/playlist', 'DELETE')
             .then(function (res) {
                 response.httpStatus = res.status
                 resolve(response)

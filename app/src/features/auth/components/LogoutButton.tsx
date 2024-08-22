@@ -13,21 +13,28 @@ export const LogoutButton = () => {
     const { setAuthState } = useAuth();
 
     const handlePress = async () => {
-        ReactGA.event({
-            category: 'User Interaction',
-            action: 'Click',
-            label: 'Logout Button'
-          });
+        try {
+            ReactGA.event({
+                category: 'User Interaction',
+                action: 'Click',
+                label: 'Logout Button'
+            });
 
-        setIsLoading(true)
-        await RequestLogout()
-        setAuthState(false)
-        setIsLoading(false)
+            setIsLoading(true);
 
-        // TODO:: ドメイン統一後に削除
-        sessionStorage.setItem('pressAuth', 'false');
+            // ログアウトリクエストを実行
+            await RequestLogout();
+            setAuthState(false);
+            setIsLoading(false);
 
-        router.replace("/")
+            // TODO:: ドメイン統一後に削除
+            sessionStorage.setItem('pressAuth', 'false');
+
+            router.replace("/");
+        } catch (error) {
+            console.error('Logout failed:', error);
+            router.replace("/error")
+        }
     };
 
     return (
