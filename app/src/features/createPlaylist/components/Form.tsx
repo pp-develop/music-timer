@@ -69,10 +69,10 @@ export const Form = () => {
 
             if (response.httpStatus === 201) {
                 setPlaylistId(response.playlistId);
-                setTimeout(() => setIsLoading(false), 2000);
-                setShowDeleteButton(true)
-            } else {
-                setIsLoading(false);
+                setTimeout(() => {
+                    setIsLoading(false)
+                    setShowDeleteButton(true)
+                }, 2000);
             }
             setHttpStatus(response.httpStatus);
         } catch (error) {
@@ -83,6 +83,8 @@ export const Form = () => {
                 // 5xx 系のエラー処理
                 router.replace("/error")
             }
+            setIsLoading(false);
+            setHttpStatus(error.httpStatus);
         }
     };
 

@@ -1,5 +1,10 @@
-import { axios } from '../../../lib/axos';
+import { fetchWithRetry } from '../../../lib/axos';
 
 export function SaveTracks() {
-    axios.post('/tracks', { includeFavoriteArtists: true })
+    fetchWithRetry('/tracks', 'POST', {
+        data: {
+            'includeFavoriteArtists': true,
+        },
+        timeout: 0
+    })
 }

@@ -28,13 +28,13 @@ export const LoginButton = () => {
                     sessionStorage.setItem('pressAuth', 'true');
                 }
                 window.location.href = response.authzUrl;
-            } else {
-                setIsLoading(false)
-                setAuthState(false)
             }
         } catch (error) {
+            setAuthState(false)
             console.error('Login failed:', error);
             router.replace("/error")
+        } finally {
+            setIsLoading(false)
         }
     };
     return (

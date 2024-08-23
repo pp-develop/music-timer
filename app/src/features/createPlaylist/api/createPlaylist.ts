@@ -17,7 +17,7 @@ export function CreatePlaylist(minute: string): Promise<Response> {
             data: {
                 'minute': parseInt(minute)
             },
-            timeout: 15000
+            timeout: 16000
         })
             .then(function (response) {
                 if (response.status == 201) {

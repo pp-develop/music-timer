@@ -18,7 +18,7 @@ export function CreatePlaylistWithSpecifyArtists(minute: string, followedArtistI
                 'includeFavoriteArtists': true,
                 'artistIds': followedArtistIds
             },
-            timeout: 15000
+            timeout: 16000
         })
             .then(function (response) {
                 if (response.status == 201) {
