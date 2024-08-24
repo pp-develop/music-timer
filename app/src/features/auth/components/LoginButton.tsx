@@ -34,7 +34,9 @@ export const LoginButton = () => {
             console.error('Login failed:', error);
             router.replace("/error")
         } finally {
-            setIsLoading(false)
+            setTimeout(() => {
+                setIsLoading(false)
+            }, 10000);
         }
     };
     return (
