@@ -14,7 +14,7 @@
   "form.specifyTime.range": "再生時間は3分から100分の間で指定してください。",
   "form.specifyTime.minute": "分",
   "form.specifyTime.placeholder": "3 ～ 100",
-  "form.includeFavoriteArtists": "フォロー中のアーティストから選曲",
+  "form.includeFavoriteArtists": "アーティストから選ぶ",
   "form.noFollowedArtists": "フォローしているアーティストがいません。",
   "form.get.followedArtists.error": "フォローしているアーティストの取得に失敗しました。\nしばらく時間を置いてから再度試してください。",
   "form.gest.includeFavoriteArtists.desc": "※ログインユーザーのみ利用可",

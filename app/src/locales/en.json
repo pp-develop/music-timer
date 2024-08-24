@@ -10,7 +10,7 @@
   "auth.logout": "Logout",
   "form.specifyTime.minute": "Min",
   "form.specifyTime.placeholder": "3 ~ 100",
-  "form.includeFavoriteArtists": "Select songs from followed artists",
+  "form.includeFavoriteArtists": "Choose from Artists",
   "form.noFollowedArtists": "You do not have any followed artists.",
   "form.favoriteTracks": "Favorite Tracks",
   "form.get.followedArtists.error": "Failed to retrieve followed artists.\nPlease try again after some time.",
