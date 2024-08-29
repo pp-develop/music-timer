@@ -14,14 +14,12 @@ export const Description = () => {
           color: theme.tertiary,
         }}
         style={{
-          paddingTop: 25,
-          paddingLeft: 25,
-          paddingBottom: 12,
-          paddingRight: 25,
+          marginTop: 25,
+          marginBottom: 12,
           maxWidth: 600,
           marginLeft: 'auto',
           marginRight: 'auto',
-          width: '100%'
+          width: '80%'
         }}
       >
         {t('top.description1')}
@@ -33,13 +31,11 @@ export const Description = () => {
           color: theme.tertiary,
         }}
         style={{
-          paddingLeft: 25,
-          paddingBottom: 12,
-          paddingRight: 25,
+          marginBottom: 12,
           maxWidth: 600,
           marginLeft: 'auto',
           marginRight: 'auto',
-          width: '100%'
+          width: '80%'
         }}
       >
         {t('top.description2')}

@@ -1,6 +1,6 @@
 {
   "appName": "Music Timer for Spotify",
-  "top.description1": "A tool for creating Spotify playlists by specifying playback time.\nIt randomly selects songs according to the time and creates a playlist.",
+  "top.description1": "It creates a playlist based on the specified playback time.",
   "top.description2": "※ If auto-play is enabled, songs will continue playing even after the playlist ends.",
   "top.description3": "If you cannot log in, please disable 'Block third-party cookies' in your browser settings.",
   "auth.login": "Login with Spotify",
