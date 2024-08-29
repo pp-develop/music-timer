@@ -20,6 +20,8 @@ export const DeletePlaylist = (props: any) => {
                 const playlistData = await getPlaylist();
                 if (playlistData.httpStatus == 200 && !playlistData.playlistIDs) {
                     setShowDeleteButton(false)
+                } else if (playlistData.httpStatus == 200 && playlistData.playlistIDs?.length > 0) {
+                    setShowDeleteButton(true)
                 }
             } catch (err) {
                 setShowDeleteButton(true)
@@ -34,7 +36,7 @@ export const DeletePlaylist = (props: any) => {
             category: 'User Interaction',
             action: 'Click',
             label: 'Delete Playlist Button'
-          });
+        });
 
         setLoading(true);
         try {
