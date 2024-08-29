@@ -104,7 +104,7 @@ export const SelectFollowedArtists = () => {
                 }}
                 style={{
                     maxWidth: 500,
-                    marginTop: 15,
+                    marginTop: 10,
                     marginLeft: 'auto',
                     marginRight: 'auto',
                 }}
