@@ -19,7 +19,8 @@ export const Description = () => {
           maxWidth: 600,
           marginLeft: 'auto',
           marginRight: 'auto',
-          width: '80%'
+          width: '80%',
+          textAlign: 'center'
         }}
       >
         {t('top.description1')}
@@ -35,7 +36,8 @@ export const Description = () => {
           maxWidth: 600,
           marginLeft: 'auto',
           marginRight: 'auto',
-          width: '80%'
+          width: '80%',
+          textAlign: 'center'
         }}
       >
         {t('top.description2')}
