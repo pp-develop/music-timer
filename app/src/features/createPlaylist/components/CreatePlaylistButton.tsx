@@ -36,7 +36,7 @@ export const CreatePlaylistButton = ({ createPlaylist, createPlaylistWithSpecify
                 maxWidth: 1000,
                 marginLeft: 'auto',
                 marginRight: 'auto',
-                marginTop: 30,
+                marginTop: 15,
                 marginBottom: 15,
             }}
             titleStyle={{

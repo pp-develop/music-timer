@@ -76,12 +76,11 @@ export const Header = () => {
                                     }
                                     centerContainerStyle={{}}
                                     containerStyle={{
-                                        paddingTop: 40,
+                                        marginTop: 40,
                                         borderBottomWidth: 0,
                                         maxWidth: 600,
                                         marginLeft: 'auto',
                                         marginRight: 'auto',
-                                        // width: '100%'
                                     }}
                                     placement="left"
                                     rightComponent={pathname == '/' ? undefined : <LogoutButton />}

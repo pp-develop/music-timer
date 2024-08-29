@@ -89,8 +89,8 @@ export const SelectFollowedArtists = () => {
         maxWidth: 400,
         minHeight: 210,
         justifyContent: 'center',
-        marginTop: 10,
-        marginBottom: 10,
+        marginTop: 15,
+        marginBottom: 15,
     };
 
     return (
@@ -103,9 +103,8 @@ export const SelectFollowedArtists = () => {
                     color: theme.tertiary,
                 }}
                 style={{
-                    paddingTop: 20,
-                    paddingBottom: 10,
                     maxWidth: 500,
+                    marginTop: 15,
                     marginLeft: 'auto',
                     marginRight: 'auto',
                 }}

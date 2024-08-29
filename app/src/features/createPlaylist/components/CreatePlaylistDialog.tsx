@@ -23,7 +23,7 @@ export const CreatePlaylistDialog = (prop: any) => {
 
   const handleBackdropPress = prop.isLoading ? () => { } : toggleDialog;
 
-  const openSpotify = async () => {
+  const openSpotify = () => {
     window.open("https://open.spotify.com/playlist/" + prop.playlistId + '?go=1', '_blank');
   };
 

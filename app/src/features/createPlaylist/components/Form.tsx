@@ -22,10 +22,10 @@ import { router } from 'expo-router';
 const schema = yup.object().shape({
     minute: yup
         .number()
-        .nullable() // 空の入力を許可する
-        .transform((value, originalValue) => (originalValue === '' ? null : value)) // 空の入力をnullに変換する
+        .nullable()
+        .transform((value, originalValue) => (originalValue === '' ? null : value))
         .required(t('form.specifyTime.required'))
-        .typeError(t('form.specifyTime.typeError')) // 数値チェックを行う
+        .typeError(t('form.specifyTime.typeError'))
         .min(3, t('form.specifyTime.range'))
         .max(100, t('form.specifyTime.range'))
 });
@@ -77,11 +77,10 @@ export const Form = () => {
             setHttpStatus(response.httpStatus);
         } catch (error) {
             if (error.httpStatus === 303 || error.httpStatus === 401) {
-                router.replace("/")
-            } else if (error.httpStatus >= 500 && error.httpStatus < 600 || !error.httpStatus
-            ) {
+                router.replace("/");
+            } else if (error.httpStatus >= 500 && error.httpStatus < 600 || !error.httpStatus) {
                 // 5xx 系のエラー処理
-                router.replace("/error")
+                router.replace("/error");
             }
             setIsLoading(false);
             setHttpStatus(error.httpStatus);
@@ -96,7 +95,7 @@ export const Form = () => {
                 render={({ field: { onChange, value } }) => (
                     <Input
                         keyboardType='numeric'
-                        containerStyle={{ maxWidth: 400, marginLeft: 'auto', marginRight: 'auto', width: "80%" }}
+                        containerStyle={{ maxWidth: 400, marginTop: 15, marginBottom: 10, marginLeft: 'auto', marginRight: 'auto', width: "80%" }}
                         errorMessage={errors.minute?.message}
                         inputStyle={{ color: theme.tertiary, textAlign: 'center' }}
                         leftIcon={<Icon name="clock-outline" size={20} />}
