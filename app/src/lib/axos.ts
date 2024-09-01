@@ -23,14 +23,20 @@ axiosRetry(axios, {
     // リトライ回数に応じてリトライ間隔を設定（1秒, 2秒, 4秒）
     return retryCount * 1000;
   },
-  retryCondition: (error) => {
-    return axiosRetry.isNetworkOrIdempotentRequestError(error) || error.response?.status === 401
+  retryCondition: async (error) => {
+    // トークンがリフレッシュされた場合はリトライしない
+    if (tokenRefreshed) {
+      await axios.delete('/session');
+      window.location.href = '/';
+      return false;
+    }
+    return axiosRetry.isNetworkOrIdempotentRequestError(error) || error.response?.status === 401;
   },
   onRetry: async (retryCount, error, requestConfig) => {
     // 401 エラーの場合にトークンを更新
     if (error.response && error.response?.status === 401) {
       if (!tokenRefreshed) {
-        console.log(`Retry attempt #${retryCount}`);
+        console.log(`Retry refresh auth token`);
         await refreshAuthToken();
       }
     }
@@ -51,7 +57,7 @@ export async function fetchWithRetry(url, method = 'GET', config = {}) {
 async function refreshAuthToken() {
   tokenRefreshed = true; // トークンの更新を試みたことを記録
   try {
-    const response = await axios.get('/auth');
+    await axios.get('/auth');
   } catch (error) {
     console.error('Token refresh failed:', error);
   }
