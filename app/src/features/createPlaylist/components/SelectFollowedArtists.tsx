@@ -178,7 +178,7 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                 {t('form.includeFavoriteArtists')}
             </Text>
             <View style={containerStyle}>
-                {isLoading && isSortComplete ? (
+                {isLoading ? (
                     <ActivityIndicator size="large" color={theme.tertiary} />
                 ) : error ? (
                     <Text style={{ textAlign: 'center' }}>
@@ -190,9 +190,7 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                             <ScrollView
                                 ref={scrollViewRef}
                                 horizontal={true}
-                                style={{
-                                    flex: 1
-                                }}
+                                style={{ flex: 1 }}
                                 onMouseEnter={onMouseEnter}
                                 onMouseLeave={onMouseLeave}
                             >
