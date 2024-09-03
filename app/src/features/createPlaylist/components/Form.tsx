@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { View, Text } from 'react-native';
 import { Input } from "@rneui/base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -38,6 +38,7 @@ export const Form = () => {
     const [playlistId, setPlaylistId] = useState("");
     const context = React.useContext(ResponseContext);
     const { setShowDeleteButton } = useContext(PlaylistContext);
+    const followedArtistsRef = useRef(null);
 
     const { control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
@@ -75,6 +76,11 @@ export const Form = () => {
                 }, 2000);
             }
             setHttpStatus(response.httpStatus);
+
+            // アーティスト情報を並べ替える
+            if (followedArtistsRef.current) {
+                followedArtistsRef.current.sortArtists();
+            }
         } catch (error) {
             if (error.httpStatus === 303 || error.httpStatus === 401) {
                 router.replace("/");
@@ -108,7 +114,7 @@ export const Form = () => {
                     />
                 )}
             />
-            <SelectFollowedArtists />
+            <SelectFollowedArtists ref={followedArtistsRef} />
             <CreatePlaylistButton
                 createPlaylist={handleSubmit(onSubmit)}
                 createPlaylistWithSpecifyArtists={handleSubmit(onSubmit)}
