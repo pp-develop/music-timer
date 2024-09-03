@@ -12,7 +12,6 @@ import { useTheme } from '../../../config/ThemeContext';
 import PlaylistContext from '../../deletePlaylist/hooks/useContext';
 import { SaveTracks } from '../api/saveTracks';
 import { useDisclosure } from '../../../hooks/useDisclosure';
-import { ResponseContext } from '../hooks/useContext';
 import { CreatePlaylist } from "../api/createPlaylist";
 import { CreatePlaylistWithSpecifyArtists } from "../api/createPlaylistWithSpecifyArtists";
 import { CreatePlaylistDialog } from "./CreatePlaylistDialog";
@@ -36,7 +35,6 @@ export const Form = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [httpStatus, setHttpStatus] = useState(0);
     const [playlistId, setPlaylistId] = useState("");
-    const context = React.useContext(ResponseContext);
     const { setShowDeleteButton } = useContext(PlaylistContext);
     const followedArtistsRef = useRef(null);
 
@@ -64,8 +62,14 @@ export const Form = () => {
             open();
             setIsLoading(true);
 
-            const response = context.followedArtistIds && context.followedArtistIds.length > 0
-                ? await CreatePlaylistWithSpecifyArtists(minute, context.followedArtistIds)
+            // ローカルストレージから選択されたアーティストIDを取得
+            let selectedArtistIds = localStorage.getItem('selectedChips');
+            // 取得した値が存在する場合はJSON形式から配列に変換
+            selectedArtistIds = selectedArtistIds ? JSON.parse(selectedArtistIds) : [];
+
+            // 選択されたアーティストIDがあるかどうかでプレイリスト作成処理を分岐
+            const response = selectedArtistIds && selectedArtistIds.length > 0
+                ? await CreatePlaylistWithSpecifyArtists(minute, selectedArtistIds)
                 : await CreatePlaylist(minute);
 
             if (response.httpStatus === 201) {
@@ -117,7 +121,6 @@ export const Form = () => {
             <SelectFollowedArtists ref={followedArtistsRef} />
             <CreatePlaylistButton
                 createPlaylist={handleSubmit(onSubmit)}
-                createPlaylistWithSpecifyArtists={handleSubmit(onSubmit)}
             />
             <CreatePlaylistDialog
                 isOpen={isOpen}

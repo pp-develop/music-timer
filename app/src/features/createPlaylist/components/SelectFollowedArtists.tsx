@@ -4,13 +4,11 @@ import { Chip, Avatar } from '@rneui/themed';
 import { Text } from "@rneui/base";
 import { useTheme } from '../../../config/ThemeContext';
 import { t } from '../../../locales/i18n';
-import { ResponseContext } from '../hooks/useContext';
 import { GetFollowedArtists, Artist } from '../api/getFollowedArtists';
 import useHorizontalScroll from '../hooks/useHorizontalScroll';
 
 export const SelectFollowedArtists = forwardRef((props, ref) => {
     const theme = useTheme();
-    const context = React.useContext(ResponseContext);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedChips, setSelectedChips] = useState<string[]>([]);
     const [artists, setArtists] = useState<Artist[]>([]);
@@ -116,7 +114,6 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                 return newCounts;
             });
 
-            context.followedArtistIds = newSelectedChips;
             return newSelectedChips;
         });
     };

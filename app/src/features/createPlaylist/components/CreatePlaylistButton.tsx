@@ -2,18 +2,12 @@ import React from "react";
 import { Button } from "@rneui/base";
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
-import { ResponseContext } from '../hooks/useContext';
 
-export const CreatePlaylistButton = ({ createPlaylist, createPlaylistWithSpecifyArtists }) => {
+export const CreatePlaylistButton = ({ createPlaylist }) => {
     const theme = useTheme();
-    const context = React.useContext(ResponseContext);
-
+    
     const handlePress = () => {
-        if (context.followedArtistIds && context.followedArtistIds.length > 0) {
-            createPlaylistWithSpecifyArtists();
-        } else {
-            createPlaylist();
-        }
+        createPlaylist();
     };
 
     return (
