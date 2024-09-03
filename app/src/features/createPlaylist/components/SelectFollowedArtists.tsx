@@ -102,7 +102,16 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
             // 選択回数を更新
             setSelectionCounts(prevCounts => {
                 const newCounts = { ...prevCounts };
-                newCounts[chip] = (newCounts[chip] || 0) + 1;
+
+                // chipが新しく追加された場合のみカウントアップ
+                if (!currentSelectedChips.includes(chip) && !newSelectedChips.includes(chip)) {
+                    // chipが削除された場合はカウントしない
+                    delete newCounts[chip];
+                } else if (!currentSelectedChips.includes(chip) && newSelectedChips.includes(chip)) {
+                    // chipが新しく追加された場合はカウントアップ
+                    newCounts[chip] = (newCounts[chip] || 0) + 1;
+                }
+
                 localStorage.setItem('selectionCounts', JSON.stringify(newCounts));
                 return newCounts;
             });
