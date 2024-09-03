@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Platform } from 'react-native';
-
 
 /**
  * カスタムフック - useHorizontalScroll
@@ -9,7 +8,7 @@ import { Platform } from 'react-native';
  * Webプラットフォーム専用です。
  *
  * @param {React.RefObject} scrollViewRef - スクロール対象のスクロールビューの参照
- * @returns {Object} - `onMouseEnter` と `onMouseLeave` イベントハンドラ
+ * @returns {Object} - `onMouseEnter` と `onMouseLeave` イベントハンドラ、スクロール位置を初期化する関数 `resetScroll`
  */
 const useHorizontalScroll = (scrollViewRef) => {
   // スクロール領域にマウスがホバーしているかどうかを管理する状態
@@ -60,7 +59,18 @@ const useHorizontalScroll = (scrollViewRef) => {
     };
   }, [scrollViewRef, isHovered]);
 
-  return { onMouseEnter: () => setIsHovered(true), onMouseLeave: () => setIsHovered(false) };
+  // スクロール位置を初期化する関数
+  const resetScroll = useCallback(() => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({ x: 0, animated: true });
+    }
+  }, [scrollViewRef]);
+
+  return {
+    onMouseEnter: () => setIsHovered(true),
+    onMouseLeave: () => setIsHovered(false),
+    resetScroll,
+  };
 };
 
 export default useHorizontalScroll;

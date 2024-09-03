@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useImperativeHandle, forwardRef } from "react";
 import { ScrollView, ActivityIndicator, View } from 'react-native';
 import { Chip, Avatar } from '@rneui/themed';
 import { Text } from "@rneui/base";
@@ -8,13 +8,15 @@ import { ResponseContext } from '../hooks/useContext';
 import { GetFollowedArtists, Artist } from '../api/getFollowedArtists';
 import useHorizontalScroll from '../hooks/useHorizontalScroll';
 
-export const SelectFollowedArtists = () => {
+export const SelectFollowedArtists = forwardRef((props, ref) => {
     const theme = useTheme();
     const context = React.useContext(ResponseContext);
     const [isLoading, setIsLoading] = useState(true);
-    const [selectedChips, setSelectedChips] = useState([]);
+    const [selectedChips, setSelectedChips] = useState<string[]>([]);
     const [artists, setArtists] = useState<Artist[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [selectionCounts, setSelectionCounts] = useState<{ [key: string]: number }>({});
+    const [isSortComplete, setIsSortComplete] = useState(false);
     const chipStyle = {
         marginRight: 1,
         marginLeft: 1,
@@ -22,7 +24,36 @@ export const SelectFollowedArtists = () => {
         borderRadius: 25,
     };
     const scrollViewRef = useRef(null);
-    const { onMouseEnter, onMouseLeave } = useHorizontalScroll(scrollViewRef);
+    const { onMouseEnter, onMouseLeave, resetScroll } = useHorizontalScroll(scrollViewRef);
+
+    const sortArtists = () => {
+        // 画面更新時のみアーティストの順序を並べ替え
+        if (artists.length > 0) {
+            const sortedArtists = [...artists].sort((a, b) => {
+                const countA = selectionCounts[a.ID] || 0;
+                const countB = selectionCounts[b.ID] || 0;
+                const isASelected = selectedChips.includes(a.ID);
+                const isBSelected = selectedChips.includes(b.ID);
+
+                // 選択回数が多いアーティストを先頭に表示
+                if (countA !== countB) return countB - countA;
+                if (isASelected && !isBSelected) return -1;
+                if (!isASelected && isBSelected) return 1;
+                return 0;
+            });
+
+            // 選択済みアーティストを先頭にする
+            const selectedArtists = sortedArtists.filter(artist => selectedChips.includes(artist.ID));
+            const unselectedArtists = sortedArtists.filter(artist => !selectedChips.includes(artist.ID));
+            setArtists([...selectedArtists, ...unselectedArtists]);
+        }
+        setIsSortComplete(true);
+        resetScroll()
+    };
+
+    useImperativeHandle(ref, () => ({
+        sortArtists,
+    }));
 
     useEffect(() => {
         const fetchArtists = async () => {
@@ -42,20 +73,46 @@ export const SelectFollowedArtists = () => {
         };
 
         fetchArtists();
+
+        // localStorage から選択情報とカウント情報を取得して状態を初期化
+        const savedChips = localStorage.getItem('selectedChips');
+        if (savedChips) {
+            setSelectedChips(JSON.parse(savedChips));
+        }
+
+        const savedCounts = localStorage.getItem('selectionCounts');
+        if (savedCounts) {
+            setSelectionCounts(JSON.parse(savedCounts));
+        }
     }, []);
 
-    const toggleChip = (chip) => {
+    useEffect(() => {
+        sortArtists()
+    }, [isLoading]);
+
+    const toggleChip = (chip: string) => {
+        // チップの選択状態を更新
         setSelectedChips(currentSelectedChips => {
             const newSelectedChips = currentSelectedChips.includes(chip)
                 ? currentSelectedChips.filter(c => c !== chip)
                 : [...currentSelectedChips, chip];
+
+            localStorage.setItem('selectedChips', JSON.stringify(newSelectedChips));
+
+            // 選択回数を更新
+            setSelectionCounts(prevCounts => {
+                const newCounts = { ...prevCounts };
+                newCounts[chip] = (newCounts[chip] || 0) + 1;
+                localStorage.setItem('selectionCounts', JSON.stringify(newCounts));
+                return newCounts;
+            });
 
             context.followedArtistIds = newSelectedChips;
             return newSelectedChips;
         });
     };
 
-    const renderArtistChips = (startIndex, endIndex) => (
+    const renderArtistChips = (startIndex: number, endIndex: number) => (
         <View style={{ flexDirection: 'row' }}>
             {artists.slice(startIndex, endIndex).map(artist => (
                 <Chip
@@ -112,7 +169,7 @@ export const SelectFollowedArtists = () => {
                 {t('form.includeFavoriteArtists')}
             </Text>
             <View style={containerStyle}>
-                {isLoading ? (
+                {isLoading && isSortComplete ? (
                     <ActivityIndicator size="large" color={theme.tertiary} />
                 ) : error ? (
                     <Text style={{ textAlign: 'center' }}>
@@ -146,4 +203,4 @@ export const SelectFollowedArtists = () => {
             </View>
         </>
     );
-};
+});
