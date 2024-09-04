@@ -1,8 +1,8 @@
 import { ThemeProvider } from '../config/ThemeContext';
-import { Header } from "../components/Parts/Header"
-import { Head } from "../components/Parts/Head"
+import { Header } from "../components/Parts/Header";
+import { Head } from "../components/Parts/Head";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { HelmetProvider } from 'react-helmet-async'
+import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from '../hooks/useAuth';
 import { StatusBar } from 'expo-status-bar';
 import React from "react";
@@ -18,22 +18,20 @@ export default function Layout() {
 
   return (
     <ThemeProvider theme={theme}>
-      <ScrollView contentContainerStyle={{
-        backgroundColor: theme.primaryColor,
-        flex: 1,
-        width: '100%',
-      }}>
-        <StatusBar style="auto" backgroundColor={theme.primaryColor} />
-        <SafeAreaProvider>
-          <AuthProvider>
-            <HelmetProvider>
-              <Head />
-            </HelmetProvider>
+      <SafeAreaProvider>
+        <AuthProvider>
+          <HelmetProvider>
+            <Head />
+          </HelmetProvider>
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1, width: '100%', backgroundColor: theme.primaryColor}}
+          >
+            <StatusBar style="auto" backgroundColor={theme.primaryColor} />
             <Header />
             <Slot />
-          </AuthProvider>
-        </SafeAreaProvider>
-      </ScrollView>
+          </ScrollView>
+        </AuthProvider>
+      </SafeAreaProvider>
     </ThemeProvider>
-  )
+  );
 }
