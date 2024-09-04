@@ -10,7 +10,7 @@ import * as yup from 'yup';
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
 import PlaylistContext from '../../deletePlaylist/hooks/useContext';
-import { SaveTracks } from '../api/saveTracks';
+import { SaveTracksFromFollowedArtists } from '../api/saveTracks';
 import { useDisclosure } from '../../../hooks/useDisclosure';
 import { CreatePlaylist } from "../api/createPlaylist";
 import { CreatePlaylistWithSpecifyArtists } from "../api/createPlaylistWithSpecifyArtists";
@@ -45,7 +45,7 @@ export const Form = () => {
 
     useEffect(() => {
         if (!sessionStorage.getItem('tracksSaved')) {
-            SaveTracks();
+            SaveTracksFromFollowedArtists();
             sessionStorage.setItem('tracksSaved', 'true');
         }
     }, []);
