@@ -38,10 +38,17 @@ export const Form = () => {
     const { setShowDeleteButton } = useContext(PlaylistContext);
     const followedArtistsRef = useRef(null);
 
-    const { control, handleSubmit, formState: { errors } } = useForm({
+    const { control, handleSubmit, setValue, watch, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
-        defaultValues: { minute: "25" },
+        defaultValues: { minute: "25" },  // デフォルト値はローカルストレージが無い場合に適用
     });
+
+    useEffect(() => {
+        const storedMinute = localStorage.getItem('minute');
+        if (storedMinute) {
+            setValue('minute', storedMinute);  // フォームの初期値をローカルストレージの値で更新
+        }
+    }, []);
 
     useEffect(() => {
         if (!sessionStorage.getItem('tracksSaved')) {
@@ -50,9 +57,18 @@ export const Form = () => {
         }
     }, []);
 
+    // minuteフィールドの値を監視し、変更があるたびにローカルストレージを更新
+    const minuteValue = watch('minute');
+    useEffect(() => {
+        if (minuteValue !== undefined) {
+            localStorage.setItem('minute', minuteValue);
+        }
+    }, [minuteValue]);
+
     const onSubmit = async (data: any) => {
         try {
             const minute = data.minute;
+
             ReactGA.event({
                 category: 'User Interaction',
                 action: 'Click',
@@ -75,8 +91,8 @@ export const Form = () => {
             if (response.httpStatus === 201) {
                 setPlaylistId(response.playlistId);
                 setTimeout(() => {
-                    setIsLoading(false)
-                    setShowDeleteButton(true)
+                    setIsLoading(false);
+                    setShowDeleteButton(true);
                 }, 2000);
             }
             setHttpStatus(response.httpStatus);
