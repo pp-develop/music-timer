@@ -77,7 +77,7 @@ export const CreatePlaylistDialog = (prop: any) => {
                 </View>
               </Pressable>
               <Dialog.Actions>
-                <Dialog.Button title="閉じる" onPress={handleBackdropPress} />
+                <Dialog.Button title={t('dialog.createPlaylist.close')} onPress={handleBackdropPress} />
               </Dialog.Actions>
             </>
             :
