@@ -26,9 +26,9 @@ export function GetFollowedArtists(): Promise<Response> {
                 if (response.status == 200) {
                     getArtists.artists = response.data.map((item: any) => (
                         {
-                            ID: item.ID,
-                            Name: item.Name,
-                            ImageUrl: item.ImageUrl
+                            ID: item.id,
+                            Name: item.name,
+                            ImageUrl: item.image_url
                         }));
                     getArtists.httpStatus = response.status;
                 }
