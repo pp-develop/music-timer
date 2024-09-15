@@ -78,6 +78,11 @@ export const Form = () => {
             open();
             setIsLoading(true);
 
+            // アーティスト情報を並べ替える
+            if (followedArtistsRef.current) {
+                followedArtistsRef.current.sortArtists();
+            }
+
             // ローカルストレージから選択されたアーティストIDを取得
             let selectedArtistIds = localStorage.getItem('selectedChips');
             // 取得した値が存在する場合はJSON形式から配列に変換
@@ -96,11 +101,6 @@ export const Form = () => {
                 }, 2000);
             }
             setHttpStatus(response.httpStatus);
-
-            // アーティスト情報を並べ替える
-            if (followedArtistsRef.current) {
-                followedArtistsRef.current.sortArtists();
-            }
         } catch (error) {
             if (error.httpStatus === 303 || error.httpStatus === 401) {
                 router.replace("/");

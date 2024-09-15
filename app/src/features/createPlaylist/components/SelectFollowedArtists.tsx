@@ -24,6 +24,31 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
     const scrollViewRef = useRef(null);
     const { onMouseEnter, onMouseLeave, resetScroll } = useHorizontalScroll(scrollViewRef);
 
+    /**
+     * 古いチップと選択カウントを有効なアーティストIDに基づいて整理します。
+     * 有効なIDだけをフィルタリングし、ローカルストレージと状態を更新します。
+     */
+    const cleanUpOldChips = () => {
+        const validArtistIds = new Set(artists.map(artist => artist.ID));
+        const filteredChips = selectedChips.filter(chip => validArtistIds.has(chip));
+
+        // localStorage のチップとカウントを更新
+        localStorage.setItem('selectedChips', JSON.stringify(filteredChips));
+        setSelectedChips(filteredChips);
+
+        setSelectionCounts(prevCounts => {
+            const updatedCounts = Object.keys(prevCounts)
+                .filter(id => validArtistIds.has(id))
+                .reduce((obj, key) => {
+                    obj[key] = prevCounts[key];
+                    return obj;
+                }, {} as { [key: string]: number });
+
+            localStorage.setItem('selectionCounts', JSON.stringify(updatedCounts));
+            return updatedCounts;
+        });
+    };
+
     const sortArtists = () => {
         // 画面更新時のみアーティストの順序を並べ替え
         if (artists.length > 0) {
@@ -85,11 +110,16 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
     }, []);
 
     useEffect(() => {
+        if (!isLoading) {
+            cleanUpOldChips();
+        }
+    }, [artists]);
+
+    useEffect(() => {
         sortArtists()
     }, [isLoading]);
 
     const toggleChip = (chip: string) => {
-        // チップの選択状態を更新
         setSelectedChips(currentSelectedChips => {
             const newSelectedChips = currentSelectedChips.includes(chip)
                 ? currentSelectedChips.filter(c => c !== chip)
@@ -97,16 +127,12 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
 
             localStorage.setItem('selectedChips', JSON.stringify(newSelectedChips));
 
-            // 選択回数を更新
             setSelectionCounts(prevCounts => {
                 const newCounts = { ...prevCounts };
 
-                // chipが新しく追加された場合のみカウントアップ
                 if (!currentSelectedChips.includes(chip) && !newSelectedChips.includes(chip)) {
-                    // chipが削除された場合はカウントしない
                     delete newCounts[chip];
                 } else if (!currentSelectedChips.includes(chip) && newSelectedChips.includes(chip)) {
-                    // chipが新しく追加された場合はカウントアップ
                     newCounts[chip] = (newCounts[chip] || 0) + 1;
                 }
 
@@ -197,11 +223,14 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                                     {renderArtistChips(Math.ceil(2 * artists.length / 3), artists.length)}
                                 </View>
                             </ScrollView>
-                        ) : (
+                        ) : artists.length === 0 ? (
                             <Text style={{ textAlign: 'center' }}>
                                 {t('form.noFollowedArtists')}
                             </Text>
-                        )}
+                        ) :
+                            <Text style={{ textAlign: 'center' }}>
+                                {t('form.get.followedArtists.error')}
+                            </Text>}
                     </>
                 )}
             </View>
