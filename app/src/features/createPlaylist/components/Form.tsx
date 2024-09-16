@@ -10,10 +10,12 @@ import * as yup from 'yup';
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
 import PlaylistContext from '../../deletePlaylist/hooks/useContext';
-import { SaveTracksFromFollowedArtists } from '../api/saveTracks';
+import { UpdateFavoriteTracks } from '../api/updateFavoriteTracks';
+import { UpdateTracksFromFollowedArtists } from '../api/updateTracksFromFollowedArtists';
 import { useDisclosure } from '../../../hooks/useDisclosure';
 import { CreatePlaylist } from "../api/createPlaylist";
 import { CreatePlaylistWithSpecifyArtists } from "../api/createPlaylistWithSpecifyArtists";
+import { CreatePlaylistWithFavoriteTracks } from "../api/createPlaylistWithFavoriteTracks";
 import { CreatePlaylistDialog } from "./CreatePlaylistDialog";
 import ReactGA from 'react-ga4';
 import { router } from 'expo-router';
@@ -52,7 +54,8 @@ export const Form = () => {
 
     useEffect(() => {
         if (!sessionStorage.getItem('tracksSaved')) {
-            SaveTracksFromFollowedArtists();
+            UpdateTracksFromFollowedArtists();
+            UpdateFavoriteTracks();
             sessionStorage.setItem('tracksSaved', 'true');
         }
     }, []);
@@ -88,10 +91,17 @@ export const Form = () => {
             // 取得した値が存在する場合はJSON形式から配列に変換
             selectedArtistIds = selectedArtistIds ? JSON.parse(selectedArtistIds) : [];
 
-            // 選択されたアーティストIDがあるかどうかでプレイリスト作成処理を分岐
-            const response = selectedArtistIds && selectedArtistIds.length > 0
-                ? await CreatePlaylistWithSpecifyArtists(minute, selectedArtistIds)
-                : await CreatePlaylist(minute);
+            const isFavoriteTracks = JSON.parse(localStorage.getItem('isFavoriteTracks') || 'false');
+
+            let response;
+            if (isFavoriteTracks) {
+                response = await CreatePlaylistWithFavoriteTracks(minute, selectedArtistIds);
+            } else if (selectedArtistIds && selectedArtistIds.length > 0) {
+                response = await CreatePlaylistWithSpecifyArtists(minute, selectedArtistIds)
+            }
+            else {
+                response = await CreatePlaylist(minute, selectedArtistIds);
+            }
 
             if (response.httpStatus === 201) {
                 setPlaylistId(response.playlistId);

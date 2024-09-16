@@ -6,6 +6,7 @@ import { useTheme } from '../../../config/ThemeContext';
 import { t } from '../../../locales/i18n';
 import { GetFollowedArtists, Artist } from '../api/getFollowedArtists';
 import useHorizontalScroll from '../hooks/useHorizontalScroll';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export const SelectFollowedArtists = forwardRef((props, ref) => {
     const theme = useTheme();
@@ -103,6 +104,10 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
             setSelectedChips(JSON.parse(savedChips));
         }
 
+        if (JSON.parse(localStorage.getItem('isFavoriteTracks') || 'false')) {
+            setSelectedChips(['favorite']);
+        }
+
         const savedCounts = localStorage.getItem('selectionCounts');
         if (savedCounts) {
             setSelectionCounts(JSON.parse(savedCounts));
@@ -110,6 +115,7 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
     }, []);
 
     useEffect(() => {
+        if (JSON.parse(localStorage.getItem('isFavoriteTracks') || 'false')) return
         if (!isLoading) {
             cleanUpOldChips();
         }
@@ -121,31 +127,83 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
 
     const toggleChip = (chip: string) => {
         setSelectedChips(currentSelectedChips => {
-            const newSelectedChips = currentSelectedChips.includes(chip)
-                ? currentSelectedChips.filter(c => c !== chip)
-                : [...currentSelectedChips, chip];
-
-            localStorage.setItem('selectedChips', JSON.stringify(newSelectedChips));
-
-            setSelectionCounts(prevCounts => {
-                const newCounts = { ...prevCounts };
-
-                if (!currentSelectedChips.includes(chip) && !newSelectedChips.includes(chip)) {
-                    delete newCounts[chip];
-                } else if (!currentSelectedChips.includes(chip) && newSelectedChips.includes(chip)) {
-                    newCounts[chip] = (newCounts[chip] || 0) + 1;
+            if (chip === 'favorite') {
+                // 「お気に入りの曲」を選択した場合、他のチップの選択を解除
+                if (currentSelectedChips.includes('favorite')) {
+                    // 既に「お気に入りの曲」が選択されている場合は解除
+                    localStorage.setItem('selectedChips', JSON.stringify([]));
+                    localStorage.setItem('isFavoriteTracks', JSON.stringify(false));
+                    return [];
+                } else {
+                    // 「お気に入りの曲」を新たに選択
+                    localStorage.setItem('selectedChips', JSON.stringify([]));
+                    localStorage.setItem('isFavoriteTracks', JSON.stringify(true));
+                    return ['favorite'];
                 }
+            } else {
+                // 他のチップを選択した場合は「お気に入りの曲」を解除
+                if (currentSelectedChips.includes('favorite')) {
+                    localStorage.setItem('selectedChips', JSON.stringify([chip]));
+                    localStorage.setItem('isFavoriteTracks', JSON.stringify(false));
+                    return [chip];
+                } else {
+                    const newSelectedChips = currentSelectedChips.includes(chip)
+                        ? currentSelectedChips.filter(c => c !== chip)
+                        : [...currentSelectedChips, chip];
 
-                localStorage.setItem('selectionCounts', JSON.stringify(newCounts));
-                return newCounts;
-            });
+                    // 選択されたチップをローカルストレージに保存
+                    localStorage.setItem('selectedChips', JSON.stringify(newSelectedChips));
 
-            return newSelectedChips;
+                    setSelectionCounts(prevCounts => {
+                        const newCounts = { ...prevCounts };
+
+                        if (!currentSelectedChips.includes(chip) && !newSelectedChips.includes(chip)) {
+                            delete newCounts[chip];
+                        } else if (!currentSelectedChips.includes(chip) && newSelectedChips.includes(chip)) {
+                            newCounts[chip] = (newCounts[chip] || 0) + 1;
+                        }
+
+                        // 選択カウントをローカルストレージに保存
+                        localStorage.setItem('selectionCounts', JSON.stringify(newCounts));
+                        return newCounts;
+                    });
+
+                    return newSelectedChips;
+                }
+            }
         });
     };
 
     const renderArtistChips = (startIndex: number, endIndex: number) => (
         <View style={{ flexDirection: 'row' }}>
+            {startIndex === 0 && (
+                <Chip
+                    key="favorite"
+                    title={t('form.favoriteTracks')}
+                    onPress={() => toggleChip('favorite')}
+                    type={selectedChips.includes('favorite') ? 'solid' : 'outline'}
+                    containerStyle={chipStyle}
+                    titleStyle={{ fontSize: 16 }}
+                    icon={
+                        <View style={{
+                            height: 40,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            display: 'flex',
+                        }}>
+                            <MaterialIcons
+                                name="favorite"
+                                size={20}
+                                color="#2089dc"
+                                style={{
+                                    marginTop: 'auto',
+                                    marginBottom: 'auto',
+                                }}
+                            />
+                        </View>
+                    }
+                />
+            )}
             {artists.slice(startIndex, endIndex).map(artist => (
                 <Chip
                     key={artist.ID}
