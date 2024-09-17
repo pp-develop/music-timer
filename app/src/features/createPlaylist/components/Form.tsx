@@ -55,7 +55,8 @@ export const Form = () => {
     useEffect(() => {
         if (!sessionStorage.getItem('tracksSaved')) {
             UpdateTracksFromFollowedArtists();
-            UpdateFavoriteTracks();
+            // お気に入り曲機能
+            // UpdateFavoriteTracks();
             sessionStorage.setItem('tracksSaved', 'true');
         }
     }, []);

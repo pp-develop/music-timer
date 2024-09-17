@@ -176,7 +176,8 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
 
     const renderArtistChips = (startIndex: number, endIndex: number) => (
         <View style={{ flexDirection: 'row' }}>
-            {startIndex === 0 && (
+            {/* お気に入り曲機能 */}
+            {/* {startIndex === 0 && (
                 <Chip
                     key="favorite"
                     title={t('form.favoriteTracks')}
@@ -203,7 +204,7 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                         </View>
                     }
                 />
-            )}
+            )} */}
             {artists.slice(startIndex, endIndex).map(artist => (
                 <Chip
                     key={artist.ID}
