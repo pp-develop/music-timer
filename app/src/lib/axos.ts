@@ -30,7 +30,9 @@ axiosRetry(axios, {
       window.location.href = '/';
       return false;
     }
-    return axiosRetry.isNetworkOrIdempotentRequestError(error) || error.response?.status === 401;
+    return axiosRetry.isNetworkOrIdempotentRequestError(error) ||
+      error.response?.status === 401 ||
+      error.response?.status === 500;
   },
   onRetry: async (retryCount, error, requestConfig) => {
     // 401 エラーの場合にトークンを更新
