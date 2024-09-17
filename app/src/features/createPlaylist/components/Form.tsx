@@ -12,6 +12,7 @@ import { useTheme } from '../../../config/ThemeContext';
 import PlaylistContext from '../../deletePlaylist/hooks/useContext';
 import { UpdateFavoriteTracks } from '../api/updateFavoriteTracks';
 import { UpdateTracksFromFollowedArtists } from '../api/updateTracksFromFollowedArtists';
+import { RecreateTracks } from '../api/recreateTracks';
 import { useDisclosure } from '../../../hooks/useDisclosure';
 import { CreatePlaylist } from "../api/createPlaylist";
 import { CreatePlaylistWithSpecifyArtists } from "../api/createPlaylistWithSpecifyArtists";
@@ -53,12 +54,17 @@ export const Form = () => {
     }, []);
 
     useEffect(() => {
-        if (!sessionStorage.getItem('tracksSaved')) {
-            UpdateTracksFromFollowedArtists();
-            // お気に入り曲機能
-            // UpdateFavoriteTracks();
-            sessionStorage.setItem('tracksSaved', 'true');
-        }
+        const fetchTracks = async () => {
+            if (!sessionStorage.getItem('tracksSaved')) {
+                await UpdateTracksFromFollowedArtists();
+                // お気に入り曲機能
+                // await UpdateFavoriteTracks();
+                await RecreateTracks();
+                sessionStorage.setItem('tracksSaved', 'true');
+            }
+        };
+
+        fetchTracks();
     }, []);
 
     // minuteフィールドの値を監視し、変更があるたびにローカルストレージを更新
