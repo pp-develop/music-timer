@@ -15,6 +15,7 @@
   "form.specifyTime.minute": "分",
   "form.specifyTime.placeholder": "3 ～ 100",
   "form.includeFavoriteArtists": "アーティストから選ぶ",
+  "form.favoriteTracks": "お気に入りの曲",
   "form.noFollowedArtists": "フォローしているアーティストがいません。",
   "form.get.followedArtists.error": "フォローしているアーティストの取得に失敗しました。\nしばらく時間を置いてから再度試してください。",
   "form.gest.includeFavoriteArtists.desc": "※ログインユーザーのみ利用可",

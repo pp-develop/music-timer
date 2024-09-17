@@ -1,10 +1,7 @@
 import { fetchWithRetry } from '../../../lib/axos';
 
-export function SaveTracksFromFollowedArtists() {
+export function UpdateTracksFromFollowedArtists() {
     fetchWithRetry('/tracks/followed-artists', 'POST', {
-        data: {
-            'includeFavoriteArtists': true,
-        },
         timeout: 0
     })
 }

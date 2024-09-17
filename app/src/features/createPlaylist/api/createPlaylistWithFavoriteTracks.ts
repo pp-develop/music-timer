@@ -5,7 +5,7 @@ type Response = {
     httpStatus: number;
 };
 
-export function CreatePlaylistWithSpecifyArtists(minute: string, selectedArtistIds: any[]): Promise<Response> {
+export function CreatePlaylistWithFavoriteTracks(minute: string, selectedArtistIds: any[]): Promise<Response> {
     return new Promise((resolve, reject) => {
         const createPlaylist: Response = {
             playlistId: "",
@@ -15,7 +15,8 @@ export function CreatePlaylistWithSpecifyArtists(minute: string, selectedArtistI
         fetchWithRetry('/playlist', 'POST', {
             data: {
                 'minute': parseInt(minute),
-                'artistIds': selectedArtistIds
+                'includeFavoriteTracks': true,
+                'artistIds': selectedArtistIds,
             },
             timeout: 16000
         })
