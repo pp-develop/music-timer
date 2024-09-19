@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+import { t } from '../locales/i18n';
 
 export default function ErrorPage() {
   const router = useRouter();
@@ -8,14 +9,9 @@ export default function ErrorPage() {
   return (
     <View style={styles.container}>
       <Text style={styles.errorCode}>500</Text>
-      <Text style={styles.errorMessage}>問題が発生しました</Text>
-      <Text style={styles.errorDescription}>
-        一時的にアクセスできない状態です。{'\n'}
-        時間を置いて再度お試しください。
-      </Text>
-      <Text style={{ color: 'blue' }} onPress={() => router.push('/')}>
-        ホームに戻る
-      </Text>
+      <Text style={styles.errorMessage}>{t('error.500.message')}</Text>
+      <Text style={styles.errorDescription}>{t('error.500.description')}</Text>
+      <Text style={{ color: 'blue' }} onPress={() => router.push('/')}>{t('error.500.home.back')}</Text>
     </View>
   );
 }

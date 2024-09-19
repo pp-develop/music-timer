@@ -28,5 +28,8 @@
   "toast.playlistDeleting": "削除中...",
   "toast.playlistDeleted": "作成したプレイリストが削除されました。",
   "toast.playlistDeleteError": "プレイリストの削除中に問題が発生しました。\nしばらく時間を置いてから再度試してください。",
-  "error.timeout": "サーバーからの応答がありません。お手数ですが、しばらく時間を置いて再試行してください。"
+  "error.timeout": "サーバーからの応答がありません。お手数ですが、しばらく時間を置いて再試行してください。",
+  "error.500.home.back": "ホームに戻る",
+  "error.500.message": "問題が発生しました",
+  "error.home.description": "一時的にアクセスできない状態です。\n時間を置いて再度お試しください。"
 }

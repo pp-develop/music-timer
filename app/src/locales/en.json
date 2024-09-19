@@ -28,5 +28,8 @@
   "form.specifyTime.typeError": "Please enter a numeric value only.",
   "form.specifyTime.range": "Playback time must be between 3 and 100 minutes.",
   "error.timeout": "No response from the server. Please wait a moment and try again.",
-  "auth.logout.failed": "Logout failed. Please wait a moment and try again."
+  "auth.logout.failed": "Logout failed. Please wait a moment and try again.",
+  "error.500.home.back": "Back to Home",
+  "error.500.message": "An issue has occurred",
+  "error.home.description": "The site is temporarily unavailable.\nPlease try again later."
 }
