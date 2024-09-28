@@ -10,9 +10,7 @@ import * as yup from 'yup';
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
 import PlaylistContext from '../../deletePlaylist/hooks/useContext';
-import { UpdateFavoriteTracks } from '../api/updateFavoriteTracks';
-import { UpdateTracksFromFollowedArtists } from '../api/updateTracksFromFollowedArtists';
-import { RecreateTracks } from '../api/recreateTracks';
+import { InitTracksData } from '../api/initTracksData';
 import { useDisclosure } from '../../../hooks/useDisclosure';
 import { CreatePlaylist } from "../api/createPlaylist";
 import { CreatePlaylistWithSpecifyArtists } from "../api/createPlaylistWithSpecifyArtists";
@@ -55,12 +53,9 @@ export const Form = () => {
 
     useEffect(() => {
         const fetchTracks = async () => {
-            if (!sessionStorage.getItem('tracksSaved')) {
-                await UpdateTracksFromFollowedArtists();
-                // お気に入り曲機能
-                // await UpdateFavoriteTracks();
-                await RecreateTracks();
-                sessionStorage.setItem('tracksSaved', 'true');
+            if (!localStorage.getItem('initTrackData')) {
+                InitTracksData();
+                localStorage.setItem('initTrackData', 'true');
             }
         };
 
