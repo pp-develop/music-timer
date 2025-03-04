@@ -253,6 +253,7 @@ const styles = StyleSheet.create({
 
     scrollContainer: {
         flex: 1,
+        marginTop: 24,
         marginBottom: 24,
     },
 
