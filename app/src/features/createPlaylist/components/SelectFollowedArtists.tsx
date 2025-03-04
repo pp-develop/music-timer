@@ -11,7 +11,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { t } from '../../../locales/i18n';
 import { GetFollowedArtists, Artist } from '../api/getFollowedArtists';
 import useHorizontalScroll from '../hooks/useHorizontalScroll';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { Svg, Path, Polyline, Circle } from 'react-native-svg';
 
 const CheckIcon = () => (
@@ -31,11 +30,11 @@ const colorsArray = [
     ['#A1A1AA', '#2D3748']
 ];
 
-const ArtistIcon = ({ artist, isSelected, onSelect, selectionCount }) => {
+const ArtistIcon = ({ artist, isSelected, onSelect, selectionCount, itemWidth }) => {
     const renderImage = () => {
         if (artist.ImageUrl) {
             return (
-                <View style={styles.artistImageContainer}>
+                <View style={[styles.artistImageContainer, { width: '55%', height: '55%' }]}>
                     <Image
                         source={{ uri: artist.ImageUrl }}
                         style={styles.artistImage}
@@ -63,7 +62,7 @@ const ArtistIcon = ({ artist, isSelected, onSelect, selectionCount }) => {
         <TouchableOpacity
             onPress={() => onSelect(artist.ID)}
             activeOpacity={0.7}
-            style={styles.artistItem}
+            style={[{ width: itemWidth }]}
         >
             <LinearGradient
                 colors={isSelected ? artist.Color : ['#374151', '#374151']}
@@ -104,6 +103,11 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
     const [isFavoriteSelected, setIsFavoriteSelected] = useState(false);
     const scrollViewRef = useRef(null);
     const { resetScroll } = useHorizontalScroll(scrollViewRef);
+    const [containerWidth, setContainerWidth] = useState(0);
+
+    // 画面幅を取得し、アイテム幅を計算
+    const gap = 8; // グリッド間のギャップ
+    const itemWidth = (containerWidth - (2 * gap)) / 3;
 
     const toggleSelection = (artistId) => {
         setSelectedIds(prev => {
@@ -206,6 +210,10 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
             style={styles.scrollContainer}
             contentContainerStyle={styles.scrollContentContainer}
             showsVerticalScrollIndicator={false}
+            onLayout={(event) => {
+                const { width } = event.nativeEvent.layout;
+                setContainerWidth(width);
+            }}
         >
             {/* <View style={styles.favoriteContainer}>
                 <TouchableOpacity
@@ -228,7 +236,7 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                     </Text>
                 </TouchableOpacity>
             </View> */}
-            <View style={styles.artistGrid}>
+            <View style={[styles.artistGrid, { gap }]}>
                 {artists.map((artist) => (
                     <ArtistIcon
                         key={artist.ID}
@@ -236,6 +244,7 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                         isSelected={selectedIds.includes(artist.ID)}
                         onSelect={toggleSelection}
                         selectionCount={selectionCounts[artist.ID] || 0}
+                        itemWidth={itemWidth}
                     />
                 ))}
             </View>
@@ -265,12 +274,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'flex-start',
-        gap: 12,
-        paddingVertical: 8,
-    },
-
-    artistItem: {
-        width: `${(100 - 8) / 3}%`, // 3列表示（8%は2つのgapの合計）
     },
 
     artistButton: {
@@ -279,17 +282,22 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 12,
-        gap: 8,
+        gap: 4,
     },
 
     artistName: {
         fontSize: 12,
         fontWeight: '600',
         textAlign: 'center',
-        marginTop: 4,
-        width: '100%', // テキストの最大幅を設定
-        paddingHorizontal: 4, // テキストの左右のパディング
+        marginTop: 2,
+        width: '100%',
+        paddingHorizontal: 2, // テキストの左右のパディングを小さく
+    },
+
+    artistImage: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'cover',
     },
 
     checkmark: {
@@ -298,7 +306,7 @@ const styles = StyleSheet.create({
         right: 4,
         backgroundColor: 'rgba(255, 255, 255, 0.2)',
         borderRadius: 10,
-        padding: 4,
+        padding: 2,
     },
 
     artistImageContainer: {
@@ -308,13 +316,9 @@ const styles = StyleSheet.create({
         height: '60%',
         borderRadius: 16,
         overflow: 'hidden',
+        marginBottom: 4,
     },
 
-    artistImage: {
-        width: '100%',
-        height: '100%',
-        resizeMode: 'cover',
-    },
     favoriteContainer: {
         paddingHorizontal: 8,
         paddingBottom: 16,
