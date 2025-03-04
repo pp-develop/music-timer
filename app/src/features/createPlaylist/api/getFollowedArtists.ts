@@ -3,6 +3,7 @@ import { fetchWithRetry } from '../../../lib/axos';
 export type Artist = {
     ID: string;
     Name: string;
+    Color: string;
 };
 
 type Response = {

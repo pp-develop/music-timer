@@ -1,5 +1,6 @@
 {
   "appName": "Music Timer for Spotify",
+  "header.title": "Music Timer",
   "top.description1": "It creates a playlist based on the specified playback time.",
   "top.description2": "※ If auto-play is enabled, songs will continue playing even after the playlist ends.",
   "top.description3": "If you cannot log in, please disable 'Block third-party cookies' in your browser settings.",
@@ -7,7 +8,6 @@
   "auth.login.desc": "Since this is a beta version, you need to apply for an account through the link below to use the app.",
   "auth.login.desc.link": "Here",
   "auth.gest": "Use as a guest",
-  "auth.logout": "Logout",
   "form.specifyTime.minute": "Min",
   "form.specifyTime.placeholder": "3 ~ 100",
   "form.includeFavoriteArtists": "Choose from Artists",

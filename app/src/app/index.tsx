@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, ActivityIndicator, View, Platform } from 'react-native';
+import {
+    View,
+    Text,
+    ActivityIndicator,
+    StyleSheet
+} from 'react-native';
 import { LoginButton } from "../features/auth";
 import { useAuth } from "../hooks/useAuth";
 import { useTheme } from '../config/ThemeContext';
 import { router } from 'expo-router';
 import { t } from '../locales/i18n';
-import { Text } from "@rneui/base";
-import { Description } from "../components/Parts/Description";
+import { Text as TextBase } from "@rneui/base";
 import { setDefaultLanguage, getDefaultLanguage } from '../locales/i18n';
 import usePageViewTracking from '../hooks/usePageViewTracking';
 
@@ -36,41 +40,52 @@ export default function Page() {
 
     return (
         <>
-            {loading && (
-                <View style={styles.indicator}>
-                    <ActivityIndicator size="large" color={theme.tertiary} />
-                </View>
-            )}
-            {!loading && (
+            {!isAuthenticated && (
                 <>
-                    {!isAuthenticated && (
-                        <>
-                            <Description />
-                            <LoginButton />
-                            {/* TODO:: ドメイン統一後に削除 */}
-                            {pressAuth && (
-                                <Text
-                                    h3
-                                    h3Style={{
-                                        fontSize: 14,
-                                        color: 'red'
-                                    }}
-                                    style={{
-                                        maxWidth: 250,
-                                        marginTop: 10,
-                                        marginLeft: 'auto',
-                                        marginRight: 'auto',
-                                        width: '100%'
-                                    }}
-                                >
-                                    {t('top.description3')}
-                                </Text>
-                            )}
-                        </>
+                    <View style={styles.container}>
+                        {loading ?
+                            <View style={styles.indicator}>
+                                <ActivityIndicator size="large" color={theme.tertiary} />
+                            </View>
+                            : <>
+
+                                {/* Floating Elements */}
+                                <View style={styles.floatingElements}>
+                                    <View style={[styles.floatingCircle, styles.greenCircle]} />
+                                    <View style={[styles.floatingCircle, styles.blueCircle]} />
+                                </View>
+
+                                {/* Glass Card */}
+                                <View style={styles.card}>
+                                    <Text style={styles.title}>音楽タイマー for Spotify</Text>
+                                    <LoginButton />
+                                </View>
+                            </>
+                        }
+                    </View>
+                    {/* TODO:: ドメイン統一後に削除 */}
+                    {pressAuth && (
+                        <TextBase
+                            h3
+                            h3Style={{
+                                fontSize: 14,
+                                color: 'red'
+                            }}
+                            style={{
+                                maxWidth: 250,
+                                marginTop: 10,
+                                marginLeft: 'auto',
+                                marginRight: 'auto',
+                                width: '100%'
+                            }}
+                        >
+                            {t('top.description3')}
+                        </TextBase>
                     )}
                 </>
             )}
-        </>)
+        </>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -80,33 +95,53 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    text: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: 'white',
-    },
-    button: {
+    container: {
+        height: '100vh',
+        width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: 18,
-        paddingHorizontal: 28,
-        borderRadius: 30,
-        elevation: 3,
-        backgroundColor: '#6E777C',
-        marginTop: 30,
-        marginLeft: 'auto',
-        marginRight: 'auto',
+        backgroundImage: 'linear-gradient(135deg, #1e2124 0%, #1a1c1f 50%, #000000 100%)',
     },
-    desc: {
-        paddingTop: 15,
-        paddingBottom: 12,
-        maxWidth: 250,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        width: '100%',
-        color: "#454C50"
+    floatingElements: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
     },
-    descLink: {
-        color: "#4d4dff"
-    }
+    floatingCircle: {
+        width: 256,
+        height: 256,
+        borderRadius: 128,
+        position: 'absolute',
+        filter: 'blur(64px)',
+    },
+    greenCircle: {
+        top: '25%',
+        left: '25%',
+        backgroundColor: 'rgba(34, 197, 94, 0.2)',
+    },
+    blueCircle: {
+        bottom: '25%',
+        right: '25%',
+        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+    },
+    card: {
+        maxWidth: 480,
+        width: '90%',
+        padding: 32,
+        borderRadius: 24,
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+        backdropFilter: 'blur(16px)',
+        borderWidth: 1,
+        borderColor: 'rgba(255, 255, 255, 0.1)',
+        alignItems: 'center',
+        gap: 32,
+    },
+    title: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        color: 'white',
+        textAlign: 'center',
+    },
 });

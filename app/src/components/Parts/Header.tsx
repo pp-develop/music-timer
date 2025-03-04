@@ -1,11 +1,26 @@
 import React from "react";
-import { Text, Header as HeaderComponent } from "@rneui/base";
-import { Image, View } from 'react-native';
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    StyleSheet,
+    Dimensions,
+} from 'react-native';
 import { LogoutButton } from "../../features/auth";
 import { t } from '../../locales/i18n';
 import { router, usePathname } from 'expo-router';
-import { useTheme } from '../../config/ThemeContext';
 import { useAuth } from "../../../src/hooks/useAuth";
+import { Svg, Path, Line, Polyline } from 'react-native-svg';
+import { MAX_INPUT_WIDTH } from '../../config';
+const { width } = Dimensions.get('window');
+
+const LogoutIcon = () => (
+    <Svg width={28} height={28} viewBox="0 0 24 24" stroke="#9CA3AF" strokeWidth={2}>
+        <Path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+        <Polyline points="16 17 21 12 16 7" />
+        <Line x1="21" y1="12" x2="9" y2="12" />
+    </Svg>
+);
 
 export const Header = () => {
     const pathname = usePathname();
@@ -13,120 +28,54 @@ export const Header = () => {
         return
     }
 
-    const theme = useTheme()
     const { loading, isAuthenticated } = useAuth();
 
     const handleTitlePress = () => {
         router.replace('/');
     };
 
-    const renderCenterComponent = () => (
-        <Text
-            onPress={pathname == '/playlist' ? undefined : () => handleTitlePress()}
-            style={{
-                color: theme.tertiary,
-                fontSize: 18,
-                fontWeight: "800",
-                marginTop: 'auto',
-                marginBottom: 'auto',
-            }}
-            numberOfLines={2} // テキストの最大行数を設定
-            ellipsizeMode="tail" // 末尾を省略する
-        >
-            {t('appName')}
-        </Text>
-    );
     return (
         <>
             {!loading && (
-                <>
+                <View style={styles.header}>
+                    <TouchableOpacity
+                        onPress={pathname == '/playlist' ? undefined : () => handleTitlePress()}
+                    >
+                        <Text
+                            style={styles.title}
+                            numberOfLines={1}
+                            ellipsizeMode="tail" >
+                            {t('header.title')}
+                        </Text>
+                    </TouchableOpacity>
                     {
                         isAuthenticated ? (
-                            <>
-                                <HeaderComponent
-                                    backgroundColor={theme.primaryColor}
-                                    backgroundImageStyle={{
-                                        backgroundColor: theme.primaryColor
-                                    }}
-                                    barStyle="default"
-                                    centerComponent={
-                                        <View style={{
-                                            flexDirection: 'row',
-                                            alignItems: 'center'
-                                        }}>
-                                            <Image
-                                                source={require('../../../assets/icon.png')}
-                                                style={{ width: 50, height: 50, marginRight: 10 }}
-                                            />
-                                            <Text
-                                                onPress={pathname == '/playlist' ? undefined : () => handleTitlePress()}
-                                                style={{
-                                                    color: theme.tertiary,
-                                                    fontSize: 18,
-                                                    fontWeight: "600",
-                                                    marginTop: 'auto',
-                                                    marginBottom: 'auto',
-                                                }}
-                                                numberOfLines={2} // テキストの最大行数を設定
-                                                ellipsizeMode="tail" // 末尾を省略する
-                                            >
-                                                {t('appName')}
-                                            </Text>
-                                        </View>
-                                    }
-                                    centerContainerStyle={{}}
-                                    containerStyle={{
-                                        marginTop: 40,
-                                        borderBottomWidth: 0,
-                                        maxWidth: 600,
-                                        marginLeft: 'auto',
-                                        marginRight: 'auto',
-                                    }}
-                                    placement="left"
-                                    rightComponent={pathname == '/' ? undefined : <LogoutButton />}
-                                    rightContainerStyle={{
-                                        justifyContent: 'center'
-                                    }}
-                                />
-                            </>
+                            <LogoutButton />
                         ) : (
-                            <>
-                                <HeaderComponent
-                                    backgroundColor={theme.primaryColor}
-                                    backgroundImageStyle={{
-                                        backgroundColor: theme.primaryColor
-                                    }}
-                                    barStyle="default"
-                                    centerComponent={renderCenterComponent()}
-                                    centerContainerStyle={{}}
-                                    containerStyle={{
-                                        paddingTop: 40,
-                                        paddingBottom: 12,
-                                        borderBottomWidth: 0,
-                                        maxWidth: 600,
-                                        marginLeft: 'auto',
-                                        marginRight: 'auto',
-                                        // width: '100%'
-                                    }}
-                                    leftComponent={
-                                        <View style={{
-                                        }}>
-                                            <Image
-                                                source={require('../../../assets/icon.png')}
-                                                style={{ width: 50, height: 50, marginRight: 0 }}
-                                            />
-                                        </View>
-                                    }
-                                    leftContainerStyle={{
-                                        justifyContent: 'center'
-                                    }}
-                                    placement="left"
-                                />
-                            </>
+                            <></>
                         )}
-                </>
+                </View>
             )}
         </>
 
     );
 }
+
+const styles = StyleSheet.create({
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 24,
+        maxWidth: MAX_INPUT_WIDTH,
+        alignSelf: 'stretch',
+    },
+    title: {
+        fontSize: Math.min(28, width * 0.07), // レスポンシブなフォントサイズ
+        fontWeight: 'bold',
+        color: '#FFFFFF',
+        letterSpacing: -0.5,
+        maxWidth: MAX_INPUT_WIDTH - 80,
+    },
+
+});
