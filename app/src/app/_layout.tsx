@@ -5,9 +5,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from '../hooks/useAuth';
 import { StatusBar } from 'expo-status-bar';
-import React from "react";
+import React from 'react';
 import { Slot } from 'expo-router';
-import { ScrollView } from 'react-native';
 
 export default function Layout() {
   const theme = {
@@ -23,13 +22,8 @@ export default function Layout() {
           <HelmetProvider>
             <Head />
           </HelmetProvider>
-          <ScrollView
-            contentContainerStyle={{ flexGrow: 1, width: '100%', backgroundColor: theme.primaryColor}}
-          >
-            <StatusBar style="auto" backgroundColor={theme.primaryColor} />
-            <Header />
-            <Slot />
-          </ScrollView>
+          <StatusBar style="auto" backgroundColor={theme.primaryColor} />
+          <Slot />
         </AuthProvider>
       </SafeAreaProvider>
     </ThemeProvider>
