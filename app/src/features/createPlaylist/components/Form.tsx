@@ -46,6 +46,7 @@ export const Form = () => {
     const [playlistId, setPlaylistId] = useState("");
     const { setShowDeleteButton } = useContext(PlaylistContext);
     const followedArtistsRef = useRef(null);
+    const [containerWidth, setContainerWidth] = useState(0);
 
     // Animated Values
     const [isLoading, setIsLoading] = useState(false);
@@ -330,7 +331,11 @@ export const Form = () => {
                 >
                     <Header />
 
-                    <View style={styles.inputContainer}>
+                    <View style={styles.inputContainer}
+                        onLayout={(event) => {
+                            const { width } = event.nativeEvent.layout;
+                            setContainerWidth(width);
+                        }}>
                         <Controller
                             control={control}
                             name="minute"
@@ -338,7 +343,9 @@ export const Form = () => {
                                 <>
                                     <TextInput
                                         errorMessage={errors.minute?.message}
-                                        style={styles.input}
+                                        style={[styles.input, {
+                                            maxWidth: containerWidth - 16
+                                        }]}
                                         value={value}
                                         onChangeText={onChange}
                                         placeholder="再生時間"
