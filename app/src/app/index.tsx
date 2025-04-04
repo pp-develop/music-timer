@@ -57,7 +57,9 @@ export default function Page() {
 
                                 {/* Glass Card */}
                                 <View style={styles.card}>
-                                    <Text style={styles.title}>音楽タイマー for Spotify</Text>
+                                    <Text style={styles.title}>
+                                        {t('appName')}
+                                    </Text>
                                     <LoginButton />
                                 </View>
                             </>
