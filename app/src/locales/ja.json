@@ -36,5 +36,8 @@
   "error.timeout": "サーバーからの応答がありません。お手数ですが、しばらく時間を置いて再試行してください。",
   "error.500.home.back": "ホームに戻る",
   "error.500.message": "問題が発生しました",
-  "error.500.description": "一時的にアクセスできない状態です。\n時間を置いて再度お試しください。"
+  "error.500.description": "一時的にアクセスできない状態です。\n時間を置いて再度お試しください。",
+  "createPlaylist.followedArtistsEmpty": "フォローしているアーティストから選曲することができます。\nSpotifyでアーティストをフォローすると、ここに表示されます。",
+  "createPlaylist.findArtists": "Spotifyで探す",
+  "createPlaylist.findArtistsTitle": "アーティストを見つける"
 }

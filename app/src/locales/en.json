@@ -36,5 +36,8 @@
   "error.timeout": "No response from the server. Please try again after some time.",
   "error.500.home.back": "Return to Home",
   "error.500.message": "An issue has occurred",
-  "error.500.description": "Currently unable to access.\nPlease try again after some time."
+  "error.500.description": "Currently unable to access.\nPlease try again after some time.",
+  "createPlaylist.followedArtistsEmpty": "You can select songs from artists you follow.\nFollow artists on Spotify to see them here.",
+  "createPlaylist.findArtists": "Find on Spotify",
+  "createPlaylist.findArtistsTitle": "Find Artists"
 }

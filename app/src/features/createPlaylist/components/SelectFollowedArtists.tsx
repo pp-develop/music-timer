@@ -8,18 +8,20 @@ import {
     Image,
     Animated,
     Easing,
+    Linking,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { t } from '../../../locales/i18n';
 import { GetFollowedArtists, Artist } from '../api/getFollowedArtists';
 import useHorizontalScroll from '../hooks/useHorizontalScroll';
 import { Svg, Path, Polyline, Circle } from 'react-native-svg';
+import { MaterialIcons } from '@expo/vector-icons';
 
 // ローディングアニメーション用のコンポーネント
 const LoadingAnimation = () => {
     const rotateAnim = useRef(new Animated.Value(0)).current;
     const scaleAnim = useRef(new Animated.Value(0.8)).current;
-    
+
     useEffect(() => {
         // 回転アニメーション
         Animated.loop(
@@ -30,7 +32,7 @@ const LoadingAnimation = () => {
                 useNativeDriver: true,
             })
         ).start();
-        
+
         // 拡大縮小アニメーション
         Animated.loop(
             Animated.sequence([
@@ -49,12 +51,12 @@ const LoadingAnimation = () => {
             ])
         ).start();
     }, []);
-    
+
     const rotate = rotateAnim.interpolate({
         inputRange: [0, 1],
         outputRange: ['0deg', '360deg'],
     });
-    
+
     return (
         <View style={styles.loadingContainer}>
             <Animated.View
@@ -155,6 +157,27 @@ const ArtistIcon = ({ artist, isSelected, onSelect, selectionCount, itemWidth })
         </TouchableOpacity>
     );
 };
+
+const EmptyState = () => (
+    <View style={styles.emptyContainer}>
+        <View style={styles.emptyCard}>
+            <MaterialIcons name="music-note" size={32} color="#4F46E5" style={styles.icon} />
+            <Text style={styles.emptyTitle}>
+            {t('createPlaylist.findArtistsTitle')}
+            </Text>
+            <Text style={styles.emptyText}>
+                {t('createPlaylist.followedArtistsEmpty')}
+            </Text>
+            <View style={styles.divider} />
+            <TouchableOpacity
+                style={styles.spotifyButton}
+                onPress={() => Linking.openURL('https://open.spotify.com/search')}
+            >
+                <Text style={styles.buttonText}>{t('createPlaylist.findArtists')}</Text>
+            </TouchableOpacity>
+        </View>
+    </View>
+);
 
 export const SelectFollowedArtists = forwardRef((props, ref) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -267,6 +290,9 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
     // LoadingAnimationコンポーネントを使用
     if (isLoading) return <LoadingAnimation />;
     if (error) return <Text style={styles.errorText}>{error}</Text>;
+    if (artists.length === 0) {
+        return <EmptyState />;
+    }
 
     return (
         <ScrollView
@@ -441,5 +467,64 @@ const styles = StyleSheet.create({
         color: '#EF4444',
         textAlign: 'center',
         padding: 16,
+    },
+
+    emptyContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+    },
+
+    emptyCard: {
+        backgroundColor: '#1E1E1E',
+        borderRadius: 16,
+        padding: 24,
+        width: '100%',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
+        elevation: 3,
+    },
+
+    icon: {
+        marginBottom: 16,
+    },
+
+    emptyTitle: {
+        fontSize: 20,
+        fontWeight: '600',
+        color: '#FFFFFF',
+        marginBottom: 12,
+    },
+
+    emptyText: {
+        fontSize: 14,
+        color: '#9CA3AF',
+        textAlign: 'center',
+        lineHeight: 20,
+    },
+
+    divider: {
+        height: 1,
+        backgroundColor: '#2D2D2D',
+        width: '100%',
+        marginVertical: 20,
+    },
+
+    spotifyButton: {
+        backgroundColor: '#1DB954', // Spotifyのブランドカラー
+        paddingVertical: 12,
+        paddingHorizontal: 24,
+        borderRadius: 24,
+        marginTop: 8,
+    },
+
+    buttonText: {
+        color: '#FFFFFF',
+        fontSize: 14,
+        fontWeight: '600',
     },
 });
