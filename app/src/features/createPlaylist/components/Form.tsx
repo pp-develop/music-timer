@@ -9,7 +9,8 @@ import {
     Easing,
     TouchableOpacity,
     Pressable,
-    Image
+    Image,
+    PanResponder
 } from 'react-native';
 import { Header } from "../../../components/Parts/Header";
 import { DeletePlaylist } from "../../deletePlaylist/components/DeletePlaylistButton";
@@ -28,6 +29,8 @@ import ReactGA from 'react-ga4';
 import { router } from 'expo-router';
 import { MAX_INPUT_WIDTH } from '../../../config';
 import { Spotify } from 'react-spotify-embed';
+import { Svg, Path } from 'react-native-svg';
+
 const { width, height } = Dimensions.get('window');
 
 const schema = yup.object().shape({
@@ -62,6 +65,62 @@ export const Form = () => {
     const loadingOpacity = useRef(new Animated.Value(0)).current;
     const waveAnimations = useRef(
         Array(3).fill().map(() => new Animated.Value(0))
+    ).current;
+
+    // インジケーター用のアニメーション値を追加
+    const swipeIndicatorOpacity = useRef(new Animated.Value(1)).current;
+    const swipeIndicatorTranslateY = useRef(new Animated.Value(0)).current;
+
+    // メインPanResponderの設定
+    const panResponder = useRef(
+        PanResponder.create({
+            onMoveShouldSetPanResponder: (evt, gestureState) => {
+                // 下方向のスワイプのみ検出
+                return gestureState.dy > 20 && Math.abs(gestureState.dx) < Math.abs(gestureState.dy);
+            },
+            onPanResponderRelease: (evt, gestureState) => {
+                // スワイプダウンの場合、アニメーションを終了する
+                if (gestureState.dy > 100) {
+                    stopAnimation();
+                } else {
+                    // キャンセルされた場合は元の位置に戻す
+                    Animated.spring(playlistScreenTranslateY, {
+                        toValue: 0,
+                        useNativeDriver: true
+                    }).start();
+                }
+            },
+            onPanResponderMove: (evt, gestureState) => {
+                // ジェスチャーの移動に合わせてプレイリスト画面を移動
+                if (gestureState.dy > 0) {
+                    playlistScreenTranslateY.setValue(gestureState.dy);
+                }
+            }
+        })
+    ).current;
+
+    // Spotifyエリア用のPanResponder
+    const spotifyPanResponder = useRef(
+        PanResponder.create({
+            onMoveShouldSetPanResponder: (evt, gestureState) => {
+                return gestureState.dy > 20 && Math.abs(gestureState.dx) < Math.abs(gestureState.dy);
+            },
+            onPanResponderRelease: (evt, gestureState) => {
+                if (gestureState.dy > 100) {
+                    stopAnimation();
+                } else {
+                    Animated.spring(playlistScreenTranslateY, {
+                        toValue: 0,
+                        useNativeDriver: true
+                    }).start();
+                }
+            },
+            onPanResponderMove: (evt, gestureState) => {
+                if (gestureState.dy > 0) {
+                    playlistScreenTranslateY.setValue(gestureState.dy);
+                }
+            }
+        })
     ).current;
 
     // ローディング開始関数
@@ -151,8 +210,8 @@ export const Form = () => {
                     Animated.timing(anim, {
                         toValue: 1,
                         duration: 300,
-                        useNativeDriver: true
-                    })
+                useNativeDriver: true
+            })
                 )
             )
         ]).start();
@@ -180,22 +239,23 @@ export const Form = () => {
                 Animated.timing(anim, {
                     toValue: 0,
                     duration: 300,
-                    useNativeDriver: true
-                })
+                useNativeDriver: true
+            })
             )
         ]).start(() => {
             setIsAnimating(false);
         });
     };
+
     const { control, handleSubmit, setValue, watch, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
-        defaultValues: { minute: "25" },  // デフォルト値はローカルストレージが無い場合に適用
+        defaultValues: { minute: "25" },
     });
 
     useEffect(() => {
         const storedMinute = localStorage.getItem('minute');
         if (storedMinute) {
-            setValue('minute', storedMinute);  // フォームの初期値をローカルストレージの値で更新
+            setValue('minute', storedMinute);
         }
     }, []);
 
@@ -217,6 +277,46 @@ export const Form = () => {
             localStorage.setItem('minute', minuteValue);
         }
     }, [minuteValue]);
+
+    // インジケーターのアニメーション
+    useEffect(() => {
+        const animateIndicator = () => {
+            Animated.sequence([
+                Animated.timing(swipeIndicatorTranslateY, {
+                    toValue: -10,
+                    duration: 500,
+                    useNativeDriver: true
+                }),
+                Animated.timing(swipeIndicatorTranslateY, {
+                    toValue: 0,
+                    duration: 500,
+                    useNativeDriver: true
+                })
+            ]).start(() => {
+                if (isAnimating) {
+                    animateIndicator();
+                }
+            });
+        };
+
+        if (isAnimating) {
+            // 5秒後にフェードアウト
+            setTimeout(() => {
+                Animated.timing(swipeIndicatorOpacity, {
+                    toValue: 0,
+                    duration: 1000,
+                    useNativeDriver: true
+                }).start();
+            }, 5000);
+
+            // アニメーション開始
+            animateIndicator();
+        } else {
+            // リセット
+            swipeIndicatorOpacity.setValue(1);
+            swipeIndicatorTranslateY.setValue(0);
+        }
+    }, [isAnimating]);
 
     const onSubmit = async (data: any) => {
         startLoading();
@@ -260,13 +360,11 @@ export const Form = () => {
                 }, 2000);
             } else {
                 setCreationStatus('failure');
-                // Animate failure message
                 Animated.timing(failureOpacity, {
                     toValue: 1,
                     duration: 300,
                     useNativeDriver: true
                 }).start(() => {
-                    // Hide failure message after 2 seconds
                     setTimeout(() => {
                         Animated.timing(failureOpacity, {
                             toValue: 0,
@@ -301,7 +399,6 @@ export const Form = () => {
             if (error.httpStatus === 303 || error.httpStatus === 401) {
                 router.replace("/");
             } else if (error.httpStatus >= 500 && error.httpStatus < 600 || !error.httpStatus) {
-                // 5xx 系のエラー処理
                 router.replace("/error");
             }
             setHttpStatus(error.httpStatus);
@@ -376,6 +473,7 @@ export const Form = () => {
             {/* プレイリスト画面 */}
             {isAnimating && (
                 <Animated.View
+                    {...panResponder.panHandlers}
                     style={[
                         styles.playlistScreen,
                         {
@@ -383,6 +481,33 @@ export const Form = () => {
                         }
                     ]}
                 >
+                    {/* フェードアウトするスワイプインジケーター */}
+                    <Animated.View
+                        style={[
+                            styles.swipeIndicatorContainer,
+                            {
+                                opacity: swipeIndicatorOpacity,
+                                transform: [{ translateY: swipeIndicatorTranslateY }]
+                            }
+                        ]}
+                    >
+                        <View style={styles.swipeBarContainer}>
+                            <View style={styles.swipeBar} />
+                        </View>
+
+                        <View style={styles.swipeArrowContainer}>
+                            <Svg width={16} height={8} viewBox="0 0 16 8" fill="none">
+                                <Path
+                                    d="M1 1L8 7L15 1"
+                                    stroke="white"
+                                    strokeWidth={2}
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                            </Svg>
+                        </View>
+                    </Animated.View>
+
                     {/* クローズボタンを追加 */}
                     <TouchableOpacity
                         style={styles.closeButton}
@@ -391,14 +516,22 @@ export const Form = () => {
                         <Text style={styles.closeButtonText}>×</Text>
                     </TouchableOpacity>
 
+                    {/* タイトルを下に移動 */}
                     <Text style={styles.playlistTitle}>{t('dialog.createPlaylist.title')}</Text>
-                    <Spotify
-                        link={"https://open.spotify.com/playlist/" + playlistId}
-                        style={
-                            { width: "100%" }
-                        }
-                    />
 
+                    {/* Spotifyプレイリスト - オーバーレイでスワイプに対応 */}
+                    <View style={styles.spotifyContainer}>
+                        <Spotify
+                            link={"https://open.spotify.com/playlist/" + playlistId}
+                            style={{ width: "100%" }}
+                        />
+                        <View
+                            {...spotifyPanResponder.panHandlers}
+                            style={styles.spotifyOverlay}
+                        />
+                    </View>
+
+                    {/* Spotifyで開くボタン */}
                     <Pressable
                         style={[
                             {
@@ -488,7 +621,7 @@ export const Form = () => {
                 </Animated.View>
             )}
 
-            {/* Failure Message Overlay */}
+            {/* 失敗メッセージオーバーレイ */}
             <Animated.View
                 style={[
                     styles.failureOverlay,
@@ -499,7 +632,6 @@ export const Form = () => {
                 ]}
             >
                 <View style={styles.failureContainer}>
-
                     {httpStatus == 404 ?
                         <>
                             <Text style={styles.failureTitle}>
@@ -534,13 +666,13 @@ const styles = StyleSheet.create({
     input: {
         flex: 1,
         color: '#FFFFFF',
-        fontSize: Math.min(24, width * 0.06), // レスポンシブなフォントサイズ
+        fontSize: Math.min(24, width * 0.06),
         padding: 0,
         textAlign: "center"
     },
     unitText: {
         color: '#9CA3AF',
-        fontSize: Math.min(20, width * 0.05), // レスポンシブなフォントサイズ
+        fontSize: Math.min(20, width * 0.05),
         marginLeft: 8,
     },
     buttonContainer: {
@@ -550,7 +682,7 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
     },
     errorText: {
-        color: '#DC2626', // 赤色で表示
+        color: '#DC2626',
         fontSize: 12,
         marginTop: 4,
     },
@@ -577,13 +709,49 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 24,
         fontWeight: 'bold',
+        marginTop: 40,  // インジケーターとの間にスペースを追加
         marginBottom: 20
     },
-    songItem: {
-        backgroundColor: 'rgba(55,65,81,0.6)',
-        padding: 15,
-        borderRadius: 10,
-        marginBottom: 10
+    swipeIndicatorContainer: {
+        position: 'absolute',
+        top: 10,
+        left: 0,
+        right: 0,
+        alignItems: 'center',
+        zIndex: 5,
+        paddingVertical: 8
+    },
+    swipeBarContainer: {
+        width: 40,
+        height: 5,
+        borderRadius: 3,
+        overflow: 'hidden',
+        backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    },
+    swipeBar: {
+        height: '100%',
+        width: '100%',
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        borderRadius: 3
+    },
+    swipeArrowContainer: {
+        height: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 4
+    },
+    spotifyContainer: {
+        width: '100%',
+        position: 'relative',
+    },
+    spotifyOverlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0,0,0,0)',
+        zIndex: 10,
     },
     loadingOverlay: {
         position: 'absolute',
@@ -632,7 +800,7 @@ const styles = StyleSheet.create({
     },
     closeButton: {
         position: 'absolute',
-        top: 20,
+        marginTop: 40, // インジケーターとの間にスペースを追加
         right: 20,
         zIndex: 10
     },
@@ -647,7 +815,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgb(31, 41, 55)', // Red-like background
+        backgroundColor: 'rgb(31, 41, 55)',
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 150,
