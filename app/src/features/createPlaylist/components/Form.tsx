@@ -536,6 +536,7 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontSize: Math.min(24, width * 0.06), // レスポンシブなフォントサイズ
         padding: 0,
+        textAlign: "center"
     },
     unitText: {
         color: '#9CA3AF',
