@@ -158,12 +158,49 @@ const ArtistIcon = ({ artist, isSelected, onSelect, selectionCount, itemWidth })
     );
 };
 
+const FavoriteTracksIcon = ({ isSelected, onSelect, itemWidth }) => {
+    return (
+        <TouchableOpacity
+            onPress={onSelect}
+            activeOpacity={0.7}
+            style={[{ width: itemWidth }]}
+        >
+            <LinearGradient
+                colors={isSelected ? ['#A1A1AA', '#2D3748'] : ['#374151', '#374151']}
+                style={styles.artistButton}
+            >
+                {isSelected && (
+                    <View style={styles.checkmark}>
+                        <CheckIcon />
+                    </View>
+                )}
+                <MaterialIcons
+                    name="favorite"
+                    size={32}
+                    color={isSelected ? '#FFFFFF' : '#9CA3AF'}
+                    style={styles.favoriteIcon}
+                />
+                <Text
+                    style={[
+                        styles.artistName,
+                        { color: isSelected ? '#FFFFFF' : '#9CA3AF' }
+                    ]}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                >
+                    {t('createPlaylist.favoriteTracks')}
+                </Text>
+            </LinearGradient>
+        </TouchableOpacity>
+    );
+};
+
 const EmptyState = () => (
     <View style={styles.emptyContainer}>
         <View style={styles.emptyCard}>
             <MaterialIcons name="music-note" size={32} color="#4F46E5" style={styles.icon} />
             <Text style={styles.emptyTitle}>
-            {t('createPlaylist.findArtistsTitle')}
+                {t('createPlaylist.findArtistsTitle')}
             </Text>
             <Text style={styles.emptyText}>
                 {t('createPlaylist.followedArtistsEmpty')}
@@ -194,25 +231,25 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
     const gap = 8; // グリッド間のギャップ
     const itemWidth = (containerWidth - (2 * gap)) / 3;
 
-    const toggleSelection = (artistId) => {
+    const handleArtistClick = (artistId: string) => {
         setSelectedIds(prev => {
-            const newSelection = prev.includes(artistId)
-                ? prev.filter(id => id !== artistId)
-                : [...prev, artistId];
-
-            localStorage.setItem('selectedIds', JSON.stringify(newSelection));
-
-            // Update selection counts
-            setSelectionCounts(prevCounts => {
-                const newCounts = { ...prevCounts };
-                if (!prev.includes(artistId)) {
-                    newCounts[artistId] = (newCounts[artistId] || 0) + 1;
+            // アーティストが新しく選択された場合（配列に含まれていない場合）
+            if (!prev.includes(artistId)) {
+                // お気に入りが選択されていたら解除する
+                if (isFavoriteSelected) {
+                    setIsFavoriteSelected(false);
+                    localStorage.setItem('isFavoriteTracks', JSON.stringify(false));
                 }
-                localStorage.setItem('selectionCounts', JSON.stringify(newCounts));
-                return newCounts;
-            });
-
-            return newSelection;
+                
+                const newIds = [...prev, artistId];
+                localStorage.setItem('selectedIds', JSON.stringify(newIds));
+                return newIds;
+            } else {
+                // 選択解除の場合
+                const newIds = prev.filter(id => id !== artistId);
+                localStorage.setItem('selectedIds', JSON.stringify(newIds));
+                return newIds;
+            }
         });
     };
 
@@ -220,6 +257,13 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
         setIsFavoriteSelected(prev => {
             const newState = !prev;
             localStorage.setItem('isFavoriteTracks', JSON.stringify(newState));
+
+            // お気に入りを選択する場合、アーティスト選択をクリアする
+            if (newState && selectedIds.length > 0) {
+                setSelectedIds([]);
+                localStorage.setItem('selectedIds', JSON.stringify([]));
+            }
+
             return newState;
         });
     };
@@ -305,12 +349,17 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
             }}
         >
             <View style={[styles.artistGrid, { gap }]}>
+                <FavoriteTracksIcon
+                    isSelected={isFavoriteSelected}
+                    onSelect={toggleFavorite}
+                    itemWidth={itemWidth}
+                />
                 {artists.map((artist) => (
                     <ArtistIcon
                         key={artist.ID}
                         artist={artist}
                         isSelected={selectedIds.includes(artist.ID)}
-                        onSelect={toggleSelection}
+                        onSelect={handleArtistClick}
                         selectionCount={selectionCounts[artist.ID] || 0}
                         itemWidth={itemWidth}
                     />
@@ -385,82 +434,8 @@ const styles = StyleSheet.create({
         marginBottom: 4,
     },
 
-    favoriteContainer: {
-        paddingHorizontal: 8,
-        paddingBottom: 16,
-    },
-
-    favoriteButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 12,
-        borderRadius: 25,
-        backgroundColor: '#F3F4F6',
-        gap: 8,
-    },
-
-    favoriteButtonSelected: {
-        backgroundColor: '#2089dc',
-    },
-
-    favoriteText: {
-        fontSize: 16,
-        color: '#2089dc',
-        fontWeight: '600',
-    },
-
-    favoriteTextSelected: {
-        color: '#FFFFFF',
-    },
-
-    countBadge: {
-        position: 'absolute',
-        top: 4,
-        left: 4,
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
-        borderRadius: 10,
-        padding: 4,
-        minWidth: 20,
-        alignItems: 'center',
-    },
-
-    countText: {
-        color: '#FFFFFF',
-        fontSize: 10,
-        fontWeight: '600',
-    },
-
-    // ローディングアニメーション用のスタイル
-    loadingContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20,
-    },
-
-    loadingCircle: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        overflow: 'hidden',
-        marginBottom: 16,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-    },
-
-    loadingGradient: {
-        width: '100%',
-        height: '100%',
-    },
-
-    loadingText: {
-        marginTop: 12,
-        fontSize: 16,
-        color: '#666',
-        fontWeight: '600',
+    favoriteIcon: {
+        marginBottom: 4,
     },
 
     errorText: {
@@ -526,5 +501,31 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontSize: 14,
         fontWeight: '600',
+    },
+
+    // ローディングアニメーション用のスタイル
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+    },
+
+    loadingCircle: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        overflow: 'hidden',
+        marginBottom: 16,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+
+    loadingGradient: {
+        width: '100%',
+        height: '100%',
     },
 });

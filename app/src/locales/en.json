@@ -39,5 +39,6 @@
   "error.500.description": "Currently unable to access.\nPlease try again after some time.",
   "createPlaylist.followedArtistsEmpty": "You can select songs from artists you follow.\nFollow artists on Spotify to see them here.",
   "createPlaylist.findArtists": "Find on Spotify",
-  "createPlaylist.findArtistsTitle": "Find Artists"
+  "createPlaylist.findArtistsTitle": "Find Artists",
+  "createPlaylist.favoriteTracks": "Favorites Tracks"
 }

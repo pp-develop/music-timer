@@ -39,5 +39,6 @@
   "error.500.description": "一時的にアクセスできない状態です。\n時間を置いて再度お試しください。",
   "createPlaylist.followedArtistsEmpty": "フォローしているアーティストから選曲することができます。\nSpotifyでアーティストをフォローすると、ここに表示されます。",
   "createPlaylist.findArtists": "Spotifyで探す",
-  "createPlaylist.findArtistsTitle": "アーティストを見つける"
+  "createPlaylist.findArtistsTitle": "アーティストを見つける",
+  "createPlaylist.favoriteTracks": "お気に入りの曲"
 }
