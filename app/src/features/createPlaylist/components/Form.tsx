@@ -10,8 +10,7 @@ import {
     TouchableOpacity,
     Pressable,
     Image,
-    PanResponder,
-    BackHandler
+    PanResponder
 } from 'react-native';
 import { Header } from "../../../components/Parts/Header";
 import { DeletePlaylist } from "../../deletePlaylist/components/DeletePlaylistButton";
@@ -211,8 +210,8 @@ export const Form = () => {
                     Animated.timing(anim, {
                         toValue: 1,
                         duration: 300,
-                        useNativeDriver: true
-                    })
+                useNativeDriver: true
+            })
                 )
             )
         ]).start();
@@ -240,8 +239,8 @@ export const Form = () => {
                 Animated.timing(anim, {
                     toValue: 0,
                     duration: 300,
-                    useNativeDriver: true
-                })
+                useNativeDriver: true
+            })
             )
         ]).start(() => {
             setIsAnimating(false);
@@ -317,23 +316,6 @@ export const Form = () => {
             swipeIndicatorOpacity.setValue(1);
             swipeIndicatorTranslateY.setValue(0);
         }
-    }, [isAnimating]);
-
-    useEffect(() => {
-        const backAction = () => {
-            if (isAnimating) {
-                stopAnimation();
-                return true; // 戻るボタンのデフォルト動作を無効にする
-            }
-            return false; // デフォルトの戻る動作を許可する
-        };
-
-        const backHandler = BackHandler.addEventListener(
-            "hardwareBackPress",
-            backAction
-        );
-
-        return () => backHandler.remove();
     }, [isAnimating]);
 
     const onSubmit = async (data: any) => {
