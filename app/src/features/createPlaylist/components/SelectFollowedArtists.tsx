@@ -100,20 +100,10 @@ const colorsArray = [
 ];
 
 const ArtistIcon = ({ artist, isSelected, onSelect, selectionCount, itemWidth }) => {
-    const renderImage = () => {
-        if (artist.ImageUrl) {
-            return (
-                <View style={[styles.artistImageContainer, { width: '55%', height: '55%' }]}>
-                    <Image
-                        source={{ uri: artist.ImageUrl }}
-                        style={styles.artistImage}
-                        defaultSource={require('../../../../assets/images/artist-icon.png')}
-                    />
-                </View>
-            );
-        }
+    const [imageLoaded, setImageLoaded] = useState(false);
 
-        return (
+    const renderPlaceholder = () => (
+        <View style={[styles.artistImagePlaceholder, { width: '55%', height: '55%' }]}>
             <Svg width={32} height={32} viewBox="0 0 40 40">
                 <Circle cx="20" cy="20" r="20" fill={'#4B5563'} />
                 <Circle cx="20" cy="15" r="6" stroke="#FFFFFF" strokeWidth="2" fill="none" />
@@ -124,7 +114,28 @@ const ArtistIcon = ({ artist, isSelected, onSelect, selectionCount, itemWidth })
                     fill="none"
                 />
             </Svg>
-        );
+        </View>
+    );
+
+    const renderImage = () => {
+        if (artist.ImageUrl) {
+            return (
+                <View style={[styles.artistImageContainer, { width: '55%', height: '55%' }]}>
+                    {!imageLoaded && renderPlaceholder()}
+                    <Image
+                        source={{ uri: artist.ImageUrl }}
+                        style={[
+                            styles.artistImage,
+                            { opacity: imageLoaded ? 1 : 0, position: 'absolute', width: '100%', height: '100%' }
+                        ]}
+                        defaultSource={require('../../../../assets/images/artist-icon.png')}
+                        onLoad={() => setImageLoaded(true)}
+                    />
+                </View>
+            );
+        }
+
+        return renderPlaceholder();
     };
 
     return (
@@ -226,6 +237,7 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
     const scrollViewRef = useRef(null);
     const { resetScroll } = useHorizontalScroll(scrollViewRef);
     const [containerWidth, setContainerWidth] = useState(0);
+    const fadeAnim = useRef(new Animated.Value(0)).current;
 
     // 画面幅を取得し、アイテム幅を計算
     const gap = 8; // グリッド間のギャップ
@@ -240,7 +252,7 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                     setIsFavoriteSelected(false);
                     localStorage.setItem('isFavoriteTracks', JSON.stringify(false));
                 }
-                
+
                 const newIds = [...prev, artistId];
                 localStorage.setItem('selectedIds', JSON.stringify(newIds));
                 return newIds;
@@ -318,7 +330,13 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
             } catch (err) {
                 setError('Network error');
             } finally {
+                // アーティストデータの読み込みが完了したら、徐々にコンテンツをフェードインさせる
                 setIsLoading(false);
+                Animated.timing(fadeAnim, {
+                    toValue: 1,
+                    duration: 300,
+                    useNativeDriver: true,
+                }).start();
             }
         };
 
@@ -339,33 +357,35 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
     }
 
     return (
-        <ScrollView
-            style={styles.scrollContainer}
-            contentContainerStyle={styles.scrollContentContainer}
-            showsVerticalScrollIndicator={false}
-            onLayout={(event) => {
-                const { width } = event.nativeEvent.layout;
-                setContainerWidth(width);
-            }}
-        >
-            <View style={[styles.artistGrid, { gap }]}>
-                <FavoriteTracksIcon
-                    isSelected={isFavoriteSelected}
-                    onSelect={toggleFavorite}
-                    itemWidth={itemWidth}
-                />
-                {artists.map((artist) => (
-                    <ArtistIcon
-                        key={artist.ID}
-                        artist={artist}
-                        isSelected={selectedIds.includes(artist.ID)}
-                        onSelect={handleArtistClick}
-                        selectionCount={selectionCounts[artist.ID] || 0}
+        <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+            <ScrollView
+                style={styles.scrollContainer}
+                contentContainerStyle={styles.scrollContentContainer}
+                showsVerticalScrollIndicator={false}
+                onLayout={(event) => {
+                    const { width } = event.nativeEvent.layout;
+                    setContainerWidth(width);
+                }}
+            >
+                <View style={[styles.artistGrid, { gap }]}>
+                    <FavoriteTracksIcon
+                        isSelected={isFavoriteSelected}
+                        onSelect={toggleFavorite}
                         itemWidth={itemWidth}
                     />
-                ))}
-            </View>
-        </ScrollView>
+                    {artists.map((artist) => (
+                        <ArtistIcon
+                            key={artist.ID}
+                            artist={artist}
+                            isSelected={selectedIds.includes(artist.ID)}
+                            onSelect={handleArtistClick}
+                            selectionCount={selectionCounts[artist.ID] || 0}
+                            itemWidth={itemWidth}
+                        />
+                    ))}
+                </View>
+            </ScrollView>
+        </Animated.View>
     );
 });
 
@@ -432,6 +452,14 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         overflow: 'hidden',
         marginBottom: 4,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    artistImagePlaceholder: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 16,
     },
 
     favoriteIcon: {
