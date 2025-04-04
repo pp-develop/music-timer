@@ -22,7 +22,7 @@
   "form.createPlaylist": "プレイリストを作成",
   "form.deletePlaylist": "プレイリストを削除",
   "dialog.loading.title": "プレイリスト準備中",
-  "dialog.loading.subtitle": "音楽を検索しています...",
+  "dialog.loading.subtitle": "曲を検索しています...",
   "dialog.createPlaylist.title": "新しいプレイリスト",
   "dialog.createPlaylist.open": "Spotifyで開く",
   "dialog.createPlaylist.close": "閉じる",
