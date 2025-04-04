@@ -101,41 +101,35 @@ const colorsArray = [
 
 const ArtistIcon = ({ artist, isSelected, onSelect, selectionCount, itemWidth }) => {
     const [imageLoaded, setImageLoaded] = useState(false);
+    const fadeAnim = useRef(new Animated.Value(0)).current;
 
-    const renderPlaceholder = () => (
-        <View style={[styles.artistImagePlaceholder, { width: '55%', height: '55%' }]}>
-            <Svg width={32} height={32} viewBox="0 0 40 40">
-                <Circle cx="20" cy="20" r="20" fill={'#4B5563'} />
-                <Circle cx="20" cy="15" r="6" stroke="#FFFFFF" strokeWidth="2" fill="none" />
-                <Path
-                    d="M8 34 C8 26 32 26 32 34"
-                    stroke="#FFFFFF"
-                    strokeWidth="2"
-                    fill="none"
-                />
-            </Svg>
-        </View>
-    );
+    useEffect(() => {
+        if (imageLoaded) {
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 200,
+                useNativeDriver: true,
+            }).start();
+        }
+    }, [imageLoaded]);
 
     const renderImage = () => {
-        if (artist.ImageUrl) {
-            return (
-                <View style={[styles.artistImageContainer, { width: '55%', height: '55%' }]}>
-                    {!imageLoaded && renderPlaceholder()}
-                    <Image
-                        source={{ uri: artist.ImageUrl }}
-                        style={[
-                            styles.artistImage,
-                            { opacity: imageLoaded ? 1 : 0, position: 'absolute', width: '100%', height: '100%' }
-                        ]}
-                        defaultSource={require('../../../../assets/images/artist-icon.png')}
-                        onLoad={() => setImageLoaded(true)}
-                    />
-                </View>
-            );
-        }
+        return (
+            <View style={[styles.artistImageContainer, { width: '55%', height: '55%' }]}>
+                {/* 常に表示される背景色のあるプレースホルダー */}
+                <View style={styles.imagePlaceholder} />
 
-        return renderPlaceholder();
+                {artist.ImageUrl && (
+                    <Animated.View style={[styles.imageWrapper, { opacity: fadeAnim }]}>
+                        <Image
+                            source={{ uri: artist.ImageUrl }}
+                            style={styles.artistImage}
+                            onLoad={() => setImageLoaded(true)}
+                        />
+                    </Animated.View>
+                )}
+            </View>
+        );
     };
 
     return (
@@ -435,6 +429,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         resizeMode: 'cover',
+        borderRadius: 16,
     },
 
     checkmark: {
@@ -454,12 +449,23 @@ const styles = StyleSheet.create({
         marginBottom: 4,
         justifyContent: 'center',
         alignItems: 'center',
+        position: 'relative',
     },
 
-    artistImagePlaceholder: {
-        justifyContent: 'center',
-        alignItems: 'center',
+    imagePlaceholder: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#2D3748', // ダークグレーの背景色
         borderRadius: 16,
+    },
+
+    imageWrapper: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        borderRadius: 16,
+        overflow: 'hidden',
     },
 
     favoriteIcon: {
