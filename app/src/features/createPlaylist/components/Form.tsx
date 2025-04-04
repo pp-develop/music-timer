@@ -354,7 +354,7 @@ export const Form = () => {
                                         onSubmitEditing={handleSubmit(onSubmit)}
                                     >
                                     </TextInput>
-                                    <Text style={styles.unitText}>分</Text>
+                                    <Text style={styles.unitText}>{t('form.specifyTime.minute')}</Text>
                                 </>
                             )}
                         />
