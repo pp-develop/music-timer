@@ -13,7 +13,7 @@
   "form.specifyTime.typeError": "Please enter numbers only.",
   "form.specifyTime.range": "Please specify playback time between 3 and 100 minutes.",
   "form.specifyTime.minute": "Min",
-  "form.specifyTime.placeholder": "3 ~ 100",
+  "form.specifyTime.placeholder": "3 ～ 100",
   "form.includeFavoriteArtists": "Select from Artists",
   "form.favoriteTracks": "Favorite Tracks",
   "form.noFollowedArtists": "No artists followed.",

@@ -348,7 +348,7 @@ export const Form = () => {
                                         }]}
                                         value={value}
                                         onChangeText={onChange}
-                                        placeholder="再生時間"
+                                        placeholder={t('form.specifyTime.placeholder')}
                                         placeholderTextColor="#6B7280"
                                         keyboardType="number-pad"
                                         onSubmitEditing={handleSubmit(onSubmit)}
