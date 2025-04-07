@@ -743,6 +743,8 @@ const styles = StyleSheet.create({
     spotifyContainer: {
         width: '100%',
         position: 'relative',
+        height: height > 600 ? height * 0.6 : 'auto',
+        aspectRatio: 16 / 9, // Spotifyの推奨アスペクト比
     },
     spotifyOverlay: {
         position: 'absolute',
