@@ -210,8 +210,8 @@ export const Form = () => {
                     Animated.timing(anim, {
                         toValue: 1,
                         duration: 300,
-                useNativeDriver: true
-            })
+                        useNativeDriver: true
+                    })
                 )
             )
         ]).start();
@@ -239,8 +239,8 @@ export const Form = () => {
                 Animated.timing(anim, {
                     toValue: 0,
                     duration: 300,
-                useNativeDriver: true
-            })
+                    useNativeDriver: true
+                })
             )
         ]).start(() => {
             setIsAnimating(false);
@@ -527,7 +527,7 @@ export const Form = () => {
                         />
                         <View
                             {...spotifyPanResponder.panHandlers}
-                            style={styles.spotifyOverlay}
+                            style={[styles.spotifyOverlay, { pointerEvents: "none" }]}
                         />
                     </View>
 
