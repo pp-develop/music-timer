@@ -249,6 +249,14 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
 
                 const newIds = [...prev, artistId];
                 localStorage.setItem('selectedIds', JSON.stringify(newIds));
+
+                // selectionCountsを更新
+                setSelectionCounts(prevCounts => {
+                    const newCounts = { ...prevCounts, [artistId]: (prevCounts[artistId] || 0) + 1 };
+                    localStorage.setItem('selectionCounts', JSON.stringify(newCounts));
+                    return newCounts;
+                });
+
                 return newIds;
             } else {
                 // 選択解除の場合
@@ -258,7 +266,6 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
             }
         });
     };
-
     const toggleFavorite = () => {
         setIsFavoriteSelected(prev => {
             const newState = !prev;
