@@ -30,6 +30,7 @@ import { router } from 'expo-router';
 import { MAX_INPUT_WIDTH } from '../../../config';
 import { Spotify } from 'react-spotify-embed';
 import { Svg, Path } from 'react-native-svg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width, height } = Dimensions.get('window');
 
@@ -253,17 +254,22 @@ export const Form = () => {
     });
 
     useEffect(() => {
-        const storedMinute = localStorage.getItem('minute');
-        if (storedMinute) {
-            setValue('minute', storedMinute);
-        }
+        const loadMinute = async () => {
+            const storedMinute = await AsyncStorage.getItem('minute');
+            if (storedMinute) {
+                setValue('minute', storedMinute);
+            }
+        };
+
+        loadMinute();
     }, []);
 
     useEffect(() => {
         const fetchTracks = async () => {
-            if (!localStorage.getItem('initTrackData')) {
+            const storedInitTrackData = await AsyncStorage.getItem('initTrackData')
+            if (!storedInitTrackData) {
                 InitTracksData();
-                localStorage.setItem('initTrackData', 'true');
+                AsyncStorage.setItem('initTrackData', 'true');
             }
         };
 
@@ -274,7 +280,7 @@ export const Form = () => {
     const minuteValue = watch('minute');
     useEffect(() => {
         if (minuteValue !== undefined) {
-            localStorage.setItem('minute', minuteValue);
+            AsyncStorage.setItem('minute', minuteValue);
         }
     }, [minuteValue]);
 
@@ -337,11 +343,11 @@ export const Form = () => {
             }
 
             // ローカルストレージから選択されたアーティストIDを取得
-            let selectedArtistIds = localStorage.getItem('selectedIds');
+            let selectedArtistIds = await AsyncStorage.getItem('selectedIds');
             // 取得した値が存在する場合はJSON形式から配列に変換
             selectedArtistIds = selectedArtistIds ? JSON.parse(selectedArtistIds) : [];
 
-            const isFavoriteTracks = JSON.parse(localStorage.getItem('isFavoriteTracks') || 'false');
+            const isFavoriteTracks = JSON.parse(await AsyncStorage.getItem('isFavoriteTracks') || 'false');
 
             let response;
             if (isFavoriteTracks) {

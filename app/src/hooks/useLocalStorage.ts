@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function getStorageValue(key: string, defaultValue: string) {
+async function getStorageValue(key: string, defaultValue: string) {
   // getting stored value
-  const saved = localStorage.getItem(key);
+  const saved = await AsyncStorage.getItem(key);
   const initial = JSON.parse(saved);
   return initial || defaultValue;
 }
 
 export const setStorageValue = (key: string, value: string) => {
-  localStorage.setItem(key, JSON.stringify(value));
+  AsyncStorage.setItem(key, JSON.stringify(value));
 };
 
 export const useLocalStorage = (key: string, defaultValue: string) => {
@@ -18,7 +19,7 @@ export const useLocalStorage = (key: string, defaultValue: string) => {
 
   useEffect(() => {
     // storing input name
-    localStorage.setItem(key, JSON.stringify(value));
+    AsyncStorage.setItem(key, JSON.stringify(value));
   }, [key, value]);
 
   return [value, setValue];

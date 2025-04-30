@@ -16,6 +16,7 @@ import { GetFollowedArtists, Artist } from '../api/getFollowedArtists';
 import useHorizontalScroll from '../hooks/useHorizontalScroll';
 import { Svg, Path, Polyline, Circle } from 'react-native-svg';
 import { MaterialIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // ローディングアニメーション用のコンポーネント
 const LoadingAnimation = () => {
@@ -244,16 +245,16 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                 // お気に入りが選択されていたら解除する
                 if (isFavoriteSelected) {
                     setIsFavoriteSelected(false);
-                    localStorage.setItem('isFavoriteTracks', JSON.stringify(false));
+                    AsyncStorage.setItem('isFavoriteTracks', JSON.stringify(false));
                 }
 
                 const newIds = [...prev, artistId];
-                localStorage.setItem('selectedIds', JSON.stringify(newIds));
+                AsyncStorage.setItem('selectedIds', JSON.stringify(newIds));
 
                 // selectionCountsを更新
                 setSelectionCounts(prevCounts => {
                     const newCounts = { ...prevCounts, [artistId]: (prevCounts[artistId] || 0) + 1 };
-                    localStorage.setItem('selectionCounts', JSON.stringify(newCounts));
+                    AsyncStorage.setItem('selectionCounts', JSON.stringify(newCounts));
                     return newCounts;
                 });
 
@@ -261,7 +262,7 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
             } else {
                 // 選択解除の場合
                 const newIds = prev.filter(id => id !== artistId);
-                localStorage.setItem('selectedIds', JSON.stringify(newIds));
+                AsyncStorage.setItem('selectedIds', JSON.stringify(newIds));
                 return newIds;
             }
         });
@@ -269,12 +270,12 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
     const toggleFavorite = () => {
         setIsFavoriteSelected(prev => {
             const newState = !prev;
-            localStorage.setItem('isFavoriteTracks', JSON.stringify(newState));
+            AsyncStorage.setItem('isFavoriteTracks', JSON.stringify(newState));
 
             // お気に入りを選択する場合、アーティスト選択をクリアする
             if (newState && selectedIds.length > 0) {
                 setSelectedIds([]);
-                localStorage.setItem('selectedIds', JSON.stringify([]));
+                AsyncStorage.setItem('selectedIds', JSON.stringify([]));
             }
 
             return newState;
@@ -321,13 +322,13 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                 }
 
                 // Load saved state
-                const savedIds = localStorage.getItem('selectedIds');
+                const savedIds = await AsyncStorage.getItem('selectedIds');
                 if (savedIds) setSelectedIds(JSON.parse(savedIds));
 
-                const savedCounts = localStorage.getItem('selectionCounts');
+                const savedCounts = await AsyncStorage.getItem('selectionCounts');
                 if (savedCounts) setSelectionCounts(JSON.parse(savedCounts));
 
-                setIsFavoriteSelected(JSON.parse(localStorage.getItem('isFavoriteTracks') || 'false'));
+                setIsFavoriteSelected(JSON.parse(await AsyncStorage.getItem('isFavoriteTracks') || 'false'));
             } catch (err) {
                 setError('Network error');
             } finally {

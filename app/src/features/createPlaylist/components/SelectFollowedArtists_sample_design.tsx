@@ -14,6 +14,7 @@ import { GetFollowedArtists, Artist } from '../api/getFollowedArtists';
 import useHorizontalScroll from '../hooks/useHorizontalScroll';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { Svg, Path, Polyline, Circle } from 'react-native-svg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CheckIcon = () => (
     <Svg width={16} height={16} viewBox="0 0 24 24" stroke="#FFFFFF" strokeWidth={2}>
@@ -101,7 +102,7 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
         const filteredChips = selectedChips.filter(chip => validArtistIds.has(chip));
 
         // localStorage のチップとカウントを更新
-        localStorage.setItem('selectedChips', JSON.stringify(filteredChips));
+        AsyncStorage.setItem('selectedChips', JSON.stringify(filteredChips));
         setSelectedChips(filteredChips);
 
         setSelectionCounts(prevCounts => {
@@ -112,7 +113,7 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                     return obj;
                 }, {} as { [key: string]: number });
 
-            localStorage.setItem('selectionCounts', JSON.stringify(updatedCounts));
+            AsyncStorage.setItem('selectionCounts', JSON.stringify(updatedCounts));
             return updatedCounts;
         });
     };
@@ -169,23 +170,23 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
         fetchArtists();
 
         // localStorage から選択情報とカウント情報を取得して状態を初期化
-        const savedChips = localStorage.getItem('selectedChips');
+        const savedChips = AsyncStorage.getItem('selectedChips');
         if (savedChips) {
             setSelectedChips(JSON.parse(savedChips));
         }
 
-        if (JSON.parse(localStorage.getItem('isFavoriteTracks') || 'false')) {
+        if (JSON.parse(AsyncStorage.getItem('isFavoriteTracks') || 'false')) {
             setSelectedChips(['favorite']);
         }
 
-        const savedCounts = localStorage.getItem('selectionCounts');
+        const savedCounts = AsyncStorage.getItem('selectionCounts');
         if (savedCounts) {
             setSelectionCounts(JSON.parse(savedCounts));
         }
     }, []);
 
     useEffect(() => {
-        if (JSON.parse(localStorage.getItem('isFavoriteTracks') || 'false')) return
+        if (JSON.parse(AsyncStorage.getItem('isFavoriteTracks') || 'false')) return
         if (!isLoading) {
             cleanUpOldChips();
         }
@@ -202,14 +203,14 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                 if (currentSelectedChips.includes('favorite')) {
                     // お気に入りが選択されている場合は解除
                     const newSelectedChips = currentSelectedChips.filter(c => c !== 'favorite');
-                    localStorage.setItem('selectedChips', JSON.stringify(newSelectedChips));
-                    localStorage.setItem('isFavoriteTracks', JSON.stringify(false));
+                    AsyncStorage.setItem('selectedChips', JSON.stringify(newSelectedChips));
+                    AsyncStorage.setItem('isFavoriteTracks', JSON.stringify(false));
                     return newSelectedChips;
                 } else {
                     // お気に入りを新たに選択（他のチップと共存可能にする）
                     const newSelectedChips = [...currentSelectedChips, 'favorite'];
-                    localStorage.setItem('selectedChips', JSON.stringify(newSelectedChips));
-                    localStorage.setItem('isFavoriteTracks', JSON.stringify(true));
+                    AsyncStorage.setItem('selectedChips', JSON.stringify(newSelectedChips));
+                    AsyncStorage.setItem('isFavoriteTracks', JSON.stringify(true));
                     return newSelectedChips;
                 }
             } else {
@@ -219,7 +220,7 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                     : [...currentSelectedChips, chip];
 
                 // 選択されたチップをローカルストレージに保存
-                localStorage.setItem('selectedChips', JSON.stringify(newSelectedChips));
+                AsyncStorage.setItem('selectedChips', JSON.stringify(newSelectedChips));
 
                 // 選択カウントの更新
                 setSelectionCounts(prevCounts => {
@@ -232,7 +233,7 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                     }
 
                     // 選択カウントをローカルストレージに保存
-                    localStorage.setItem('selectionCounts', JSON.stringify(newCounts));
+                    AsyncStorage.setItem('selectionCounts', JSON.stringify(newCounts));
                     return newCounts;
                 });
 
