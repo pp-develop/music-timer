@@ -7,6 +7,7 @@ import { useAuth } from "../../../../src/hooks/useAuth";
 import { router } from 'expo-router';
 import ReactGA from 'react-ga4';
 import { Svg, Path, Line, Polyline } from 'react-native-svg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LogoutIcon = () => (
     <Svg width={28} height={28} viewBox="0 0 24 24" stroke="#9CA3AF" strokeWidth={2}>
@@ -37,7 +38,7 @@ export const LogoutButton = () => {
             setIsLoading(false);
 
             // TODO:: ドメイン統一後に削除
-            sessionStorage.setItem('pressAuth', 'false');
+            AsyncStorage.setItem('pressAuth', 'false');
 
             router.replace("/");
         } catch (error) {

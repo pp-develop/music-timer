@@ -28,9 +28,9 @@ import { CreatePlaylistWithFavoriteTracks } from "../api/createPlaylistWithFavor
 import ReactGA from 'react-ga4';
 import { router } from 'expo-router';
 import { MAX_INPUT_WIDTH } from '../../../config';
-import { Spotify } from 'react-spotify-embed';
 import { Svg, Path } from 'react-native-svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Linking } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
@@ -414,7 +414,7 @@ export const Form = () => {
     };
 
     const openSpotify = () => {
-        window.open("https://open.spotify.com/playlist/" + playlistId + '?go=1', '_blank');
+        Linking.openURL("https://open.spotify.com/playlist/" + playlistId + '?go=1');
     };
 
     return (
@@ -527,10 +527,6 @@ export const Form = () => {
 
                     {/* Spotifyプレイリスト - オーバーレイでスワイプに対応 */}
                     <View style={styles.spotifyContainer}>
-                        <Spotify
-                            link={"https://open.spotify.com/playlist/" + playlistId}
-                            style={{ width: "100%" }}
-                        />
                         <View
                             {...spotifyPanResponder.panHandlers}
                             style={[styles.spotifyOverlay, { pointerEvents: "none" }]}

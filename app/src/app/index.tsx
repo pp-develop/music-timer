@@ -13,6 +13,7 @@ import { t } from '../locales/i18n';
 import { Text as TextBase } from "@rneui/base";
 import { setDefaultLanguage, getDefaultLanguage } from '../locales/i18n';
 import usePageViewTracking from '../hooks/usePageViewTracking';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Page() {
     // 言語が日本語でなければ英語をデフォルトに設定
@@ -31,11 +32,14 @@ export default function Page() {
         if (!loading && isAuthenticated) {
             router.replace('/playlist');
         }
-        // TODO:: ドメイン統一後に削除
-        const pressAuthSession = sessionStorage.getItem('pressAuth');
-        if (pressAuthSession === 'true') {
-            setPressAuth(true);
+        const loadAuth = async () => {
+            const pressAuthSession = await AsyncStorage.getItem('pressAuth');
+            if (pressAuthSession === 'true') {
+                setPressAuth(true);
+            }
         }
+        // TODO:: ドメイン統一後に削除
+        loadAuth()
     }, [loading, isAuthenticated]);
 
     return (

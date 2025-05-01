@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { API_URL, BASE_URL } from '../config';
-import { t } from './../locales/i18n';
+import { Linking } from 'react-native';
 
 let tokenRefreshed = false; // トークンが更新されたかどうかを示すフラグ
 
@@ -27,7 +27,7 @@ axiosRetry(axios, {
     // トークンがリフレッシュされた場合はリトライしない
     if (tokenRefreshed) {
       await axios.delete('/session');
-      window.location.href = '/';
+      Linking.openURL('/');
       return false;
     }
     return axiosRetry.isNetworkOrIdempotentRequestError(error) ||

@@ -12,6 +12,8 @@ import { t } from '../../../locales/i18n';
 import { useAuth } from "../../../hooks/useAuth";
 import ReactGA from 'react-ga4';
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Linking } from 'react-native';
 
 export const LoginButton = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -31,10 +33,10 @@ export const LoginButton = () => {
 
             if (response.httpStatus == 200) {
                 // TODO::　ドメイン統一後に削除
-                if (!sessionStorage.getItem('pressAuth')) {
-                    sessionStorage.setItem('pressAuth', 'true');
+                if (! await AsyncStorage.getItem('pressAuth')) {
+                    AsyncStorage.setItem('pressAuth', 'true');
                 }
-                window.location.href = response.authzUrl;
+                Linking.openURL(response.authzUrl);
             }
         } catch (error) {
             setAuthState(false)
