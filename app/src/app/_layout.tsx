@@ -2,7 +2,6 @@ import { ThemeProvider } from '../config/ThemeContext';
 import { Header } from "../components/Parts/Header";
 import { Head } from "../components/Parts/Head";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from '../hooks/useAuth';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
@@ -19,9 +18,7 @@ export default function Layout() {
     <ThemeProvider theme={theme}>
       <SafeAreaProvider>
         <AuthProvider>
-          <HelmetProvider>
-            <Head />
-          </HelmetProvider>
+          <Head />
           <StatusBar style="auto" backgroundColor={theme.primaryColor} />
           <Slot />
         </AuthProvider>

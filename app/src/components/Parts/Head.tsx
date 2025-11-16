@@ -1,11 +1,11 @@
 import React from "react";
-import { Helmet } from 'react-helmet-async'
+import ExpoHead from 'expo-router/head';
 import { t } from '../../locales/i18n';
 
 export const Head = () => {
     return (
-        <Helmet>
+        <ExpoHead>
             <title>{t('appName')}</title>
-        </Helmet>
+        </ExpoHead>
     );
 }
