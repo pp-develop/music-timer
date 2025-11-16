@@ -3,6 +3,7 @@ import { fetchWithRetry } from '../../../lib/axos';
 type Response = {
     playlistId: string;
     httpStatus: number;
+    errorCode?: string;
 };
 
 export function CreatePlaylistWithSpecifyArtists(minute: string, selectedArtistIds: any[]): Promise<Response> {
@@ -28,6 +29,7 @@ export function CreatePlaylistWithSpecifyArtists(minute: string, selectedArtistI
             })
             .catch(function (error) {
                 createPlaylist.httpStatus = error.response?.status
+                createPlaylist.errorCode = error.response?.data?.code
                 reject(createPlaylist)
             })
     });

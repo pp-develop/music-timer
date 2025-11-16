@@ -26,7 +26,7 @@
   "dialog.createPlaylist.title": "新しいプレイリスト",
   "dialog.createPlaylist.open": "Spotifyで開く",
   "dialog.createPlaylist.close": "閉じる",
-  "dialog.createPlaylist.not.created.title": "プレイリスト作成に失敗",
+  "dialog.createPlaylist.not.created.title": "プレイリストを作成できませんでした",
   "dialog.createPlaylist.not.created": "条件を見直し再度お試しください。",
   "dialog.createPlaylist.server.error.title": "現在サーバーにアクセスできません。",
   "dialog.createPlaylist.server.error": "しばらく時間を置いてから再度試してください。",
@@ -40,5 +40,14 @@
   "createPlaylist.followedArtistsEmpty": "フォローしているアーティストから選曲することができます。\nSpotifyでアーティストをフォローすると、ここに表示されます。",
   "createPlaylist.findArtists": "Spotifyで探す",
   "createPlaylist.findArtistsTitle": "アーティストを見つける",
-  "createPlaylist.favoriteTracks": "お気に入りの曲"
+  "createPlaylist.favoriteTracks": "お気に入りの曲",
+  "error.not_enough_tracks": "トラック数が不足しています。再生時間を短くするか、アーティストを追加してください。",
+  "error.no_favorite_tracks": "お気に入りのトラックがありません。Spotifyで曲にいいねをするか、アーティストを選択してください。",
+  "error.tracks_not_found": "トラックが見つかりませんでした。条件を変更して再度お試しください。",
+  "error.spotify_rate_limit": "Spotify APIの利用上限に達しました。数分お待ちください。",
+  "error.playlist_quota_exceeded": "プレイリスト作成上限に達しました。Spotifyで不要なプレイリストを削除してください。",
+  "error.token_expired": "認証の有効期限が切れました。ページを更新して再度ログインしてください。",
+  "error.playlist_creation_failed": "予期しないエラーが発生しました。条件を確認して再度お試しください。",
+  "error.internal_error": "サーバーエラーが発生しました。しばらく時間を置いてから再度お試しください。",
+  "error.default": "エラーが発生しました。しばらく時間を置いてから再度お試しください。"
 }

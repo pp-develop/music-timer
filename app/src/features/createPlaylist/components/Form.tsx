@@ -22,6 +22,7 @@ import * as yup from 'yup';
 import { t } from '../../../locales/i18n';
 import PlaylistContext from '../../deletePlaylist/hooks/useContext';
 import { InitTracksData } from '../api/initTracksData';
+import { getErrorMessageKey } from '../../../types/errorCodes';
 import { CreatePlaylist } from "../api/createPlaylist";
 import { CreatePlaylistWithSpecifyArtists } from "../api/createPlaylistWithSpecifyArtists";
 import { CreatePlaylistWithFavoriteTracks } from "../api/createPlaylistWithFavoriteTracks";
@@ -48,6 +49,7 @@ const schema = yup.object().shape({
 export const Form = () => {
     const [httpStatus, setHttpStatus] = useState(0);
     const [playlistId, setPlaylistId] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
     const { setShowDeleteButton } = useContext(PlaylistContext);
     const followedArtistsRef = useRef(null);
     const [containerWidth, setContainerWidth] = useState(0);
@@ -365,6 +367,8 @@ export const Form = () => {
                     setShowDeleteButton(true);
                 }, 2000);
             } else {
+                const errorKey = getErrorMessageKey(response.errorCode);
+                setErrorMessage(t(errorKey));
                 setCreationStatus('failure');
                 Animated.timing(failureOpacity, {
                     toValue: 1,
@@ -385,6 +389,8 @@ export const Form = () => {
             setHttpStatus(response.httpStatus);
             startAnimation()
         } catch (error) {
+            const errorKey = getErrorMessageKey(error.errorCode);
+            setErrorMessage(t(errorKey));
             setCreationStatus('failure');
             Animated.timing(failureOpacity, {
                 toValue: 1,
@@ -638,21 +644,12 @@ export const Form = () => {
                 ]}
             >
                 <View style={styles.failureContainer}>
-                    {httpStatus == 404 ?
-                        <>
-                            <Text style={styles.failureTitle}>
-                                {t('dialog.createPlaylist.not.created.title')}
-                            </Text>
-                            <Text style={styles.failureSubtext}>{t('dialog.createPlaylist.not.created')}</Text>
-                        </>
-                        :
-                        <>
-                            <Text style={styles.failureTitle}>
-                                {t('dialog.createPlaylist.server.error.title')}
-                            </Text>
-                            <Text style={styles.failureSubtext}>{t('dialog.createPlaylist.server.error')}</Text>
-                        </>
-                    }
+                    <Text style={styles.failureTitle}>
+                        {t('dialog.createPlaylist.not.created.title')}
+                    </Text>
+                    <Text style={styles.failureSubtext}>
+                        {errorMessage || t('dialog.createPlaylist.not.created')}
+                    </Text>
                 </View>
             </Animated.View>
         </>

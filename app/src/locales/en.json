@@ -40,5 +40,14 @@
   "createPlaylist.followedArtistsEmpty": "You can select songs from artists you follow.\nFollow artists on Spotify to see them here.",
   "createPlaylist.findArtists": "Find on Spotify",
   "createPlaylist.findArtistsTitle": "Find Artists",
-  "createPlaylist.favoriteTracks": "Favorites Tracks"
+  "createPlaylist.favoriteTracks": "Favorites Tracks",
+  "error.not_enough_tracks": "Insufficient tracks. Shorten the playback time or add more artists.",
+  "error.no_favorite_tracks": "No favorite tracks found. Like songs on Spotify or select artists.",
+  "error.tracks_not_found": "Tracks not found. Change your conditions and try again.",
+  "error.spotify_rate_limit": "Spotify API usage limit reached. Please wait a few minutes.",
+  "error.playlist_quota_exceeded": "Playlist creation limit reached. Delete unnecessary playlists on Spotify.",
+  "error.token_expired": "Authentication expired. Refresh the page and login again.",
+  "error.playlist_creation_failed": "An unexpected error occurred. Review your conditions and try again.",
+  "error.internal_error": "Server error occurred. Please try again after some time.",
+  "error.default": "An error occurred. Please try again after some time."
 }
