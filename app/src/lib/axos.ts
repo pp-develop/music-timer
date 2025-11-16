@@ -30,9 +30,17 @@ axiosRetry(axios, {
       window.location.href = '/';
       return false;
     }
-    return axiosRetry.isNetworkOrIdempotentRequestError(error) ||
-      error.response?.status === 401 ||
-      error.response?.status === 500;
+
+    const status = error.response?.status;
+    const isTimeout = error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT';
+    const isServiceUnavailable = status === 502 || status === 503 || status === 504;
+
+    // タイムアウトとサービス起動エラーを追加
+    return isTimeout ||
+      isServiceUnavailable ||
+      axiosRetry.isNetworkOrIdempotentRequestError(error) ||
+      status === 401 ||
+      status === 500;
   },
   onRetry: async (retryCount, error, requestConfig) => {
     // 401 エラーの場合にトークンを更新
@@ -41,6 +49,15 @@ axiosRetry(axios, {
         console.log(`Retry refresh auth token`);
         await refreshAuthToken();
       }
+      return;
+    }
+
+    // タイムアウトやサービス起動待ちの場合
+    const isTimeout = error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT';
+    const status = error.response?.status;
+
+    if (isTimeout || status === 503 || status === 502 || status === 504) {
+      console.log(`Service is starting or slow to respond... Retry ${retryCount}/3`);
     }
   }
 });
