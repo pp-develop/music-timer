@@ -28,7 +28,7 @@ import { CreatePlaylistWithSpecifyArtists } from "../api/createPlaylistWithSpeci
 import { CreatePlaylistWithFavoriteTracks } from "../api/createPlaylistWithFavoriteTracks";
 import ReactGA from 'react-ga4';
 import { router } from 'expo-router';
-import { MAX_INPUT_WIDTH } from '../../../config';
+import { MAX_INPUT_WIDTH, ERROR_MESSAGE_DISPLAY_DURATION } from '../../../config';
 import { Spotify } from 'react-spotify-embed';
 import { Svg, Path } from 'react-native-svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -74,9 +74,9 @@ export const Form = () => {
     const swipeIndicatorOpacity = useRef(new Animated.Value(1)).current;
     const swipeIndicatorTranslateY = useRef(new Animated.Value(0)).current;
 
-    // メインPanResponderの設定
-    const panResponder = useRef(
-        PanResponder.create({
+    // 共通のPanResponder設定を作成する関数
+    const createSwipePanResponder = () => {
+        return PanResponder.create({
             onMoveShouldSetPanResponder: (evt, gestureState) => {
                 // 下方向のスワイプのみ検出
                 return gestureState.dy > 20 && Math.abs(gestureState.dx) < Math.abs(gestureState.dy);
@@ -99,32 +99,12 @@ export const Form = () => {
                     playlistScreenTranslateY.setValue(gestureState.dy);
                 }
             }
-        })
-    ).current;
+        });
+    };
 
-    // Spotifyエリア用のPanResponder
-    const spotifyPanResponder = useRef(
-        PanResponder.create({
-            onMoveShouldSetPanResponder: (evt, gestureState) => {
-                return gestureState.dy > 20 && Math.abs(gestureState.dx) < Math.abs(gestureState.dy);
-            },
-            onPanResponderRelease: (evt, gestureState) => {
-                if (gestureState.dy > 100) {
-                    stopAnimation();
-                } else {
-                    Animated.spring(playlistScreenTranslateY, {
-                        toValue: 0,
-                        useNativeDriver: true
-                    }).start();
-                }
-            },
-            onPanResponderMove: (evt, gestureState) => {
-                if (gestureState.dy > 0) {
-                    playlistScreenTranslateY.setValue(gestureState.dy);
-                }
-            }
-        })
-    ).current;
+    // メインPanResponderとSpotifyエリア用PanResponderを同じ設定で作成
+    const panResponder = useRef(createSwipePanResponder()).current;
+    const spotifyPanResponder = useRef(createSwipePanResponder()).current;
 
     // ローディング開始関数
     const startLoading = () => {
@@ -250,6 +230,28 @@ export const Form = () => {
         });
     };
 
+    // エラー表示の共通関数
+    const showError = (errorCode?: string) => {
+        const errorKey = getErrorMessageKey(errorCode);
+        setErrorMessage(t(errorKey));
+        setCreationStatus('failure');
+        Animated.timing(failureOpacity, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: true
+        }).start(() => {
+            setTimeout(() => {
+                Animated.timing(failureOpacity, {
+                    toValue: 0,
+                    duration: 300,
+                    useNativeDriver: true
+                }).start(() => {
+                    setCreationStatus('idle');
+                });
+            }, ERROR_MESSAGE_DISPLAY_DURATION);
+        });
+    };
+
     const { control, handleSubmit, setValue, watch, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
         defaultValues: { minute: "25" },
@@ -367,46 +369,12 @@ export const Form = () => {
                     setShowDeleteButton(true);
                 }, 2000);
             } else {
-                const errorKey = getErrorMessageKey(response.errorCode);
-                setErrorMessage(t(errorKey));
-                setCreationStatus('failure');
-                Animated.timing(failureOpacity, {
-                    toValue: 1,
-                    duration: 300,
-                    useNativeDriver: true
-                }).start(() => {
-                    setTimeout(() => {
-                        Animated.timing(failureOpacity, {
-                            toValue: 0,
-                            duration: 300,
-                            useNativeDriver: true
-                        }).start(() => {
-                            setCreationStatus('idle');
-                        });
-                    }, 4000);
-                });
+                showError(response.errorCode);
             }
             setHttpStatus(response.httpStatus);
             startAnimation()
         } catch (error) {
-            const errorKey = getErrorMessageKey(error.errorCode);
-            setErrorMessage(t(errorKey));
-            setCreationStatus('failure');
-            Animated.timing(failureOpacity, {
-                toValue: 1,
-                duration: 300,
-                useNativeDriver: true
-            }).start(() => {
-                setTimeout(() => {
-                    Animated.timing(failureOpacity, {
-                        toValue: 0,
-                        duration: 300,
-                        useNativeDriver: true
-                    }).start(() => {
-                        setCreationStatus('idle');
-                    });
-                }, 4000);
-            });
+            showError(error.errorCode);
 
             if (error.httpStatus === 303 || error.httpStatus === 401) {
                 router.replace("/");
