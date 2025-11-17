@@ -49,5 +49,7 @@
   "error.token_expired": "Authentication expired. Refresh the page and login again.",
   "error.playlist_creation_failed": "An unexpected error occurred. Review your conditions and try again.",
   "error.internal_error": "Server error occurred. Please try again after some time.",
+  "error.timeout_insufficient_tracks": "Insufficient total duration for the selected conditions.\nShorten the playback time or add more favorite tracks or artists.",
+  "error.timeout_no_match": "No combination found matching the specified playback time.\nChange the playback time or adjust your conditions.",
   "error.default": "An error occurred. Please try again after some time."
 }
