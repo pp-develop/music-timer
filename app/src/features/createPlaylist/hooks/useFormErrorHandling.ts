@@ -6,13 +6,23 @@ import { ERROR_MESSAGE_DISPLAY_DURATION } from '../../../config';
 
 /**
  * フォームのエラー処理フック
+ *
+ * エラー表示のライフサイクル管理:
+ * 1. showError(): エラーを表示し、ERROR_MESSAGE_DISPLAY_DURATION後にフェードアウト
+ * 2. dismissError(): エラーを閉じる
+ * 3. handleHttpError(): HTTPステータスに応じてページ遷移
  */
 export const useFormErrorHandling = (
     failureOpacity: Animated.Value,
     setErrorMessage: (msg: string) => void,
     setCreationStatus: (status: 'idle' | 'success' | 'failure') => void
 ) => {
-    // エラー表示の共通関数
+    let timeoutId: NodeJS.Timeout | null = null;
+
+    /**
+     * エラーを表示
+     * ERROR_MESSAGE_DISPLAY_DURATION後に自動でフェードアウト
+     */
     const showError = (errorCode?: string) => {
         const errorKey = getErrorMessageKey(errorCode);
         setErrorMessage(t(errorKey));
@@ -22,15 +32,26 @@ export const useFormErrorHandling = (
             duration: 300,
             useNativeDriver: true
         }).start(() => {
-            setTimeout(() => {
-                Animated.timing(failureOpacity, {
-                    toValue: 0,
-                    duration: 300,
-                    useNativeDriver: true
-                }).start(() => {
-                    setCreationStatus('idle');
-                });
+            timeoutId = setTimeout(() => {
+                dismissError();
             }, ERROR_MESSAGE_DISPLAY_DURATION);
+        });
+    };
+
+    /**
+     * エラーを閉じる
+     */
+    const dismissError = () => {
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
+        }
+        Animated.timing(failureOpacity, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: true
+        }).start(() => {
+            setCreationStatus('idle');
         });
     };
 
@@ -46,5 +67,6 @@ export const useFormErrorHandling = (
     return {
         showError,
         handleHttpError,
+        dismissError,
     };
 };

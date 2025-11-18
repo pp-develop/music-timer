@@ -28,6 +28,7 @@
   "dialog.createPlaylist.close": "Close",
   "dialog.createPlaylist.not.created.title": "Playlist Creation Failed",
   "dialog.createPlaylist.not.created": "Please review the conditions and try again.",
+  "dialog.tapToClose": "(Tap to close)",
   "dialog.createPlaylist.server.error.title": "Cannot Access Server Currently",
   "dialog.createPlaylist.server.error": "Please try again after some time.",
   "toast.playlistDeleting": "Deleting...",
