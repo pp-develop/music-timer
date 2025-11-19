@@ -14,7 +14,7 @@ export function authz(): Promise<AuthzResponse> {
             httpStatus: 0,
         };
 
-        fetchWithRetry('/authz-url')
+        fetchWithRetry('/auth/web/authz-url')
             .then(function (res) {
                 response.authzUrl = res.data.url;
                 response.httpStatus = res.status
@@ -34,7 +34,7 @@ export function auth(): Promise<Response> {
             httpStatus: 0
         }
 
-        fetchWithRetry('/auth')
+        fetchWithRetry('/auth/status')
             .then(function (res) {
                 response.httpStatus = res.status
                 resolve(response)
@@ -53,7 +53,7 @@ export function logout(): Promise<Response> {
             httpStatus: 0,
         };
 
-        fetchWithRetry('/session', "DELETE")
+        fetchWithRetry('/auth/web/session', "DELETE")
             .then(function (res) {
                 response.httpStatus = res.status
                 resolve(response)
