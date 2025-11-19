@@ -26,7 +26,7 @@ axiosRetry(axios, {
   retryCondition: async (error) => {
     // トークンがリフレッシュされた場合はリトライしない
     if (tokenRefreshed) {
-      await axios.delete('/session');
+      await axios.delete('/auth/web/session');
       window.location.href = '/';
       return false;
     }
@@ -76,7 +76,7 @@ export async function fetchWithRetry(url, method = 'GET', config = {}) {
 async function refreshAuthToken() {
   tokenRefreshed = true; // トークンの更新を試みたことを記録
   try {
-    await axios.get('/auth');
+    await axios.get('/auth/status');
   } catch (error) {
     console.error('Token refresh failed:', error);
   }
