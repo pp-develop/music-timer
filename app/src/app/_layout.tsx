@@ -6,6 +6,8 @@ import { AuthProvider } from '../hooks/useAuth';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Slot } from 'expo-router';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from '../components/CustomToast/toastConfig';
 
 export default function Layout() {
   const theme = {
@@ -21,6 +23,7 @@ export default function Layout() {
           <Head />
           <StatusBar style="auto" backgroundColor={theme.primaryColor} />
           <Slot />
+          <Toast config={toastConfig} />
         </AuthProvider>
       </SafeAreaProvider>
     </ThemeProvider>

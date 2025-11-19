@@ -4,7 +4,7 @@ import {
 } from '@rneui/themed';
 import { Dimensions, StyleSheet, Pressable, View, Image } from 'react-native';
 import { Text } from "@rneui/base";
-import { Spotify } from 'react-spotify-embed';
+import { SpotifyEmbed } from '../../../components/SpotifyEmbed';
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
 
@@ -49,7 +49,7 @@ export const CreatePlaylistDialog = (prop: any) => {
           :
           prop.httpStatus == 201 ?
             <>
-              <Spotify
+              <SpotifyEmbed
                 link={"https://open.spotify.com/playlist/" + prop.playlistId}
                 width={width * 0.8}
               />

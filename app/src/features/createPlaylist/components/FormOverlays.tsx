@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Animated, Dimensions, TouchableOpacity, Pressable, Image } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
-import { Spotify } from 'react-spotify-embed';
+import { SpotifyEmbed } from '../../../components/SpotifyEmbed';
 import { t } from '../../../locales/i18n';
 
 const { height } = Dimensions.get('window');
@@ -308,7 +308,7 @@ export const PlaylistSuccessScreen: React.FC<PlaylistSuccessScreenProps> = ({
 
             {/* Spotifyプレイリスト - オーバーレイでスワイプに対応 */}
             <View style={styles.spotifyContainer}>
-                <Spotify
+                <SpotifyEmbed
                     link={"https://open.spotify.com/playlist/" + playlistId}
                     style={{ width: "100%" }}
                 />

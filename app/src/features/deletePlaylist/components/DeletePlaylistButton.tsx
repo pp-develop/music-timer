@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { deletePlaylist } from '../api/DeletePlaylist';
 import { t } from '../../../locales/i18n';
-import toast, { Toaster } from 'react-hot-toast';
+import Toast from 'react-native-toast-message';
 import PlaylistContext from '../hooks/useContext';
 import { getPlaylist } from '../api/GetPlaylist';
 import ReactGA from 'react-ga4';
@@ -46,24 +46,35 @@ export const DeletePlaylist = (props: any) => {
         });
 
         setLoading(true);
+
+        // Show loading toast
+        Toast.show({
+            type: 'info',
+            text1: t('toast.playlistDeleting'),
+            position: 'top',
+        });
+
         try {
-            await toast.promise(deletePlaylist(), {
-                loading: t('toast.playlistDeleting'),
-                success: () => t('toast.playlistDeleted'),
-                error: () => t('toast.playlistDeleteError'),
-            },
-                // {
-                //     style: {
-                //         minWidth: '250px',
-                //     },
-                //     success: {
-                //         duration: 5000,
-                //         icon: '🔥',
-                //     }
-                // }
-            );
+            await deletePlaylist();
+
+            // Show success toast
+            Toast.show({
+                type: 'success',
+                text1: t('toast.playlistDeleted'),
+                position: 'top',
+                visibilityTime: 3000,
+            });
+
             setShowDeleteButton(false)
         } catch (error) {
+            // Show error toast
+            Toast.show({
+                type: 'error',
+                text1: t('toast.playlistDeleteError'),
+                position: 'top',
+                visibilityTime: 4000,
+            });
+
             setShowDeleteButton(true)
             console.error(error);
         } finally {
@@ -73,30 +84,6 @@ export const DeletePlaylist = (props: any) => {
 
     return (
         <>
-            <Toaster
-                position="top-center"
-                reverseOrder={false}
-                gutter={8}
-                containerClassName=""
-                containerStyle={{}}
-                toastOptions={{
-                    // Define default options
-                    className: '',
-                    style: {
-                        background: '#363636',
-                        color: '#fff',
-                    },
-                    // Default options for specific types
-                    success: {
-                        duration: 3000,
-                        theme: {
-                            primary: 'green',
-                            secondary: 'black',
-                        },
-                    },
-                }}
-            />
-
             {showDeleteButton && (
                 <TouchableOpacity
                     style={styles.deleteButton}
