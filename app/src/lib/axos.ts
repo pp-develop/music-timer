@@ -1,7 +1,8 @@
 import Axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { API_URL, BASE_URL } from '../config';
-import { t } from './../locales/i18n';
+import { Platform } from 'react-native';
+import { getAccessToken, getRefreshToken, saveTokens, isTokenExpired, clearTokens } from '../utils/tokenManager';
 
 let tokenRefreshed = false; // トークンが更新されたかどうかを示すフラグ
 
@@ -10,11 +11,29 @@ export const axios = Axios.create({
   headers: {
     'Access-Control-Allow-Origin': BASE_URL,
     'Access-Control-Allow-Headers': '*',
-    "Access-Control-Allow-Credentials": 'true',
   },
-  withCredentials: true,
+  // Web版のみCookie認証を有効化
+  withCredentials: Platform.OS === 'web',
   timeout: 8000, // タイムアウト時間を設定（8秒）
 });
+
+// リクエストインターセプター（ネイティブのみJWT認証ヘッダー追加）
+axios.interceptors.request.use(
+  async (config) => {
+    // ネイティブプラットフォームの場合のみ、JWTトークンをヘッダーに追加
+    if (Platform.OS !== 'web') {
+      const accessToken = await getAccessToken();
+      if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
+      }
+    }
+    // Web版はCookieで自動的に認証されるため、何もしない
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 // リトライ設定
 axiosRetry(axios, {
@@ -26,8 +45,13 @@ axiosRetry(axios, {
   retryCondition: async (error) => {
     // トークンがリフレッシュされた場合はリトライしない
     if (tokenRefreshed) {
-      await axios.delete('/auth/web/session');
-      window.location.href = '/';
+      // プラットフォームごとに異なる処理
+      if (Platform.OS === 'web') {
+        await axios.delete('/auth/web/session');
+        window.location.href = '/';
+      } else {
+        await clearTokens();
+      }
       return false;
     }
 
@@ -73,11 +97,45 @@ export async function fetchWithRetry(url, method = 'GET', config = {}) {
   }
 }
 
+// トークンリフレッシュ関数（プラットフォームごとに分岐）
 async function refreshAuthToken() {
-  tokenRefreshed = true; // トークンの更新を試みたことを記録
+  tokenRefreshed = true;
+
   try {
-    await axios.get('/auth/status');
+    if (Platform.OS === 'web') {
+      // Web: セッションベース認証のリフレッシュ（既存の処理）
+      await axios.get('/auth/status');
+    } else {
+      // Native: JWTトークンのリフレッシュ
+      const refreshToken = await getRefreshToken();
+
+      if (!refreshToken) {
+        throw new Error('No refresh token available');
+      }
+
+      // トークンが期限切れかチェック
+      const expired = await isTokenExpired();
+      if (!expired) {
+        tokenRefreshed = false; // まだ有効なのでフラグをリセット
+        return;
+      }
+
+      // リフレッシュエンドポイントを呼び出し
+      const response = await axios.post('/auth/native/refresh', {
+        refresh_token: refreshToken,
+      });
+
+      const newTokenPair = response.data;
+      await saveTokens(newTokenPair);
+
+      tokenRefreshed = false; // 成功したのでフラグをリセット
+      console.log('Token refreshed successfully');
+    }
   } catch (error) {
     console.error('Token refresh failed:', error);
+    if (Platform.OS !== 'web') {
+      await clearTokens();
+    }
+    throw error;
   }
 }
