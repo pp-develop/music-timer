@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Animated, Dimensions, TouchableOpacity, Pressable, Image } from 'react-native';
+import { View, Text, StyleSheet, Animated, Dimensions, TouchableOpacity, Pressable, Image, Platform } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 import { SpotifyEmbed } from '../../../components/SpotifyEmbed';
 import { t } from '../../../locales/i18n';
@@ -599,8 +599,15 @@ const styles = StyleSheet.create({
     spotifyContainer: {
         width: '100%',
         position: 'relative',
-        height: height > 600 ? height * 0.6 : 'auto',
-        aspectRatio: 16 / 9,
+        ...Platform.select({
+            web: {
+                height: height > 600 ? height * 0.6 : 'auto',
+                aspectRatio: 16 / 9,
+            },
+            android: {
+                height: Math.min(height * 0.5, 400),
+            },
+        }),
     },
     spotifyOverlay: {
         position: 'absolute',

@@ -36,9 +36,6 @@ export const LogoutButton = () => {
             setAuthState(false);
             setIsLoading(false);
 
-            // TODO:: ドメイン統一後に削除
-            sessionStorage.setItem('pressAuth', 'false');
-
             router.replace("/");
         } catch (error) {
             console.error('Logout failed:', error);

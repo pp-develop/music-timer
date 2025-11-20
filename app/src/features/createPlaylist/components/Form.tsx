@@ -24,6 +24,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFormAnimations } from '../hooks/useFormAnimations';
 import { useFormErrorHandling } from '../hooks/useFormErrorHandling';
 import { useFormInput } from '../hooks/useFormInput';
+import { openSpotify } from '../utils/openSpotify';
 
 const { width } = Dimensions.get('window');
 
@@ -99,8 +100,8 @@ export const Form = () => {
         }
     };
 
-    const openSpotify = () => {
-        window.open("https://open.spotify.com/playlist/" + playlistId + '?go=1', '_blank');
+    const handleOpenSpotify = () => {
+        openSpotify(playlistId);
     };
 
     return (
@@ -172,7 +173,7 @@ export const Form = () => {
                 panResponder={panHandlers.panResponder}
                 spotifyPanResponder={panHandlers.spotifyPanResponder}
                 onClose={controls.stopAnimation}
-                onOpenSpotify={openSpotify}
+                onOpenSpotify={handleOpenSpotify}
             />
 
             {/* ローディング画面 */}

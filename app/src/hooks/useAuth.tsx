@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, FC } from "react";
 import { auth } from '../features/auth/api/auth';
 import { router } from 'expo-router';
+import { Platform } from 'react-native';
+import { getAccessToken } from '../utils/tokenManager';
 
 interface AuthContextProps {
   loading: boolean;
@@ -17,6 +19,18 @@ const useProvideAuth = () => {
   useEffect(() => {
     const fetchAuth = async () => {
       try {
+        // ネイティブの場合はトークンの存在をまずチェック
+        if (Platform.OS !== 'web') {
+          const token = await getAccessToken();
+          if (token) {
+            // トークンが存在する場合は認証済みと判断
+            setIsAuthenticated(true);
+            setLoading(false);
+            return;
+          }
+        }
+
+        // Web または ネイティブでトークンがない場合はサーバーに確認
         const response = await auth();
         if (response.httpStatus === 200) {
           setIsAuthenticated(true);
