@@ -36,6 +36,8 @@
       "expo-secure-store"
     ],
     "extra": {
+      "API_URL": "https://api.music-timer.dpdns.org",
+      "BASE_URL": "https://music-timer.dpdns.org",
       "router": {
         "origin": false
       },
