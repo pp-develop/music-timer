@@ -332,13 +332,7 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
             } catch (err) {
                 setError('Network error');
             } finally {
-                // アーティストデータの読み込みが完了したら、徐々にコンテンツをフェードインさせる
                 setIsLoading(false);
-                Animated.timing(fadeAnim, {
-                    toValue: 1,
-                    duration: 300,
-                    useNativeDriver: true,
-                }).start();
             }
         };
 
@@ -351,7 +345,17 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
         }
     }, [isLoading]);
 
-    // LoadingAnimationコンポーネントを使用
+    // containerWidth が確定したらフェードイン開始
+    useEffect(() => {
+        if (!isLoading && containerWidth > 0) {
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 300,
+                useNativeDriver: true,
+            }).start();
+        }
+    }, [isLoading, containerWidth]);
+
     if (isLoading) return <LoadingAnimation />;
     if (error) return <Text style={styles.errorText}>{error}</Text>;
     if (artists.length === 0) {
