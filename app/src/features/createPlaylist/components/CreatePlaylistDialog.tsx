@@ -7,6 +7,7 @@ import { Text } from "@rneui/base";
 import { SpotifyEmbed } from '../../../components/SpotifyEmbed';
 import { t } from '../../../locales/i18n';
 import { useTheme } from '../../../config/ThemeContext';
+import { openSpotify } from '../utils/openSpotify';
 
 let { width, height, scale } = Dimensions.get('window');
 if (width > 800) {
@@ -23,8 +24,8 @@ export const CreatePlaylistDialog = (prop: any) => {
 
   const handleBackdropPress = prop.isLoading ? () => { } : toggleDialog;
 
-  const openSpotify = () => {
-    window.open("https://open.spotify.com/playlist/" + prop.playlistId + '?go=1', '_blank');
+  const handleOpenSpotify = () => {
+    openSpotify(prop.playlistId);
   };
 
   return (
@@ -64,7 +65,7 @@ export const CreatePlaylistDialog = (prop: any) => {
                 marginTop: 10,
                 marginLeft: 'auto',
                 marginRight: 'auto'
-              }} onPress={openSpotify}>
+              }} onPress={handleOpenSpotify}>
                 <View style={{
                   flexDirection: 'row',
                   alignItems: 'center'

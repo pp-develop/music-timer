@@ -3,7 +3,9 @@
     "name": "music timer",
     "slug": "music-timer",
     "version": "1.0.0",
+    "scheme": "musictimer",
     "orientation": "portrait",
+    "platforms": ["android", "web"],
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
@@ -17,10 +19,8 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
+      "package": "com.ppdevelop.musictimer",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
@@ -32,7 +32,16 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router"
-    ]
+      "expo-router",
+      "expo-secure-store"
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "78916394-65b6-4218-9c29-c8b6aaa27380"
+      }
+    }
   }
 }

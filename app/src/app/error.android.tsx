@@ -1,19 +1,3 @@
-/**
- * エラーページのフォールバックファイル
- *
- * このファイルは Expo Router の仕様により必須です。
- * プラットフォーム固有のファイル（error.android.tsx、error.web.tsx）が存在する場合でも、
- * フォールバック用のファイル（プラットフォーム拡張子なし）が必要になります。
- *
- * 現在の使用状況:
- * - Android: error.android.tsx が優先的に使用される
- * - Web: error.web.tsx が優先的に使用される
- * - iOS等その他: このファイルが使用される
- *
- * このファイルがないと以下のエラーが発生します:
- * "The file ./error.android.tsx does not have a fallback sibling file without a platform extension."
- */
-
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';

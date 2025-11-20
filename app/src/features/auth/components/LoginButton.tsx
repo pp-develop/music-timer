@@ -4,7 +4,9 @@ import {
     Text,
     TouchableOpacity,
     StyleSheet,
-    ActivityIndicator
+    ActivityIndicator,
+    Linking,
+    Platform
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { authz } from '../api/auth'
@@ -30,11 +32,12 @@ export const LoginButton = () => {
             const response = await authz()
 
             if (response.httpStatus == 200) {
-                // TODO::　ドメイン統一後に削除
-                if (!sessionStorage.getItem('pressAuth')) {
-                    sessionStorage.setItem('pressAuth', 'true');
+                // プラットフォーム対応のURL遷移
+                if (Platform.OS === 'web') {
+                    window.location.href = response.authzUrl;
+                } else {
+                    await Linking.openURL(response.authzUrl);
                 }
-                window.location.href = response.authzUrl;
             }
         } catch (error) {
             setAuthState(false)
