@@ -136,6 +136,7 @@ async function refreshAuthToken() {
     if (Platform.OS !== 'web') {
       await clearTokens();
     }
-    throw error;
+    // エラーをスローしない: retryCondition で tokenRefreshed === true が検出され、
+    // プラットフォーム別のログアウト処理（Web: セッション削除+リダイレクト、Native: トークンクリア）が実行される
   }
 }
