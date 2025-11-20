@@ -40,7 +40,12 @@ export function auth(): Promise<Response> {
             httpStatus: 0
         }
 
-        fetchWithRetry('/auth/status')
+        // プラットフォームに応じてエンドポイントを切り替え
+        const endpoint = Platform.OS === 'web'
+            ? '/auth/web/status'     // Web: Cookie認証
+            : '/auth/native/status'; // Native: JWT認証
+
+        fetchWithRetry(endpoint)
             .then(function (res) {
                 response.httpStatus = res.status
                 resolve(response)
