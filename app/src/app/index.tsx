@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
     View,
     Text,
@@ -10,7 +10,6 @@ import { useAuth } from "../hooks/useAuth";
 import { useTheme } from '../config/ThemeContext';
 import { router } from 'expo-router';
 import { t } from '../locales/i18n';
-import { Text as TextBase } from "@rneui/base";
 import { setDefaultLanguage, getDefaultLanguage } from '../locales/i18n';
 import usePageViewTracking from '../hooks/usePageViewTracking';
 
@@ -25,16 +24,10 @@ export default function Page() {
     usePageViewTracking(); // ページビューのトラッキングを有効化
     const theme = useTheme()
     const { loading, isAuthenticated } = useAuth();
-    const [pressAuth, setPressAuth] = useState(false);
 
     useEffect(() => {
         if (!loading && isAuthenticated) {
             router.replace('/playlist');
-        }
-        // TODO:: ドメイン統一後に削除
-        const pressAuthSession = sessionStorage.getItem('pressAuth');
-        if (pressAuthSession === 'true') {
-            setPressAuth(true);
         }
     }, [loading, isAuthenticated]);
 
@@ -65,25 +58,6 @@ export default function Page() {
                             </>
                         }
                     </View>
-                    {/* TODO:: ドメイン統一後に削除 */}
-                    {pressAuth && (
-                        <TextBase
-                            h3
-                            h3Style={{
-                                fontSize: 14,
-                                color: 'red'
-                            }}
-                            style={{
-                                maxWidth: 250,
-                                marginTop: 10,
-                                marginLeft: 'auto',
-                                marginRight: 'auto',
-                                width: '100%'
-                            }}
-                        >
-                            {t('top.description3')}
-                        </TextBase>
-                    )}
                 </>
             )}
         </>
