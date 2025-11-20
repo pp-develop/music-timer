@@ -5,6 +5,7 @@
     "version": "1.0.0",
     "scheme": "musictimer",
     "orientation": "portrait",
+    "platforms": ["android", "web"],
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
@@ -18,10 +19,6 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.ppdevelop.musictimer"
-    },
     "android": {
       "package": "com.ppdevelop.musictimer",
       "adaptiveIcon": {
