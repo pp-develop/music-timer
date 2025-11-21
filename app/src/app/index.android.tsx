@@ -3,8 +3,7 @@ import {
     View,
     Text,
     ActivityIndicator,
-    StyleSheet,
-    Dimensions
+    StyleSheet
 } from 'react-native';
 import { LoginButton } from "../features/auth";
 import { useAuth } from "../hooks/useAuth";
@@ -14,8 +13,6 @@ import { t } from '../locales/i18n';
 import { setDefaultLanguage, getDefaultLanguage } from '../locales/i18n';
 import usePageViewTracking from '../hooks/usePageViewTracking';
 import { LinearGradient } from 'expo-linear-gradient';
-
-const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export default function Page() {
     // 言語が日本語でなければ英語をデフォルトに設定
@@ -71,7 +68,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     container: {
-        height: SCREEN_HEIGHT,
+        flex: 1,
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
