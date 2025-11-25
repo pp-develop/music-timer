@@ -1,18 +1,35 @@
 import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 
-// 環境変数の優先順位:
-// 1. process.env (開発時の .env ファイル)
-// 2. Constants.expoConfig?.extra (app.json の extra フィールド、本番ビルド用)
-// 3. デフォルト値 (ローカル開発用)
-export const API_URL =
-    process.env.API_URL ||
-    Constants.expoConfig?.extra?.API_URL ||
-    'http://localhost:8080';
+const isWeb = Platform.OS === 'web';
+const isProd = process.env.ENVIRONMENT === 'production';
 
-export const BASE_URL =
-    process.env.BASE_URL ||
-    Constants.expoConfig?.extra?.BASE_URL ||
-    'http://localhost:19006';
+const getUrl = (envKey: string) => {
+    if (isProd) {
+        // 本番環境: 必須、なければエラー
+        const url = Constants.expoConfig?.extra?.[envKey];
+        if (!url) {
+            throw new Error(`[Production] ${envKey} is required in app.json extra`);
+        }
+        return url;
+    }
+    // 開発環境: 警告のみ
+    const url = process.env[envKey];
+    if (!url) {
+        console.warn(`[Development] ${envKey} is not defined in .env file`);
+    }
+    return url || '';
+};
+
+export const API_URL = isWeb ? getUrl('API_URL') : getUrl('NATIVE_API_URL');
+export const BASE_URL = isWeb ? getUrl('BASE_URL') : getUrl('NATIVE_BASE_URL');
+
+console.log('=== Configuration ===');
+console.log('Environment:', isProd ? 'production' : 'development');
+console.log('Platform:', Platform.OS);
+console.log('API_URL:', API_URL);
+console.log('BASE_URL:', BASE_URL);
+console.log('=====================');
 
 export const GOOGLE_ANALYTICS_TRACKING_ID = process.env.GOOGLE_ANALYTICS_TRACKING_ID || '';
 export const MAX_CONTAINER_WIDTH = 400; // コンテナの最大幅
