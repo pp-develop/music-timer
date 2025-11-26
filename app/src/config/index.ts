@@ -2,7 +2,7 @@ import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
 const isWeb = Platform.OS === 'web';
-const isProd = process.env.ENVIRONMENT === 'production';
+const isProd = process.env.EXPO_PUBLIC_ENVIRONMENT === 'production';
 
 const getUrl = (envKey: string) => {
     if (isProd) {
@@ -21,8 +21,14 @@ const getUrl = (envKey: string) => {
     return url || '';
 };
 
-export const API_URL = isWeb ? getUrl('API_URL') : getUrl('NATIVE_API_URL');
-export const BASE_URL = isWeb ? getUrl('BASE_URL') : getUrl('NATIVE_BASE_URL');
+// 開発環境用の設定
+export const API_URL = isWeb
+    ? getUrl('EXPO_PUBLIC_API_URL')
+    : getUrl('EXPO_PUBLIC_NATIVE_API_URL');
+
+export const BASE_URL = isWeb
+    ? getUrl('EXPO_PUBLIC_BASE_URL')
+    : getUrl('EXPO_PUBLIC_NATIVE_BASE_URL');
 
 // console.log('=== Configuration ===');
 // console.log('Environment:', isProd ? 'production' : 'development');
@@ -31,7 +37,7 @@ export const BASE_URL = isWeb ? getUrl('BASE_URL') : getUrl('NATIVE_BASE_URL');
 // console.log('BASE_URL:', BASE_URL);
 // console.log('=====================');
 
-export const GOOGLE_ANALYTICS_TRACKING_ID = process.env.GOOGLE_ANALYTICS_TRACKING_ID || '';
+export const GOOGLE_ANALYTICS_TRACKING_ID = process.env.EXPO_PUBLIC_GOOGLE_ANALYTICS_TRACKING_ID || '';
 export const MAX_CONTAINER_WIDTH = 400; // コンテナの最大幅
 export const MAX_INPUT_WIDTH = 360;     // 入力フィールドの最大幅
 export const MIN_ARTIST_ITEM_SIZE = 100; // アーティストアイテムの最小サイズ
