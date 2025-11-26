@@ -39,6 +39,8 @@
     "extra": {
       "API_URL": "https://api.music-timer.dpdns.org",
       "BASE_URL": "https://music-timer.dpdns.org",
+      "NATIVE_API_URL": "https://api.music-timer.dpdns.org",
+      "NATIVE_BASE_URL": "https://music-timer.dpdns.org",
       "router": {
         "origin": false
       },
