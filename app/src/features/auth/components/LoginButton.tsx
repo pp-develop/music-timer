@@ -41,11 +41,7 @@ export const LoginButton = () => {
             }
         } catch (error: any) {
             console.error('Login failed:', error);
-
-            handleApiError(error, {
-                onAuthError: () => setAuthState(false),
-                onServerError: () => setAuthState(false)
-            });
+            handleApiError(error);
         } finally {
             setTimeout(() => {
                 setIsLoading(false)
