@@ -1,8 +1,8 @@
 import { Animated } from 'react-native';
-import { router } from 'expo-router';
 import { getErrorMessageKey } from '../../../types/errorCodes';
 import { t } from '../../../locales/i18n';
 import { ERROR_MESSAGE_DISPLAY_DURATION } from '../../../config';
+import { handleApiError } from '../../../utils/errorHandler';
 
 /**
  * フォームのエラー処理フック
@@ -56,12 +56,17 @@ export const useFormErrorHandling = (
     };
 
     // HTTPエラーハンドリング
-    const handleHttpError = (httpStatus: number) => {
-        if (httpStatus === 303 || httpStatus === 401) {
-            router.replace("/");
-        } else if (httpStatus >= 500 && httpStatus < 600 || !httpStatus) {
-            router.replace("/error");
-        }
+    const handleHttpError = (httpStatus: number, error?: any) => {
+        // エラーオブジェクトにhttpStatusを追加（handleApiErrorで使用）
+        const errorWithStatus = {
+            ...error,
+            response: {
+                ...error?.response,
+                status: httpStatus
+            }
+        };
+
+        handleApiError(errorWithStatus);
     };
 
     return {

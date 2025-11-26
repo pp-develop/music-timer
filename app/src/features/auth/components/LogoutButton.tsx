@@ -7,6 +7,7 @@ import { useAuth } from "../../../../src/hooks/useAuth";
 import { router } from 'expo-router';
 import ReactGA from 'react-ga4';
 import { Svg, Path, Line, Polyline } from 'react-native-svg';
+import { handleApiError } from '../../../utils/errorHandler';
 
 const LogoutIcon = () => (
     <Svg width={28} height={28} viewBox="0 0 24 24" stroke="#9CA3AF" strokeWidth={2}>
@@ -37,9 +38,10 @@ export const LogoutButton = () => {
             setIsLoading(false);
 
             router.replace("/");
-        } catch (error) {
+        } catch (error: any) {
             console.error('Logout failed:', error);
-            router.replace("/error")
+
+            handleApiError(error);
         }
     };
 

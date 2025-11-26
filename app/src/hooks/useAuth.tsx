@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, FC } from "react";
 import { auth } from '../features/auth/api/auth';
-import { router } from 'expo-router';
 import { Platform } from 'react-native';
 import { getAccessToken } from '../utils/tokenManager';
+import { handleApiError } from '../utils/errorHandler';
 
 interface AuthContextProps {
   loading: boolean;
@@ -37,13 +37,10 @@ const useProvideAuth = () => {
         } else {
           setIsAuthenticated(false);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('Auth failed:', error);
-        if (error.httpStatus === 303) {
-          router.replace("/")
-          return
-        }
-        router.replace("/error")
+
+        handleApiError(error);
       } finally {
         setLoading(false);
       }

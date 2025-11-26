@@ -3,6 +3,7 @@ import axiosRetry from 'axios-retry';
 import { API_URL, BASE_URL } from '../config';
 import { Platform } from 'react-native';
 import { getAccessToken, getRefreshToken, saveTokens, isTokenExpired, clearTokens } from '../utils/tokenManager';
+import { MAX_RETRIES } from '../utils/errorHandler';
 
 let tokenRefreshed = false; // トークンが更新されたかどうかを示すフラグ
 
@@ -37,7 +38,7 @@ axios.interceptors.request.use(
 
 // リトライ設定
 axiosRetry(axios, {
-  retries: 3, // 最大リトライ回数
+  retries: MAX_RETRIES, // 最大リトライ回数
   retryDelay: (retryCount) => {
     // リトライ回数に応じてリトライ間隔を設定（1秒, 2秒, 4秒）
     return retryCount * 1000;

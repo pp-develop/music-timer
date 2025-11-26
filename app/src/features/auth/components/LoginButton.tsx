@@ -13,7 +13,7 @@ import { authz } from '../api/auth'
 import { t } from '../../../locales/i18n';
 import { useAuth } from "../../../hooks/useAuth";
 import ReactGA from 'react-ga4';
-import { router } from 'expo-router';
+import { handleApiError } from '../../../utils/errorHandler';
 
 export const LoginButton = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -39,10 +39,13 @@ export const LoginButton = () => {
                     await Linking.openURL(response.authzUrl);
                 }
             }
-        } catch (error) {
-            setAuthState(false)
+        } catch (error: any) {
             console.error('Login failed:', error);
-            router.replace("/error")
+
+            handleApiError(error, {
+                onAuthError: () => setAuthState(false),
+                onServerError: () => setAuthState(false)
+            });
         } finally {
             setTimeout(() => {
                 setIsLoading(false)
