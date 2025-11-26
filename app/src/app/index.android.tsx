@@ -10,18 +10,10 @@ import { useAuth } from "../hooks/useAuth";
 import { useTheme } from '../config/ThemeContext';
 import { router } from 'expo-router';
 import { t } from '../locales/i18n';
-import { setDefaultLanguage, getDefaultLanguage } from '../locales/i18n';
 import usePageViewTracking from '../hooks/usePageViewTracking';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Page() {
-    // 言語が日本語でなければ英語をデフォルトに設定
-    if (getDefaultLanguage() !== 'ja') {
-        setDefaultLanguage('en');
-    } else {
-        setDefaultLanguage('ja');
-    }
-
     usePageViewTracking(); // ページビューのトラッキングを有効化
     const theme = useTheme()
     const { loading, isAuthenticated } = useAuth();

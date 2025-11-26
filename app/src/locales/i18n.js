@@ -1,5 +1,6 @@
 // i18n.js
 import * as Localization from 'expo-localization';
+import { Platform } from 'react-native';
 
 const locales = {
     en: require('./en.json'),
@@ -13,7 +14,18 @@ const getLanguageResource = (language) => {
     return selectedLocale;
 };
 
-let defaultLanguage = Localization.locale.split('-')[0]; // デフォルトの言語をブラウザの言語から取得する
+// デフォルトの言語を取得
+const getInitialLanguage = () => {
+    // Web環境の場合
+    if (Platform.OS === 'web' && typeof navigator !== 'undefined') {
+        const browserLang = navigator.language || navigator.userLanguage;
+        return browserLang ? browserLang.split('-')[0] : fallbackLanguage;
+    }
+    // ネイティブ環境の場合
+    return Localization.locale ? Localization.locale.split('-')[0] : fallbackLanguage;
+};
+
+let defaultLanguage = getInitialLanguage();
 
 // デフォルトの言語を設定する関数
 export const setDefaultLanguage = (language) => {
