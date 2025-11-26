@@ -36,10 +36,10 @@
       "expo-secure-store"
     ],
     "extra": {
-      "API_URL": "https://api.music-timer.dpdns.org",
-      "BASE_URL": "https://music-timer.dpdns.org",
-      "NATIVE_API_URL": "https://api.music-timer.dpdns.org",
-      "NATIVE_BASE_URL": "https://music-timer.dpdns.org",
+      "EXPO_PUBLIC_API_URL": "https://api.music-timer.dpdns.org",
+      "EXPO_PUBLIC_BASE_URL": "https://music-timer.dpdns.org",
+      "EXPO_PUBLIC_NATIVE_API_URL": "https://api.music-timer.dpdns.org",
+      "EXPO_PUBLIC_NATIVE_BASE_URL": "https://music-timer.dpdns.org",
       "router": {
         "origin": false
       },
