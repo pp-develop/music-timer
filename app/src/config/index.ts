@@ -24,12 +24,12 @@ const getUrl = (envKey: string) => {
 export const API_URL = isWeb ? getUrl('API_URL') : getUrl('NATIVE_API_URL');
 export const BASE_URL = isWeb ? getUrl('BASE_URL') : getUrl('NATIVE_BASE_URL');
 
-console.log('=== Configuration ===');
-console.log('Environment:', isProd ? 'production' : 'development');
-console.log('Platform:', Platform.OS);
-console.log('API_URL:', API_URL);
-console.log('BASE_URL:', BASE_URL);
-console.log('=====================');
+// console.log('=== Configuration ===');
+// console.log('Environment:', isProd ? 'production' : 'development');
+// console.log('Platform:', Platform.OS);
+// console.log('API_URL:', API_URL);
+// console.log('BASE_URL:', BASE_URL);
+// console.log('=====================');
 
 export const GOOGLE_ANALYTICS_TRACKING_ID = process.env.GOOGLE_ANALYTICS_TRACKING_ID || '';
 export const MAX_CONTAINER_WIDTH = 400; // コンテナの最大幅
