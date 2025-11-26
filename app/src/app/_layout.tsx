@@ -1,7 +1,7 @@
 import { ThemeProvider } from '../config/ThemeContext';
 import { Header } from "../components/Parts/Header";
 import { Head } from "../components/Parts/Head";
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { AuthProvider } from '../hooks/useAuth';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
@@ -20,10 +20,12 @@ export default function Layout() {
     <ThemeProvider theme={theme}>
       <SafeAreaProvider>
         <AuthProvider>
-          <Head />
-          <StatusBar style="auto" backgroundColor={theme.primaryColor} />
-          <Slot />
-          <Toast config={toastConfig} />
+          <SafeAreaView style={{ flex: 1, backgroundColor: '#000000' }}>
+            <Head />
+            <StatusBar style="light" translucent={false} backgroundColor="#000000" />
+            <Slot />
+            <Toast config={toastConfig} />
+          </SafeAreaView>
         </AuthProvider>
       </SafeAreaProvider>
     </ThemeProvider>
