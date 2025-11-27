@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import {
     StyleSheet,
     View,
-    SafeAreaView,
     ActivityIndicator
 } from 'react-native';
 import { Form } from "../../features/createPlaylist";
@@ -24,7 +23,7 @@ export default function Layout() {
     }, [loading, isAuthenticated]);
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <LinearGradient
                 colors={['#111827', '#000000']}
                 style={styles.gradient}
@@ -50,7 +49,7 @@ export default function Layout() {
                     </View>
                 </View>
             </LinearGradient>
-        </SafeAreaView >
+        </View>
     );
 }
 

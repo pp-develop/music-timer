@@ -16,16 +16,27 @@ const getLanguageResource = (language) => {
 
 // デフォルトの言語を取得
 const getInitialLanguage = () => {
-    // Web環境の場合
-    if (Platform.OS === 'web' && typeof navigator !== 'undefined') {
-        const browserLang = navigator.language || navigator.userLanguage;
-        return browserLang ? browserLang.split('-')[0] : fallbackLanguage;
+    // Web/ネイティブ共通: getLocales()を使用（Expo SDK 49+推奨）
+    try {
+        const deviceLocales = Localization.getLocales();
+        if (deviceLocales && deviceLocales.length > 0) {
+            const primaryLocale = deviceLocales[0];
+            console.log('Device locale:', primaryLocale);
+            return primaryLocale.languageCode || fallbackLanguage;
+        }
+    } catch (error) {
+        console.warn('Failed to get device locale:', error);
     }
-    // ネイティブ環境の場合
-    return Localization.locale ? Localization.locale.split('-')[0] : fallbackLanguage;
+
+    return fallbackLanguage;
 };
 
 let defaultLanguage = getInitialLanguage();
+
+console.log('=== i18n Initialization ===');
+console.log('Platform:', Platform.OS);
+console.log('Selected language:', defaultLanguage);
+console.log('===========================');
 
 // デフォルトの言語を設定する関数
 export const setDefaultLanguage = (language) => {

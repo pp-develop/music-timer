@@ -24,8 +24,8 @@ export default function Layout() {
             <Head />
             <StatusBar style="light" translucent={false} backgroundColor="#000000" />
             <Slot />
-            <Toast config={toastConfig} />
           </SafeAreaView>
+          <Toast config={toastConfig} />
         </AuthProvider>
       </SafeAreaProvider>
     </ThemeProvider>
