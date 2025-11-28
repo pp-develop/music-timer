@@ -32,15 +32,10 @@ const useProvideAuth = () => {
 
         // Web または ネイティブでトークンがない場合はサーバーに確認
         const response = await auth();
-        if (response.httpStatus === 200) {
-          setIsAuthenticated(true);
-        } else {
-          setIsAuthenticated(false);
-        }
+        setIsAuthenticated(response.authenticated);
       } catch (error: any) {
-        console.error('Auth failed:', error);
-
-        handleApiError(error);
+        // エラー時は何もしない（isAuthenticatedはfalseのまま）
+        console.error('Auth check failed:', error);
       } finally {
         setLoading(false);
       }

@@ -33,10 +33,16 @@ export function authz(): Promise<AuthzResponse> {
     });
 };
 
-export function auth(): Promise<Response> {
+export type AuthStatusResponse = {
+    authenticated: boolean;
+    httpStatus: number;
+};
+
+export function auth(): Promise<AuthStatusResponse> {
     return new Promise((resolve, reject) => {
 
-        const response: Response = {
+        const response: AuthStatusResponse = {
+            authenticated: false,
             httpStatus: 0
         }
 
@@ -47,12 +53,14 @@ export function auth(): Promise<Response> {
 
         fetchWithRetry(endpoint, 'GET')
             .then(function (res) {
-                response.httpStatus = res.status
-                resolve(response)
+                response.httpStatus = res.status;
+                response.authenticated = res.data.authenticated ?? false;
+                resolve(response);
             })
             .catch(function (error) {
-                response.httpStatus = error.response?.status
-                reject(response);
+                response.httpStatus = error.response?.status;
+                // エラー時は何もしない（authenticatedはfalseのまま）
+                resolve(response);
             })
     });
 };
