@@ -20,14 +20,14 @@ import {
     ActivityIndicator
 } from 'react-native';
 import { Form } from "../../../features/spotify/createPlaylist";
-import { useSpotifyAuth, SpotifyAuthProvider } from "../../../hooks/useSpotifyAuth";
+import { useSpotifyAuth } from "../../../hooks/useSpotifyAuth";
 import { useTheme } from '../../../config/ThemeContext';
 import { router } from 'expo-router';
 import { PlaylistProvider } from '../../../features/spotify/deletePlaylist/hooks/useContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MAX_CONTAINER_WIDTH } from '../../../config';
 
-function SpotifyPlaylistLayout() {
+export default function Layout() {
     const theme = useTheme()
     const { loading, isAuthenticated } = useSpotifyAuth();
 
@@ -65,14 +65,6 @@ function SpotifyPlaylistLayout() {
                 </View>
             </LinearGradient>
         </View>
-    );
-}
-
-export default function Layout() {
-    return (
-        <SpotifyAuthProvider>
-            <SpotifyPlaylistLayout />
-        </SpotifyAuthProvider>
     );
 }
 
