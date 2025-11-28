@@ -105,7 +105,7 @@ async function refreshAuthToken() {
   try {
     if (Platform.OS === 'web') {
       // Web: セッションベース認証のリフレッシュ（既存の処理）
-      await axios.get('/auth/status');
+      await axios.get('/auth/web/status');
     } else {
       // Native: JWTトークンのリフレッシュ
       const refreshToken = await getRefreshToken();
