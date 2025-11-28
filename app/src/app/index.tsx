@@ -20,7 +20,7 @@ import {
     ActivityIndicator,
     StyleSheet
 } from 'react-native';
-import { LoginButton } from "../features/auth";
+import { LoginButton } from "../features/spotify/auth";
 import { useAuth } from "../hooks/useAuth";
 import { useTheme } from '../config/ThemeContext';
 import { router } from 'expo-router';
@@ -34,7 +34,7 @@ export default function Page() {
 
     useEffect(() => {
         if (!loading && isAuthenticated) {
-            router.replace('/playlist');
+            router.replace('/playlist/spotify');
         }
     }, [loading, isAuthenticated]);
 

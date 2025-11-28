@@ -1,5 +1,5 @@
-import { fetchWithRetry } from '../../../lib/axos';
-import { t } from '../../../locales/i18n';
+import { fetchWithRetry } from '../../../../lib/axos';
+import { t } from '../../../../locales/i18n';
 
 export type Response = {
     httpStatus: number;

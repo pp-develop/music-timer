@@ -6,7 +6,7 @@ import {
     StyleSheet,
     Dimensions,
 } from 'react-native';
-import { LogoutButton } from "../../features/auth";
+import { LogoutButton } from "../../features/spotify/auth";
 import { t } from '../../locales/i18n';
 import { router, usePathname } from 'expo-router';
 import { useAuth } from "../../../src/hooks/useAuth";
@@ -39,7 +39,7 @@ export const Header = () => {
             {!loading && (
                 <View style={styles.header}>
                     <TouchableOpacity
-                        onPress={pathname == '/playlist' ? undefined : () => handleTitlePress()}
+                        onPress={pathname.startsWith('/playlist') ? undefined : () => handleTitlePress()}
                     >
                         <Text
                             style={styles.title}

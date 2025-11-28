@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, Animated, Dimensions, TouchableOpacity, Pressable, Image, Platform } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
-import { SpotifyEmbed } from '../../../components/SpotifyEmbed';
-import { t } from '../../../locales/i18n';
+import { SpotifyEmbed } from '../../../../components/SpotifyEmbed';
+import { t } from '../../../../locales/i18n';
 
 const { height } = Dimensions.get('window');
 
@@ -344,7 +344,7 @@ export const PlaylistSuccessScreen: React.FC<PlaylistSuccessScreenProps> = ({
                 {({ pressed }) => (
                     <>
                         <Image
-                            source={require('../../../../assets/images/spotify-icon.png')}
+                            source={require('../../../../../assets/images/spotify-icon.png')}
                             style={{
                                 width: 25,
                                 height: 25,

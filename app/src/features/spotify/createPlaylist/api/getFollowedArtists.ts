@@ -1,4 +1,4 @@
-import { fetchWithRetry } from '../../../lib/axos';
+import { fetchWithRetry } from '../../../../lib/axos';
 
 export type Artist = {
     ID: string;

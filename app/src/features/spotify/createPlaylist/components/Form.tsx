@@ -7,22 +7,22 @@ import {
     Dimensions,
     Animated,
 } from 'react-native';
-import { Header } from "../../../components/Parts/Header";
+import { Header } from "../../../../components/Parts/Header";
 import { DeletePlaylist } from "../../deletePlaylist/components/DeletePlaylistButton";
 import { CreatePlaylistButton } from "./CreatePlaylistButton";
 import { SelectFollowedArtists } from "./SelectFollowedArtists";
 import { LoadingOverlay, ErrorOverlay, PlaylistSuccessScreen } from "./FormOverlays";
 import { Controller } from 'react-hook-form';
-import { t } from '../../../locales/i18n';
+import { t } from '../../../../locales/i18n';
 import PlaylistContext from '../../deletePlaylist/hooks/useContext';
 import { CreatePlaylist } from "../api/createPlaylist";
 import { CreatePlaylistWithSpecifyArtists } from "../api/createPlaylistWithSpecifyArtists";
 import { CreatePlaylistWithFavoriteTracks } from "../api/createPlaylistWithFavoriteTracks";
 import ReactGA from 'react-ga4';
-import { MAX_INPUT_WIDTH } from '../../../config';
+import { MAX_INPUT_WIDTH } from '../../../../config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFormAnimations } from '../hooks/useFormAnimations';
-import { useFormErrorHandling } from '../hooks/useFormErrorHandling';
+import { useFormAnimations } from '../../../common/hooks/useFormAnimations';
+import { useFormErrorHandling } from '../../../common/hooks/useFormErrorHandling';
 import { useFormInput } from '../hooks/useFormInput';
 import { openSpotify } from '../utils/openSpotify';
 
