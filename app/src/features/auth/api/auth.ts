@@ -45,17 +45,7 @@ export function auth(): Promise<Response> {
             ? '/auth/web/status'     // Web: Cookie認証
             : '/auth/native/status'; // Native: JWT認証
 
-        // 303をエラーとして扱うために validateStatus を設定
-        const config = {
-            validateStatus: (status: number) => {
-                // 303はfalseを返してエラー扱いにする（自動リダイレクトを防ぐ）
-                if (status === 303) return false;
-                // その他は200-299のみ成功とする
-                return status >= 200 && status < 300;
-            }
-        };
-
-        fetchWithRetry(endpoint, 'GET', config)
+        fetchWithRetry(endpoint, 'GET')
             .then(function (res) {
                 response.httpStatus = res.status
                 resolve(response)
