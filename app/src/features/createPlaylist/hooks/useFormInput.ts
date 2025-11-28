@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { t } from '../../../locales/i18n';
-import { InitTracksData } from '../api/initTracksData';
+import { InitFavoriteTracksData, InitFollowedArtistsTracksData } from '../api/initTracksData';
 
 const schema = yup.object().shape({
     minute: yup
@@ -38,13 +38,22 @@ export const useFormInput = () => {
         loadMinute();
     }, []);
 
-    // トラックデータの初期化
+    // トラックデータの初期化（24時間有効期限付きキャッシュ）
     useEffect(() => {
         const fetchTracks = async () => {
-            const storedInitTrackData = await AsyncStorage.getItem('initTrackData')
-            if (!storedInitTrackData) {
-                InitTracksData();
-                AsyncStorage.setItem('initTrackData', 'true');
+            const lastFetchTime = await AsyncStorage.getItem('initTrackDataTimestamp');
+            const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24時間（ミリ秒）
+            const now = Date.now();
+
+            // 初回 or キャッシュ期限切れの場合に実行
+            if (!lastFetchTime || now - parseInt(lastFetchTime) > CACHE_DURATION) {
+                // お気に入りトラックとフォローアーティストのトラックを並列で初期化
+                await Promise.all([
+                    InitFavoriteTracksData(),
+                    InitFollowedArtistsTracksData()
+                ]);
+                await AsyncStorage.setItem('initTrackData', 'true');
+                await AsyncStorage.setItem('initTrackDataTimestamp', now.toString());
             }
         };
 
