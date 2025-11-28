@@ -11,7 +11,7 @@
         "buildType": "apk"
       },
       "env": {
-        "ENVIRONMENT": "production"
+        "EXPO_PUBLIC_ENVIRONMENT": "production"
       }
     },
     "preview": {
@@ -21,13 +21,13 @@
       },
       "credentialsSource": "remote",
       "env": {
-        "ENVIRONMENT": "production"
+        "EXPO_PUBLIC_ENVIRONMENT": "production"
       }
     },
     "production": {
       "autoIncrement": true,
       "env": {
-        "ENVIRONMENT": "production"
+        "EXPO_PUBLIC_ENVIRONMENT": "production"
       }
     }
   },
