@@ -1,35 +1,20 @@
-/**
- * プレイリストページのレイアウトフォールバックファイル
- *
- * このファイルは通常使用されることはありませんが、Expo Router の仕様により必須です。
- * プラットフォーム固有のファイル（_layout.android.tsx、_layout.web.tsx）が存在する場合でも、
- * フォールバック用のファイル（プラットフォーム拡張子なし）が必要になります。
- *
- * 現在の使用状況:
- * - Android: _layout.android.tsx が優先的に使用される
- * - Web: _layout.web.tsx が優先的に使用される
- * - iOS等その他: このファイルが使用される（念のため）
- *
- * 実装内容: _layout.web.tsx と同等の内容
- */
-
 import React, { useEffect } from "react";
 import {
     StyleSheet,
     View,
     ActivityIndicator
 } from 'react-native';
-import { Form } from "../../features/createPlaylist";
-import { useAuth } from "../../hooks/useAuth";
-import { useTheme } from '../../config/ThemeContext';
+import { Form } from "../../../features/createPlaylist";
+import { useSpotifyAuth, SpotifyAuthProvider } from "../../../hooks/useSpotifyAuth";
+import { useTheme } from '../../../config/ThemeContext';
 import { router } from 'expo-router';
-import { PlaylistProvider } from '../../features/deletePlaylist/hooks/useContext';
+import { PlaylistProvider } from '../../../features/deletePlaylist/hooks/useContext';
 import { LinearGradient } from 'expo-linear-gradient';
-import { MAX_CONTAINER_WIDTH } from '../../config';
+import { MAX_CONTAINER_WIDTH } from '../../../config';
 
-export default function Layout() {
+function SpotifyPlaylistLayout() {
     const theme = useTheme()
-    const { loading, isAuthenticated } = useAuth();
+    const { loading, isAuthenticated } = useSpotifyAuth();
 
     useEffect(() => {
         if (!loading && !isAuthenticated) {
@@ -65,6 +50,14 @@ export default function Layout() {
                 </View>
             </LinearGradient>
         </View>
+    );
+}
+
+export default function Layout() {
+    return (
+        <SpotifyAuthProvider>
+            <SpotifyPlaylistLayout />
+        </SpotifyAuthProvider>
     );
 }
 

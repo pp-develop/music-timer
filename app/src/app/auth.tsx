@@ -47,7 +47,7 @@ export default function AuthCallbackPage() {
         setAuthState(true);
 
         // プレイリスト画面にリダイレクト
-        setTimeout(() => router.replace('/playlist'), 500);
+        setTimeout(() => router.replace('/playlist/spotify'), 500);
       } catch (error) {
         console.error('Token save failed:', error);
         setStatus('トークン保存に失敗しました');

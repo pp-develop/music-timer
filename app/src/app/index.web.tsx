@@ -19,7 +19,7 @@ export default function Page() {
 
     useEffect(() => {
         if (!loading && isAuthenticated) {
-            router.replace('/playlist');
+            router.replace('/playlist/spotify');
         }
     }, [loading, isAuthenticated]);
 

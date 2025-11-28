@@ -39,7 +39,7 @@ export const Header = () => {
             {!loading && (
                 <View style={styles.header}>
                     <TouchableOpacity
-                        onPress={pathname == '/playlist' ? undefined : () => handleTitlePress()}
+                        onPress={pathname.startsWith('/playlist') ? undefined : () => handleTitlePress()}
                     >
                         <Text
                             style={styles.title}
