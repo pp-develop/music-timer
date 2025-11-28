@@ -47,8 +47,8 @@ export const useFormInput = () => {
 
             // 初回 or キャッシュ期限切れの場合に実行
             if (!lastFetchTime || now - parseInt(lastFetchTime) > CACHE_DURATION) {
-                // お気に入りトラックとフォローアーティストのトラックを並列で初期化
-                await Promise.all([
+                // お気に入りトラックとフォローアーティストのトラックを並列で初期化（バックグラウンド実行）
+                Promise.all([
                     InitFavoriteTracksData(),
                     InitFollowedArtistsTracksData()
                 ]);
