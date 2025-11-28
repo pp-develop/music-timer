@@ -19,7 +19,7 @@ export function GetFollowedArtists(): Promise<Response> {
             httpStatus: 0
         };
 
-        fetchWithRetry('/artists', 'GET', {
+        fetchWithRetry('/spotify/artists', 'GET', {
             data: {
             },
         })

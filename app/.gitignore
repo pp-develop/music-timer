@@ -11,3 +11,4 @@ npm-debug.*
 web-build/
 *.pnpm*
 .env
+gradle.properties

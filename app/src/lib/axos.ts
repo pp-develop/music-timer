@@ -40,7 +40,7 @@ axios.interceptors.request.use(
  * Web版セッション切れハンドラー
  *
  * 401エラー発生時に呼び出され、以下の処理を実行する:
- * 1. サーバー側のセッションを削除 (DELETE /auth/web/session)
+ * 1. サーバー側のセッションを削除 (DELETE /spotify/auth/web/session)
  * 2. ホームページ (/) へリダイレクト
  *
  * Web版はCookie/Session認証を使用しているため、セッションが切れた場合は
@@ -49,7 +49,7 @@ axios.interceptors.request.use(
 async function handleWebSessionExpired() {
   try {
     // サーバー側のセッションを削除
-    await axios.delete('/auth/web/session');
+    await axios.delete('/spotify/auth/web/session');
   } catch (e) {
     console.error('Failed to delete session:', e);
   } finally {
@@ -217,7 +217,7 @@ async function refreshAuthToken() {
     }
 
     // リフレッシュエンドポイントを呼び出して新しいトークンペアを取得
-    const response = await axios.post('/auth/native/refresh', {
+    const response = await axios.post('/spotify/auth/native/refresh', {
       refresh_token: refreshToken,
     });
 

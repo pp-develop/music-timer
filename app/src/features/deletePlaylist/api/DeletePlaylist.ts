@@ -11,7 +11,7 @@ export function deletePlaylist(): Promise<Response> {
             httpStatus: 0
         };
 
-        fetchWithRetry('/playlist', 'DELETE')
+        fetchWithRetry('/spotify/playlists', 'DELETE')
             .then(function (res) {
                 response.httpStatus = res.status
                 resolve(response)
