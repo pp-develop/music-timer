@@ -188,7 +188,7 @@ export async function fetchWithRetry(url: string, method: string = 'GET', config
  * 401エラー発生時に onRetry から呼び出され、以下の処理を実行する:
  * 1. リフレッシュトークンを取得
  * 2. アクセストークンの有効期限をチェック
- * 3. 期限切れの場合、/auth/native/refresh を呼び出して新しいトークンペアを取得
+ * 3. 期限切れの場合、/spotify/auth/native/refresh を呼び出して新しいトークンペアを取得
  * 4. 新しいトークンペアを保存
  *
  * 【動作フロー】
