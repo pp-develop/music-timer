@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { StyleSheet, TouchableOpacity, View, Animated } from 'react-native';
 import { deletePlaylist } from '../api/DeletePlaylist';
-import { t } from '../../../locales/i18n';
+import { t } from '../../../../locales/i18n';
 import Toast from 'react-native-toast-message';
 import PlaylistContext from '../hooks/useContext';
 import { getPlaylist } from '../api/GetPlaylist';

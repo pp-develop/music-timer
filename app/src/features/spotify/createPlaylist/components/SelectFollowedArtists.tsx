@@ -11,9 +11,9 @@ import {
     Linking,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { t } from '../../../locales/i18n';
+import { t } from '../../../../locales/i18n';
 import { GetFollowedArtists, Artist } from '../api/getFollowedArtists';
-import useHorizontalScroll from '../hooks/useHorizontalScroll';
+import useHorizontalScroll from '../../../common/hooks/useHorizontalScroll';
 import { Svg, Path, Polyline, Circle } from 'react-native-svg';
 import { MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';

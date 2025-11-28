@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { t } from '../../../locales/i18n';
+import { t } from '../../../../locales/i18n';
 import { InitFavoriteTracksData, InitFollowedArtistsTracksData } from '../api/initTracksData';
 
 const schema = yup.object().shape({

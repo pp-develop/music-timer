@@ -6,7 +6,7 @@ import {
     StyleSheet,
     Dimensions,
 } from 'react-native';
-import { LogoutButton } from "../../features/auth";
+import { LogoutButton } from "../../features/spotify/auth";
 import { t } from '../../locales/i18n';
 import { router, usePathname } from 'expo-router';
 import { useAuth } from "../../../src/hooks/useAuth";

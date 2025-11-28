@@ -1,4 +1,4 @@
-import { fetchWithRetry, axios } from '../../../lib/axos';
+import { fetchWithRetry, axios } from '../../../../lib/axos';
 import { Response } from '../types/index';
 import { Platform } from 'react-native';
 
@@ -80,7 +80,7 @@ export function logout(): Promise<Response> {
                 response.httpStatus = res.status;
             } else {
                 // Native: ローカルのトークンをクリア
-                const { clearTokens } = await import('../../../utils/tokenManager');
+                const { clearTokens } = await import('../../../../utils/tokenManager');
                 await clearTokens();
                 response.httpStatus = 200;
             }

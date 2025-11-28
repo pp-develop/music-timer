@@ -1,4 +1,4 @@
-import { fetchWithRetry } from '../../../lib/axos';
+import { fetchWithRetry } from '../../../../lib/axos';
 
 /**
  * お気に入りトラックの初期化

@@ -10,10 +10,10 @@ import {
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { authz } from '../api/auth'
-import { t } from '../../../locales/i18n';
-import { useAuth } from "../../../hooks/useAuth";
+import { t } from '../../../../locales/i18n';
+import { useAuth } from "../../../../hooks/useAuth";
 import ReactGA from 'react-ga4';
-import { handleApiError } from '../../../utils/errorHandler';
+import { handleApiError } from '../../../../utils/errorHandler';
 
 export const LoginButton = () => {
     const [isLoading, setIsLoading] = useState(false);

@@ -1,4 +1,4 @@
-import { fetchWithRetry } from '../../../lib/axos';
+import { fetchWithRetry } from '../../../../lib/axos';
 
 type Response = {
     playlistId: string;
@@ -6,8 +6,9 @@ type Response = {
     errorCode?: string;
 };
 
-export function CreatePlaylistWithFavoriteTracks(minute: string, selectedArtistIds: any[]): Promise<Response> {
+export function CreatePlaylist(minute: string): Promise<Response> {
     return new Promise((resolve, reject) => {
+
         const createPlaylist: Response = {
             playlistId: "",
             httpStatus: 0
@@ -15,9 +16,7 @@ export function CreatePlaylistWithFavoriteTracks(minute: string, selectedArtistI
 
         fetchWithRetry('/spotify/playlists', 'POST', {
             data: {
-                'minute': parseInt(minute),
-                'includeFavoriteTracks': true,
-                'artistIds': selectedArtistIds,
+                'minute': parseInt(minute)
             },
             timeout: 16000
         })

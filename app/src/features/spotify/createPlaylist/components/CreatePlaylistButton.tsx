@@ -5,7 +5,7 @@ import {
     StyleSheet,
     Dimensions,
 } from 'react-native';
-import { t } from '../../../locales/i18n';
+import { t } from '../../../../locales/i18n';
 import { Svg, Path } from 'react-native-svg';
 const { width } = Dimensions.get('window');
 

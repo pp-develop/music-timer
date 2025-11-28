@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { StyleSheet, ActivityIndicator, View, TouchableOpacity } from 'react-native';
 import { logout as RequestLogout } from '../api/auth'
-import { t } from '../../../locales/i18n';
-import { useTheme } from '../../../config/ThemeContext';
-import { useAuth } from "../../../../src/hooks/useAuth";
+import { t } from '../../../../locales/i18n';
+import { useTheme } from '../../../../config/ThemeContext';
+import { useAuth } from "../../../../hooks/useAuth";
 import { router } from 'expo-router';
 import ReactGA from 'react-ga4';
 import { Svg, Path, Line, Polyline } from 'react-native-svg';
-import { handleApiError } from '../../../utils/errorHandler';
+import { handleApiError } from '../../../../utils/errorHandler';
 
 const LogoutIcon = () => (
     <Svg width={28} height={28} viewBox="0 0 24 24" stroke="#9CA3AF" strokeWidth={2}>

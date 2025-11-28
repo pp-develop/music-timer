@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, FC } from "react";
-import { auth } from '../features/auth/api/auth';
+import { auth } from '../features/spotify/auth/api/auth';
 import { Platform } from 'react-native';
 import { getAccessToken } from '../utils/tokenManager';
 
