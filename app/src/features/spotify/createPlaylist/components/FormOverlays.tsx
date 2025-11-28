@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, Animated, Dimensions, TouchableOpacity, Pressable, Image, Platform } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, Animated, Dimensions, TouchableOpacity, Pressable, Image, Platform, BackHandler } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 import { SpotifyEmbed } from '../../../../components/SpotifyEmbed';
 import { t } from '../../../../locales/i18n';
@@ -256,6 +256,23 @@ export const PlaylistSuccessScreen: React.FC<PlaylistSuccessScreenProps> = ({
     onClose,
     onOpenSpotify,
 }) => {
+    // Androidの戻るボタンを処理（Web/iOSでは実行されない）
+    useEffect(() => {
+        // Android以外では何もしない
+        if (Platform.OS !== 'android') return;
+        if (!isAnimating) return;
+
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            () => {
+                onClose();
+                return true; // イベントを消費（デフォルト動作を防ぐ）
+            }
+        );
+
+        return () => backHandler.remove();
+    }, [isAnimating, onClose]);
+
     if (!isAnimating) return null;
 
     return (
