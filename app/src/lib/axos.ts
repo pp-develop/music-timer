@@ -36,6 +36,20 @@ axios.interceptors.request.use(
   }
 );
 
+// Web版セッション切れハンドラー
+async function handleWebSessionExpired() {
+  try {
+    // セッションを削除してホームへリダイレクト
+    await axios.delete('/auth/web/session');
+  } catch (e) {
+    console.error('Failed to delete session:', e);
+  } finally {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/';
+    }
+  }
+}
+
 // リトライ設定
 axiosRetry(axios, {
   retries: MAX_RETRIES, // 最大リトライ回数
@@ -44,31 +58,36 @@ axiosRetry(axios, {
     return retryCount * 1000;
   },
   retryCondition: async (error) => {
-    // トークンがリフレッシュされた場合はリトライしない
-    if (tokenRefreshed) {
-      // プラットフォームごとに異なる処理
-      if (Platform.OS === 'web') {
-        await axios.delete('/auth/web/session');
-        window.location.href = '/';
-      } else {
-        await clearTokens();
-      }
-      return false;
-    }
-
     const status = error.response?.status;
     const isTimeout = error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT';
     const isServiceUnavailable = status === 502 || status === 503 || status === 504;
 
-    // タイムアウトとサービス起動エラーを追加
+    // 401エラーの場合
+    if (status === 401) {
+      // Web版: セッション切れなのでリトライせず、即座にログアウト
+      if (Platform.OS === 'web') {
+        await handleWebSessionExpired();
+        return false; // リトライしない
+      }
+
+      // Native版: トークンリフレッシュを試みるのでリトライする
+      if (!tokenRefreshed) {
+        return true;
+      } else {
+        // リフレッシュ失敗済みの場合はログアウト
+        await clearTokens();
+        return false;
+      }
+    }
+
+    // タイムアウトとサービス起動エラー
     return isTimeout ||
       isServiceUnavailable ||
       axiosRetry.isNetworkOrIdempotentRequestError(error) ||
-      status === 401 ||
       status === 500;
   },
   onRetry: async (retryCount, error, requestConfig) => {
-    // 401 エラーの場合にトークンを更新
+    // 401 エラーの場合（Native版のみ到達）
     if (error.response && error.response?.status === 401) {
       if (!tokenRefreshed) {
         console.log(`Retry refresh auth token`);
@@ -88,7 +107,7 @@ axiosRetry(axios, {
 });
 
 // リクエストのラッパー関数
-export async function fetchWithRetry(url, method = 'GET', config = {}) {
+export async function fetchWithRetry(url: string, method: string = 'GET', config: any = {}) {
   try {
     const response = await axios({ url, method, ...config });
     return response;
@@ -98,46 +117,38 @@ export async function fetchWithRetry(url, method = 'GET', config = {}) {
   }
 }
 
-// トークンリフレッシュ関数（プラットフォームごとに分岐）
+// トークンリフレッシュ関数（Native専用）
 async function refreshAuthToken() {
   tokenRefreshed = true;
 
   try {
-    if (Platform.OS === 'web') {
-      // Web: セッションベース認証のリフレッシュ（既存の処理）
-      await axios.get('/auth/web/status');
-    } else {
-      // Native: JWTトークンのリフレッシュ
-      const refreshToken = await getRefreshToken();
+    // Native: JWTトークンのリフレッシュ
+    const refreshToken = await getRefreshToken();
 
-      if (!refreshToken) {
-        throw new Error('No refresh token available');
-      }
-
-      // トークンが期限切れかチェック
-      const expired = await isTokenExpired();
-      if (!expired) {
-        tokenRefreshed = false; // まだ有効なのでフラグをリセット
-        return;
-      }
-
-      // リフレッシュエンドポイントを呼び出し
-      const response = await axios.post('/auth/native/refresh', {
-        refresh_token: refreshToken,
-      });
-
-      const newTokenPair = response.data;
-      await saveTokens(newTokenPair);
-
-      tokenRefreshed = false; // 成功したのでフラグをリセット
-      console.log('Token refreshed successfully');
+    if (!refreshToken) {
+      throw new Error('No refresh token available');
     }
+
+    // トークンが期限切れかチェック
+    const expired = await isTokenExpired();
+    if (!expired) {
+      tokenRefreshed = false; // まだ有効なのでフラグをリセット
+      return;
+    }
+
+    // リフレッシュエンドポイントを呼び出し
+    const response = await axios.post('/auth/native/refresh', {
+      refresh_token: refreshToken,
+    });
+
+    const newTokenPair = response.data;
+    await saveTokens(newTokenPair);
+
+    tokenRefreshed = false; // 成功したのでフラグをリセット
+    console.log('Token refreshed successfully');
   } catch (error) {
     console.error('Token refresh failed:', error);
-    if (Platform.OS !== 'web') {
-      await clearTokens();
-    }
-    // エラーをスローしない: retryCondition で tokenRefreshed === true が検出され、
-    // プラットフォーム別のログアウト処理（Web: セッション削除+リダイレクト、Native: トークンクリア）が実行される
+    await clearTokens();
+    // tokenRefreshed は true のまま（retryCondition でログアウト処理が実行される）
   }
 }
