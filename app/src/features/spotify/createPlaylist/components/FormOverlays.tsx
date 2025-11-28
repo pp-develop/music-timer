@@ -344,7 +344,7 @@ export const PlaylistSuccessScreen: React.FC<PlaylistSuccessScreenProps> = ({
                 {({ pressed }) => (
                     <>
                         <Image
-                            source={require('../../../../assets/images/spotify-icon.png')}
+                            source={require('../../../../../assets/images/spotify-icon.png')}
                             style={{
                                 width: 25,
                                 height: 25,
