@@ -17,8 +17,8 @@ export function authz(): Promise<AuthzResponse> {
 
         // プラットフォームに応じてエンドポイントを切り替え
         const endpoint = Platform.OS === 'web'
-            ? '/spotify/auth/web/authz-url'     // Web: Cookie認証
-            : '/spotify/auth/native/authz-url'; // Native: JWT認証
+            ? '/soundcloud/auth/web/authz-url'     // Web: Cookie認証
+            : '/soundcloud/auth/native/authz-url'; // Native: JWT認証
 
         fetchWithRetry(endpoint)
             .then(function (res) {
@@ -48,8 +48,8 @@ export function auth(): Promise<AuthStatusResponse> {
 
         // プラットフォームに応じてエンドポイントを切り替え
         const endpoint = Platform.OS === 'web'
-            ? '/spotify/auth/web/status'     // Web: Cookie認証
-            : '/spotify/auth/native/status'; // Native: JWT認証
+            ? '/soundcloud/auth/web/status'     // Web: Cookie認証
+            : '/soundcloud/auth/native/status'; // Native: JWT認証
 
         fetchWithRetry(endpoint, 'GET')
             .then(function (res) {
@@ -76,12 +76,12 @@ export function logout(): Promise<Response> {
             // プラットフォームに応じてログアウト処理を切り替え
             if (Platform.OS === 'web') {
                 // Web: セッション削除
-                const res = await fetchWithRetry('/spotify/auth/web/session', 'DELETE');
+                const res = await fetchWithRetry('/soundcloud/auth/web/session', 'DELETE');
                 response.httpStatus = res.status;
             } else {
                 // Native: ローカルのトークンをクリア
                 const { clearTokens } = await import('../../../../utils/tokenManager');
-                await clearTokens('spotify');
+                await clearTokens('soundcloud');
                 response.httpStatus = 200;
             }
             resolve(response);

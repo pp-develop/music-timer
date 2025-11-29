@@ -1,26 +1,54 @@
 /**
- * 互換性レイヤー: useAuth.tsx
+ * 統一的な認証プロバイダー
  *
- * このファイルは既存のコードとの互換性を保つために存在します。
- * 実際の実装はuseSpotifyAuth.tsxにあります。
- *
- * 現在、Spotify認証のみサポートしているため、useAuth === useSpotifyAuth です。
- * 将来的にSoundCloudなど他のサービスを追加する際は、
- * このファイルでサービスを切り替えるロジックを実装するか、
- * 各コンポーネントで明示的にuseSpotifyAuth/useSoundCloudAuthを使用してください。
+ * パスに基づいて必要な認証プロバイダーのみをマウントし、
+ * 無駄なAPIリクエストを削減します。
  */
 
-export {
-  useSpotifyAuth as useAuth,
-  SpotifyAuthProvider as AuthProvider,
-  type SpotifyAuthContextProps as AuthContextProps
-} from './useSpotifyAuth';
+import React, { ReactNode, FC } from 'react';
+import { usePathname } from 'expo-router';
+import { SpotifyAuthProvider } from './useSpotifyAuth';
+import { SoundCloudAuthProvider } from './useSoundCloudAuth';
+
+interface AuthProviderProps {
+  children: ReactNode;
+}
 
 /**
- * 注意:
- * index.tsx などのログイン画面では、まだこのuseAuthを使用していますが、
- * これは現状Spotify認証のみなので問題ありません。
- *
- * 将来的にマルチサービス対応する場合は、ログイン画面を
- * サービス選択画面に変更し、各サービスの認証を独立させる必要があります。
+ * パスに基づいて適切な認証プロバイダーをマウント
  */
+export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
+  const pathname = usePathname();
+
+  // ホーム画面では両方の認証状態が必要（サービス選択画面）
+  const isHomePage = pathname === '/' || pathname === '/index';
+  const isSpotifyPage = pathname.startsWith('/spotify');
+  const isSoundCloudPage = pathname.startsWith('/soundcloud');
+
+  const needsSpotify = isHomePage || isSpotifyPage;
+  const needsSoundCloud = isHomePage || isSoundCloudPage;
+
+  // 両方必要（ホーム画面）
+  if (needsSpotify && needsSoundCloud) {
+    return (
+      <SpotifyAuthProvider>
+        <SoundCloudAuthProvider>
+          {children}
+        </SoundCloudAuthProvider>
+      </SpotifyAuthProvider>
+    );
+  }
+
+  // Spotifyのみ
+  if (needsSpotify) {
+    return <SpotifyAuthProvider>{children}</SpotifyAuthProvider>;
+  }
+
+  // SoundCloudのみ
+  if (needsSoundCloud) {
+    return <SoundCloudAuthProvider>{children}</SoundCloudAuthProvider>;
+  }
+
+  // 認証不要（エラーページなど）
+  return <>{children}</>;
+};

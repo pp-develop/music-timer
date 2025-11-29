@@ -3,7 +3,7 @@ import { StyleSheet, ActivityIndicator, View, TouchableOpacity } from 'react-nat
 import { logout as RequestLogout } from '../api/auth'
 import { t } from '../../../../locales/i18n';
 import { useTheme } from '../../../../config/ThemeContext';
-import { useSpotifyAuth } from "../../../../hooks/useSpotifyAuth";
+import { useSoundCloudAuth } from "../../../../hooks/useSoundCloudAuth";
 import { router } from 'expo-router';
 import ReactGA from 'react-ga4';
 import { Svg, Path, Line, Polyline } from 'react-native-svg';
@@ -20,14 +20,14 @@ const LogoutIcon = () => (
 export const LogoutButton = () => {
     const theme = useTheme()
     const [isLoading, setIsLoading] = useState(false);
-    const { setAuthState } = useSpotifyAuth();
+    const { setAuthState } = useSoundCloudAuth();
 
     const handlePress = async () => {
         try {
             ReactGA.event({
                 category: 'User Interaction',
                 action: 'Click',
-                label: 'Logout Button'
+                label: 'SoundCloud Logout Button'
             });
 
             setIsLoading(true);
@@ -39,7 +39,7 @@ export const LogoutButton = () => {
 
             router.replace("/");
         } catch (error: any) {
-            console.error('Logout failed:', error);
+            console.error('SoundCloud logout failed:', error);
 
             handleApiError(error);
         }

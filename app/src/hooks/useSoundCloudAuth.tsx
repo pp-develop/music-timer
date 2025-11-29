@@ -1,17 +1,17 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, FC } from "react";
-import { auth } from '../features/spotify/auth/api/auth';
+import { auth } from '../features/soundcloud/auth/api/auth';
 import { Platform } from 'react-native';
 import { getAccessToken } from '../utils/tokenManager';
 
-export interface SpotifyAuthContextProps {
+export interface SoundCloudAuthContextProps {
   loading: boolean;
   isAuthenticated: boolean;
   setAuthState: (state: boolean) => void;
 }
 
-const SpotifyAuthContext = createContext<SpotifyAuthContextProps | null>(null);
+const SoundCloudAuthContext = createContext<SoundCloudAuthContextProps | null>(null);
 
-const useProvideSpotifyAuth = () => {
+const useProvideSoundCloudAuth = () => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -20,7 +20,7 @@ const useProvideSpotifyAuth = () => {
       try {
         // ネイティブの場合はトークンの存在をまずチェック
         if (Platform.OS !== 'web') {
-          const token = await getAccessToken('spotify');
+          const token = await getAccessToken('soundcloud');
           if (token) {
             // トークンが存在する場合は認証済みと判断
             setIsAuthenticated(true);
@@ -34,7 +34,7 @@ const useProvideSpotifyAuth = () => {
         setIsAuthenticated(response.authenticated);
       } catch (error: any) {
         // エラー時は何もしない（isAuthenticatedはfalseのまま）
-        console.error('Spotify auth check failed:', error);
+        console.error('SoundCloud auth check failed:', error);
       } finally {
         setLoading(false);
       }
@@ -47,24 +47,24 @@ const useProvideSpotifyAuth = () => {
   return { loading, isAuthenticated, setAuthState };
 };
 
-interface SpotifyAuthProviderProps {
+interface SoundCloudAuthProviderProps {
   children: ReactNode;
 }
 
-export const SpotifyAuthProvider: FC<SpotifyAuthProviderProps> = ({ children }) => {
-  const auth = useProvideSpotifyAuth();
+export const SoundCloudAuthProvider: FC<SoundCloudAuthProviderProps> = ({ children }) => {
+  const auth = useProvideSoundCloudAuth();
 
   return (
-    <SpotifyAuthContext.Provider value={auth}>
+    <SoundCloudAuthContext.Provider value={auth}>
       {children}
-    </SpotifyAuthContext.Provider>
+    </SoundCloudAuthContext.Provider>
   );
 };
 
-export const useSpotifyAuth = (): SpotifyAuthContextProps => {
-  const context = useContext(SpotifyAuthContext);
+export const useSoundCloudAuth = (): SoundCloudAuthContextProps => {
+  const context = useContext(SoundCloudAuthContext);
   if (!context) {
-    throw new Error("useSpotifyAuth must be used within a SpotifyAuthProvider");
+    throw new Error("useSoundCloudAuth must be used within a SoundCloudAuthProvider");
   }
   return context;
 };
