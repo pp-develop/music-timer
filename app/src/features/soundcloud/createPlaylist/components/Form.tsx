@@ -29,6 +29,7 @@ const { width } = Dimensions.get('window');
 export const Form = () => {
     const [httpStatus, setHttpStatus] = useState(0);
     const [playlistId, setPlaylistId] = useState("");
+    const [secretToken, setSecretToken] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const { setShowDeleteButton } = useContext(PlaylistContext);
     const [containerWidth, setContainerWidth] = useState(0);
@@ -67,6 +68,7 @@ export const Form = () => {
 
             if (response.httpStatus === 201) {
                 setPlaylistId(response.playlistId);
+                setSecretToken(response.secretToken || "");
                 setTimeout(() => {
                     setShowDeleteButton(true);
                 }, 2000);
@@ -149,6 +151,7 @@ export const Form = () => {
             <PlaylistSuccessScreen
                 isAnimating={isAnimating}
                 playlistId={playlistId}
+                secretToken={secretToken}
                 translateY={animatedValues.playlistScreenTranslateY}
                 swipeIndicatorOpacity={animatedValues.swipeIndicatorOpacity}
                 swipeIndicatorTranslateY={animatedValues.swipeIndicatorTranslateY}

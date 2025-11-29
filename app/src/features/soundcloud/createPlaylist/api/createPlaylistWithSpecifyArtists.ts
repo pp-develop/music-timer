@@ -2,6 +2,7 @@ import { fetchWithRetry } from '../../../../lib/axos';
 
 type Response = {
     playlistId: string;
+    secretToken: string;
     httpStatus: number;
     errorCode?: string;
 };
@@ -10,6 +11,7 @@ export function CreatePlaylistWithSpecifyArtists(minute: string, selectedArtistI
     return new Promise((resolve, reject) => {
         const createPlaylist: Response = {
             playlistId: "",
+            secretToken: "",
             httpStatus: 0
         };
 
@@ -23,6 +25,7 @@ export function CreatePlaylistWithSpecifyArtists(minute: string, selectedArtistI
             .then(function (response) {
                 if (response.status == 201) {
                     createPlaylist.playlistId = response.data.playlist_id
+                    createPlaylist.secretToken = response.data.secret_token || ""
                     createPlaylist.httpStatus = response.status
                 }
                 resolve(createPlaylist)

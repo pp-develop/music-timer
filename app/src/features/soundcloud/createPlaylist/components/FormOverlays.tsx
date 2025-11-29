@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Animated, Dimensions, TouchableOpacity, Pressable, Image, Platform, BackHandler } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 import { t } from '../../../../locales/i18n';
+import { SoundCloudEmbed } from '../../../../components/SoundCloudEmbed';
 
 const { height } = Dimensions.get('window');
 
@@ -199,6 +200,7 @@ export const ErrorOverlay: React.FC<ErrorOverlayProps> = ({ opacity, errorMessag
 interface PlaylistSuccessScreenProps {
     isAnimating: boolean;
     playlistId: string;
+    secretToken?: string;
     translateY: Animated.Value;
     swipeIndicatorOpacity: Animated.Value;
     swipeIndicatorTranslateY: Animated.Value;
@@ -214,6 +216,7 @@ interface PlaylistSuccessScreenProps {
 export const PlaylistSuccessScreen: React.FC<PlaylistSuccessScreenProps> = ({
     isAnimating,
     playlistId,
+    secretToken,
     translateY,
     swipeIndicatorOpacity,
     swipeIndicatorTranslateY,
@@ -284,14 +287,14 @@ export const PlaylistSuccessScreen: React.FC<PlaylistSuccessScreenProps> = ({
 
             <Text style={styles.playlistTitle}>{t('dialog.createPlaylist.title')}</Text>
 
-            {/* SoundCloudプレイリスト表示エリア */}
+            {/* SoundCloudプレイリスト埋め込み */}
             <View style={styles.soundcloudContainer}>
-                <View style={styles.soundcloudPlaceholder}>
-                    <Svg width={64} height={64} viewBox="0 0 24 24" fill="#FF5500">
-                        <Path d="M7.803 5.731c.589 0 1.119.236 1.508.625.391.39.627.918.627 1.508 0 .59-.236 1.117-.627 1.508-.39.39-.919.625-1.508.625-.589 0-1.119-.236-1.508-.625-.391-.391-.627-.918-.627-1.508 0-.59.236-1.117.627-1.508.39-.39.919-.625 1.508-.625zm-5.803 8.058c0-2.177 1.764-3.943 3.941-3.943s3.941 1.766 3.941 3.943c0 2.178-1.764 3.943-3.941 3.943s-3.941-1.765-3.941-3.943zm15.055-.005c0-1.215.984-2.199 2.199-2.199s2.199.984 2.199 2.199c0 1.214-.984 2.199-2.199 2.199s-2.199-.985-2.199-2.199zm-3.396 0c0-.806.652-1.458 1.458-1.458s1.458.652 1.458 1.458c0 .805-.652 1.458-1.458 1.458s-1.458-.653-1.458-1.458zm-11.455-5.277c0-.533.433-.966.966-.966s.966.433.966.966c0 .533-.433.966-.966.966s-.966-.433-.966-.966z" />
-                    </Svg>
-                    <Text style={styles.soundcloudText}>Playlist ID: {playlistId}</Text>
-                </View>
+                <SoundCloudEmbed
+                    playlistId={playlistId}
+                    secretToken={secretToken}
+                    width="100%"
+                    height={300}
+                />
                 <View
                     {...soundcloudPanResponder.panHandlers}
                     style={[styles.soundcloudOverlay, { pointerEvents: "none" }]}
