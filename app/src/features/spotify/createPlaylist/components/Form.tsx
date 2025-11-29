@@ -171,7 +171,7 @@ export const Form = () => {
                 swipeIndicatorOpacity={animatedValues.swipeIndicatorOpacity}
                 swipeIndicatorTranslateY={animatedValues.swipeIndicatorTranslateY}
                 panResponder={panHandlers.panResponder}
-                spotifyPanResponder={panHandlers.spotifyPanResponder}
+                embedPanResponder={panHandlers.embedPanResponder}
                 onClose={controls.stopAnimation}
                 onOpenSpotify={handleOpenSpotify}
             />

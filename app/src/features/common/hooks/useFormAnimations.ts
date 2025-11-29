@@ -87,9 +87,9 @@ export const useFormAnimations = (
         });
     };
 
-    // メインPanResponderとSpotifyエリア用PanResponderを同じ設定で作成
+    // メインPanResponderと埋め込みエリア用PanResponderを同じ設定で作成
     const panResponder = useRef(createSwipePanResponder()).current;
-    const spotifyPanResponder = useRef(createSwipePanResponder()).current;
+    const embedPanResponder = useRef(createSwipePanResponder()).current;
 
     // ローディング開始関数
     const startLoading = () => {
@@ -238,7 +238,7 @@ export const useFormAnimations = (
         },
         panHandlers: {
             panResponder,
-            spotifyPanResponder,
+            embedPanResponder,
         },
         controls: {
             startAnimation,

@@ -205,7 +205,7 @@ interface PlaylistSuccessScreenProps {
     swipeIndicatorOpacity: Animated.Value;
     swipeIndicatorTranslateY: Animated.Value;
     panResponder: any;
-    soundcloudPanResponder: any;
+    embedPanResponder: any;
     onClose: () => void;
     onOpenSoundCloud: () => void;
 }
@@ -221,7 +221,7 @@ export const PlaylistSuccessScreen: React.FC<PlaylistSuccessScreenProps> = ({
     swipeIndicatorOpacity,
     swipeIndicatorTranslateY,
     panResponder,
-    soundcloudPanResponder,
+    embedPanResponder,
     onClose,
     onOpenSoundCloud,
 }) => {
@@ -296,7 +296,7 @@ export const PlaylistSuccessScreen: React.FC<PlaylistSuccessScreenProps> = ({
                     height={300}
                 />
                 <View
-                    {...soundcloudPanResponder.panHandlers}
+                    {...embedPanResponder.panHandlers}
                     style={[styles.soundcloudOverlay, { pointerEvents: "none" }]}
                 />
             </View>

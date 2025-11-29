@@ -156,7 +156,7 @@ export const Form = () => {
                 swipeIndicatorOpacity={animatedValues.swipeIndicatorOpacity}
                 swipeIndicatorTranslateY={animatedValues.swipeIndicatorTranslateY}
                 panResponder={panHandlers.panResponder}
-                soundcloudPanResponder={panHandlers.spotifyPanResponder}
+                embedPanResponder={panHandlers.embedPanResponder}
                 onClose={controls.stopAnimation}
                 onOpenSoundCloud={handleOpenSoundCloud}
             />
