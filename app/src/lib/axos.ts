@@ -2,9 +2,14 @@ import Axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { API_URL, BASE_URL } from '../config';
 import { Platform } from 'react-native';
+import { router } from 'expo-router';
 import { getAccessToken, getRefreshToken, saveTokens, isTokenExpired, clearTokens } from '../utils/tokenManager';
-import { MAX_RETRIES } from '../utils/errorHandler';
 import { authEvents, AUTH_EVENTS } from '../utils/authEvents';
+
+/**
+ * axios-retryの最大リトライ回数
+ */
+export const MAX_RETRIES = 3;
 
 let tokenRefreshed = false; // トークンが更新されたかどうかを示すフラグ
 
@@ -33,6 +38,19 @@ axios.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// レスポンスインターセプター（リトライ完了後のエラー処理）
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // リトライが完了した場合はエラー画面へリダイレクト
+    const retryCount = error?.config?.['axios-retry']?.retryCount || 0;
+    if (retryCount >= MAX_RETRIES) {
+      router.replace('/error');
+    }
     return Promise.reject(error);
   }
 );
