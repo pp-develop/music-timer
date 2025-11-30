@@ -27,7 +27,7 @@ export default function ErrorPage() {
       <Text style={styles.errorCode}>500</Text>
       <Text style={styles.errorMessage}>{t('error.500.message')}</Text>
       <Text style={styles.errorDescription}>{t('error.500.description')}</Text>
-      <Text style={{ color: 'blue' }} onPress={() => router.push('/')}>{t('error.500.home.back')}</Text>
+      <Text style={styles.homeLink} onPress={() => router.push('/')}>{t('error.500.home.back')}</Text>
     </View>
   );
 }
@@ -37,22 +37,32 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    height: 500
+    backgroundColor: '#111827',
   },
   errorCode: {
     fontSize: 48,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#FFFFFF',
   },
   errorMessage: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#FFFFFF',
   },
   errorDescription: {
     fontSize: 16,
     textAlign: 'center',
     paddingHorizontal: 30,
-    marginBottom: 10
+    marginBottom: 20,
+    color: '#9CA3AF',
+  },
+  homeLink: {
+    fontSize: 16,
+    color: '#60A5FA',
+    fontWeight: 'bold',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
   },
 });
