@@ -1,6 +1,7 @@
 import { fetchWithRetry, axios } from '../../../../lib/axos';
 import { Response } from '../types/index';
 import { Platform } from 'react-native';
+import { authEvents, AUTH_EVENTS } from '../../../../utils/authEvents';
 
 export type AuthzResponse = {
     authzUrl: string;
@@ -75,17 +76,18 @@ export function logout(): Promise<Response> {
         try {
             // プラットフォームに応じてログアウト処理を切り替え
             if (Platform.OS === 'web') {
-                // Web: セッション削除
+                // Web: セッション削除 + イベント発行
                 const res = await fetchWithRetry('/spotify/auth/web/session', 'DELETE');
                 response.httpStatus = res.status;
+                authEvents.emit(AUTH_EVENTS.CLEARED);
             } else {
-                // Native: ローカルのトークンをクリア
+                // Native: ローカルのトークンをクリア（clearTokens内でイベント発行）
                 const { clearTokens } = await import('../../../../utils/tokenManager');
                 await clearTokens();
                 response.httpStatus = 200;
             }
             resolve(response);
-        } catch (error) {
+        } catch (error: any) {
             response.httpStatus = error.response?.status || 500;
             reject(response);
         }

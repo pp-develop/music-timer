@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode, FC } 
 import { auth } from '../features/spotify/auth/api/auth';
 import { Platform } from 'react-native';
 import { getAccessToken } from '../utils/tokenManager';
+import { authEvents, AUTH_EVENTS } from '../utils/authEvents';
 
 export interface SpotifyAuthContextProps {
   loading: boolean;
@@ -14,6 +15,18 @@ const SpotifyAuthContext = createContext<SpotifyAuthContextProps | null>(null);
 const useProvideSpotifyAuth = () => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // 認証クリアイベントをリッスン
+  useEffect(() => {
+    const handleAuthCleared = () => {
+      setIsAuthenticated(false);
+    };
+
+    authEvents.on(AUTH_EVENTS.CLEARED, handleAuthCleared);
+    return () => {
+      authEvents.off(AUTH_EVENTS.CLEARED, handleAuthCleared);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchAuth = async () => {

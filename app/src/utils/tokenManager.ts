@@ -1,5 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
-import { router } from 'expo-router';
+import { authEvents, AUTH_EVENTS } from './authEvents';
 
 const ACCESS_TOKEN_KEY = 'access_token';
 const REFRESH_TOKEN_KEY = 'refresh_token';
@@ -62,18 +62,16 @@ export async function isTokenExpired(): Promise<boolean> {
 }
 
 // トークンのクリア（ログアウト時、ネイティブのみ）
+// リダイレクトはContextの状態変更により_layout.tsxで行われる
 export async function clearTokens(): Promise<void> {
   try {
     await SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY);
     await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY);
     await SecureStore.deleteItemAsync(TOKEN_EXPIRY_KEY);
-
-    // トークンをクリアしたらログイン画面へリダイレクト
-    // 認証が必要な画面から自動的にログアウトさせる
-    router.replace('/');
   } catch (error) {
     console.error('Failed to clear tokens:', error);
-    // エラーが発生してもログイン画面へリダイレクト
-    router.replace('/');
+  } finally {
+    // 認証クリアイベントを発行（useSpotifyAuthがリッスンして状態を更新）
+    authEvents.emit(AUTH_EVENTS.CLEARED);
   }
 }

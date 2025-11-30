@@ -25,15 +25,19 @@ export const isRetryExhausted = (error: any): boolean => {
  *   handleApiError(error);
  * }
  * ```
+ *
+ * 認証エラー（401）のリダイレクトは以下のフローで処理される:
+ * 1. axos.ts で clearTokens() が呼ばれる
+ * 2. tokenManager.ts が auth:cleared イベントを発行
+ * 3. useSpotifyAuth がイベントを受け取り isAuthenticated=false に更新
+ * 4. _layout.tsx が isAuthenticated の変更を検知してリダイレクト
  */
 export const handleApiError = (error: any) => {
   const status = error?.response?.status || error?.httpStatus;
 
-  // 認証エラー（303, 401）→ ホームへ
-  // router.replace("/")でホームに戻ると、useAuthが再実行され、
-  // 認証チェックAPIが呼ばれて自動的にisAuthenticated=falseになる
+  // 認証エラー（303, 401）は axos.ts → tokenManager → useSpotifyAuth → _layout.tsx で処理
+  // ここでは何もしない（イベントベースで処理される）
   if (status === 303 || status === 401) {
-    router.replace("/");
     return;
   }
 
