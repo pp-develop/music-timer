@@ -34,15 +34,15 @@ const useProvideSpotifyAuth = () => {
         // ネイティブの場合はトークンの存在をまずチェック
         if (Platform.OS !== 'web') {
           const token = await getAccessToken();
-          if (token) {
-            // トークンが存在する場合は認証済みと判断
-            setIsAuthenticated(true);
+          if (!token) {
+            // トークンがない場合は未認証（無駄なAPI呼び出しを避ける）
+            setIsAuthenticated(false);
             setLoading(false);
             return;
           }
         }
 
-        // Web または ネイティブでトークンがない場合はサーバーに確認
+        // Web・Native共通: サーバーでSpotify認証状態を確認
         const response = await auth();
         setIsAuthenticated(response.authenticated);
       } catch (error: any) {
