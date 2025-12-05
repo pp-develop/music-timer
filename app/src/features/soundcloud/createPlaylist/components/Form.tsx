@@ -10,11 +10,13 @@ import {
 import { Header } from "../../../../components/Parts/Header";
 import { DeletePlaylist } from "../../deletePlaylist/components/DeletePlaylistButton";
 import { CreatePlaylistButton } from "./CreatePlaylistButton";
+import { SelectFollowedArtists } from "./SelectFollowedArtists";
 import { LoadingOverlay, ErrorOverlay, PlaylistSuccessScreen } from "./FormOverlays";
 import { Controller } from 'react-hook-form';
 import { t } from '../../../../locales/i18n';
 import PlaylistContext from '../../deletePlaylist/hooks/useContext';
 import { CreatePlaylist } from "../api/createPlaylist";
+import { CreatePlaylistWithSpecifyArtists } from "../api/createPlaylistWithSpecifyArtists";
 import { CreatePlaylistWithFavoriteTracks } from "../api/createPlaylistWithFavoriteTracks";
 import ReactGA from 'react-ga4';
 import { MAX_INPUT_WIDTH } from '../../../../config';
@@ -32,6 +34,7 @@ export const Form = () => {
     const [secretToken, setSecretToken] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const { setShowDeleteButton } = useContext(PlaylistContext);
+    const followedArtistsRef = useRef(null);
     const [containerWidth, setContainerWidth] = useState(0);
 
     // Animated Values
@@ -57,13 +60,25 @@ export const Form = () => {
                 value: minute
             });
 
-            const isFavoriteTracks = JSON.parse(await AsyncStorage.getItem('isFavoriteTracks') || 'false');
+            // アーティスト情報を並べ替える
+            if (followedArtistsRef.current) {
+                followedArtistsRef.current.sortArtists();
+            }
+
+            // ローカルストレージから選択されたアーティストIDを取得
+            let selectedArtistIds = await AsyncStorage.getItem('soundcloud_selectedIds');
+            // 取得した値が存在する場合はJSON形式から配列に変換
+            selectedArtistIds = selectedArtistIds ? JSON.parse(selectedArtistIds) : [];
+
+            const isFavoriteTracks = JSON.parse(await AsyncStorage.getItem('soundcloud_isFavoriteTracks') || 'false');
 
             let response;
             if (isFavoriteTracks) {
-                response = await CreatePlaylistWithFavoriteTracks(minute, []);
+                response = await CreatePlaylistWithFavoriteTracks(minute, selectedArtistIds);
+            } else if (selectedArtistIds && selectedArtistIds.length > 0) {
+                response = await CreatePlaylistWithSpecifyArtists(minute, selectedArtistIds);
             } else {
-                response = await CreatePlaylist(minute, []);
+                response = await CreatePlaylist(minute, selectedArtistIds);
             }
 
             if (response.httpStatus === 201) {
@@ -136,6 +151,8 @@ export const Form = () => {
                         />
                     </View>
                     {errors && <Text style={styles.errorText}>{errors.minute?.message}</Text>}
+
+                    <SelectFollowedArtists ref={followedArtistsRef} />
 
                     <View style={styles.buttonContainer}>
                         <CreatePlaylistButton
