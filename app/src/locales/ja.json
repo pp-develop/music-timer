@@ -34,6 +34,7 @@
   "error.not_enough_tracks": "トラック数が不足しています。再生時間を短くするか、アーティストを追加してください。",
   "error.no_favorite_tracks": "お気に入りのトラックがありません。Spotifyで曲にいいねをするか、アーティストを選択してください。",
   "error.tracks_not_found": "トラックが見つかりませんでした。条件を変更して再度お試しください。",
+  "error.artist_tracks_not_found": "選択したアーティストの曲が見つかりませんでした。他のアーティストを選択してください。",
   "error.spotify_rate_limit": "Spotify APIの利用上限に達しました。数分お待ちください。",
   "error.playlist_quota_exceeded": "プレイリスト作成上限に達しました。Spotifyで不要なプレイリストを削除してください。",
   "error.token_expired": "認証の有効期限が切れました。ページを更新して再度ログインしてください。",

@@ -18,6 +18,8 @@ import PlaylistContext from '../../deletePlaylist/hooks/useContext';
 import { CreatePlaylist } from "../api/createPlaylist";
 import { CreatePlaylistWithSpecifyArtists } from "../api/createPlaylistWithSpecifyArtists";
 import { CreatePlaylistWithFavoriteTracks } from "../api/createPlaylistWithFavoriteTracks";
+import { InitFavoriteTracksData, InitFollowedArtistsTracksData } from "../api/initTracksData";
+import { ErrorCodes } from "../../../../types/errorCodes";
 import ReactGA from 'react-ga4';
 import { MAX_INPUT_WIDTH } from '../../../../config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -71,26 +73,59 @@ export const Form = () => {
 
             const isFavoriteTracks = JSON.parse(await AsyncStorage.getItem('isFavoriteTracks') || 'false');
 
-            let response;
-            if (isFavoriteTracks) {
-                response = await CreatePlaylistWithFavoriteTracks(minute, selectedArtistIds);
-            } else if (selectedArtistIds && selectedArtistIds.length > 0) {
-                response = await CreatePlaylistWithSpecifyArtists(minute, selectedArtistIds)
-            }
-            else {
-                response = await CreatePlaylist(minute, selectedArtistIds);
+            // プレイリスト作成関数（エラー時もレスポンスを返す）
+            const executeCreatePlaylist = async () => {
+                try {
+                    if (isFavoriteTracks) {
+                        return await CreatePlaylistWithFavoriteTracks(minute, selectedArtistIds);
+                    } else if (selectedArtistIds && selectedArtistIds.length > 0) {
+                        return await CreatePlaylistWithSpecifyArtists(minute, selectedArtistIds);
+                    } else {
+                        return await CreatePlaylist(minute, selectedArtistIds);
+                    }
+                } catch (error: any) {
+                    return error; // rejectされたエラーオブジェクトをそのまま返す
+                }
+            };
+
+            let response = await executeCreatePlaylist();
+
+            // TRACKS_NOT_FOUNDの場合、サーバー側にトラックデータがキャッシュされていない可能性がある
+            // リクエストの種類に応じたinitを実行してデータを準備し、5秒後にリトライする
+            // ※ initの完了を待つと時間がかかりすぎるため、固定時間で待機する
+            // 2回目も失敗した場合は本当にトラックが存在しないため、文脈に応じたエラーメッセージを表示する
+            if (response.errorCode === ErrorCodes.TRACKS_NOT_FOUND) {
+                if (isFavoriteTracks) {
+                    InitFavoriteTracksData();
+                } else {
+                    InitFollowedArtistsTracksData();
+                }
+                await new Promise(resolve => setTimeout(resolve, 5000));
+                response = await executeCreatePlaylist();
             }
 
+            // 結果処理
+            setHttpStatus(response.httpStatus);
             if (response.httpStatus === 201) {
                 setPlaylistId(response.playlistId);
                 setTimeout(() => {
                     setShowDeleteButton(true);
                 }, 2000);
+                controls.startAnimation();
             } else {
-                showError(response.errorCode);
+                // 2回目のTRACKS_NOT_FOUNDは文脈に応じたエラーメッセージ
+                if (response.errorCode === ErrorCodes.TRACKS_NOT_FOUND) {
+                    if (isFavoriteTracks) {
+                        showError(ErrorCodes.NO_FAVORITE_TRACKS);
+                    } else if (selectedArtistIds?.length > 0) {
+                        showError(ErrorCodes.ARTIST_TRACKS_NOT_FOUND);
+                    } else {
+                        showError(response.errorCode);
+                    }
+                } else {
+                    showError(response.errorCode);
+                }
             }
-            setHttpStatus(response.httpStatus);
-            controls.startAnimation()
         } catch (error: any) {
             showError(error.errorCode);
             setHttpStatus(error.httpStatus);

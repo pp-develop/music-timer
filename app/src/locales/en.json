@@ -34,6 +34,7 @@
   "error.not_enough_tracks": "Not enough tracks. Please shorten the playback time or add more artists.",
   "error.no_favorite_tracks": "No favorite tracks found. Like songs on Spotify or select artists.",
   "error.tracks_not_found": "Tracks not found. Change your conditions and try again.",
+  "error.artist_tracks_not_found": "No tracks found for the selected artists. Please select other artists.",
   "error.spotify_rate_limit": "Spotify API usage limit reached. Please wait a few minutes.",
   "error.playlist_quota_exceeded": "Playlist creation limit reached. Delete unnecessary playlists on Spotify.",
   "error.token_expired": "Authentication expired. Refresh the page and log in again.",
