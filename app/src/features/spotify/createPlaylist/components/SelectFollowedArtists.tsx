@@ -319,41 +319,29 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                         Color: getRandomElement(colorsArray)
                     }));
                     setArtists(processedArtists);
-                }
 
-                // Load saved state
-                const currentArtistIds = new Set(processedArtists.map(a => a.ID));
+                    // Load saved state - フォロー解除されたアーティストを除去
+                    const currentArtistIds = new Set(processedArtists.map(a => a.ID));
 
-                // selectedIds: フォロー中のアーティストのみに絞り込み
-                const savedIds = await AsyncStorage.getItem('selectedIds');
-                if (savedIds) {
-                    const parsedIds: string[] = JSON.parse(savedIds);
+                    const savedIds = await AsyncStorage.getItem('selectedIds');
+                    const parsedIds: string[] = savedIds ? JSON.parse(savedIds) : [];
                     const validIds = parsedIds.filter(id => currentArtistIds.has(id));
                     setSelectedIds(validIds);
-                    // ゴーストIDが除去された場合は保存を更新
-                    if (validIds.length !== parsedIds.length) {
-                        AsyncStorage.setItem('selectedIds', JSON.stringify(validIds));
-                    }
-                }
+                    AsyncStorage.setItem('selectedIds', JSON.stringify(validIds));
 
-                // selectionCounts: フォロー中のアーティストのみに絞り込み
-                const savedCounts = await AsyncStorage.getItem('selectionCounts');
-                if (savedCounts) {
-                    const parsedCounts: Record<string, number> = JSON.parse(savedCounts);
-                    const validCounts: Record<string, number> = {};
-                    for (const id of Object.keys(parsedCounts)) {
-                        if (currentArtistIds.has(id)) {
-                            validCounts[id] = parsedCounts[id];
-                        }
-                    }
+                    const savedCounts = await AsyncStorage.getItem('selectionCounts');
+                    const parsedCounts: Record<string, number> = savedCounts ? JSON.parse(savedCounts) : {};
+                    const validCounts = Object.fromEntries(
+                        Object.entries(parsedCounts).filter(([id]) => currentArtistIds.has(id))
+                    );
                     setSelectionCounts(validCounts);
-                    // ゴーストIDが除去された場合は保存を更新
-                    if (Object.keys(validCounts).length !== Object.keys(parsedCounts).length) {
-                        AsyncStorage.setItem('selectionCounts', JSON.stringify(validCounts));
+                    AsyncStorage.setItem('selectionCounts', JSON.stringify(validCounts));
+
+                    const savedFavorite = await AsyncStorage.getItem('isFavoriteTracks');
+                    if (savedFavorite) {
+                        setIsFavoriteSelected(JSON.parse(savedFavorite));
                     }
                 }
-
-                setIsFavoriteSelected(JSON.parse(await AsyncStorage.getItem('isFavoriteTracks') || 'false'));
             } catch (err) {
                 setError('Network error');
             } finally {
