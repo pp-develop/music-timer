@@ -4,7 +4,7 @@ import { fetchWithRetry } from '../../../../lib/axos';
  * お気に入りトラックの初期化
  */
 export async function InitFavoriteTracksData() {
-    await fetchWithRetry('/soundcloud/tracks/init/favorites', 'POST', {
+    await fetchWithRetry('/api/soundcloud/tracks/init/favorites', 'POST', {
         timeout: 0
     });
 }
@@ -13,7 +13,7 @@ export async function InitFavoriteTracksData() {
  * フォローアーティストのトラック初期化
  */
 export async function InitFollowedArtistsTracksData() {
-    await fetchWithRetry('/soundcloud/tracks/init/followed-artists', 'POST', {
+    await fetchWithRetry('/api/soundcloud/tracks/init/followed-artists', 'POST', {
         timeout: 0
     });
 }

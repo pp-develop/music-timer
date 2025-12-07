@@ -12,7 +12,7 @@ export function getPlaylist(): Promise<Response> {
             httpStatus: 0
         };
 
-        fetchWithRetry('/soundcloud/playlists', 'GET')
+        fetchWithRetry('/api/soundcloud/playlists', 'GET')
             .then(function (res) {
                 response.playlistIDs = res.data
                 response.httpStatus = res.status

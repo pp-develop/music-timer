@@ -1,5 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
-import { authEvents, AUTH_EVENTS } from './authEvents';
+import { authEvents, AUTH_CLEARED_EVENTS } from './authEvents';
 
 export type ServiceType = 'spotify' | 'soundcloud';
 
@@ -72,7 +72,7 @@ export async function clearTokens(service: ServiceType): Promise<void> {
   } catch (error) {
     console.error('Failed to clear tokens:', error);
   } finally {
-    // 認証クリアイベントを発行（useSpotifyAuthがリッスンして状態を更新）
-    authEvents.emit(AUTH_EVENTS.CLEARED);
+    // サービス別の認証クリアイベントを発行
+    authEvents.emit(AUTH_CLEARED_EVENTS[service]);
   }
 }

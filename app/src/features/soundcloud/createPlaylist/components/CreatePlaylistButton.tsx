@@ -15,15 +15,23 @@ const PlaylistIcon = () => (
     </Svg>
 );
 
-export const CreatePlaylistButton = ({ minute, createPlaylist }) => {
+interface CreatePlaylistButtonProps {
+    minute: number | string;
+    hasSelection: boolean;
+    createPlaylist: () => void;
+}
+
+export const CreatePlaylistButton = ({ minute, hasSelection, createPlaylist }: CreatePlaylistButtonProps) => {
     const handlePress = () => {
         createPlaylist();
     };
 
+    const isDisabled = !minute || !hasSelection;
+
     return (
         <TouchableOpacity
-            style={[styles.createButton, (!minute) && styles.buttonDisabled]}
-            disabled={!minute}
+            style={[styles.createButton, isDisabled && styles.buttonDisabled]}
+            disabled={isDisabled}
             onPress={handlePress}
         >
             <PlaylistIcon />

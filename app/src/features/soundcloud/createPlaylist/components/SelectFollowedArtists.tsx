@@ -212,11 +212,34 @@ const EmptyState = () => (
     </View>
 );
 
-export const SelectFollowedArtists = forwardRef((props, ref) => {
+const ErrorState = ({ onRetry }: { onRetry: () => void }) => (
+    <View style={styles.emptyContainer}>
+        <View style={styles.emptyCard}>
+            <MaterialIcons name="wifi-off" size={32} color="#EF4444" style={styles.icon} />
+            <Text style={styles.emptyTitle}>
+                {t('common.networkError')}
+            </Text>
+            <Text style={styles.emptyText}>
+                {t('common.networkErrorDescription')}
+            </Text>
+            <View style={styles.divider} />
+            <TouchableOpacity style={styles.retryButton} onPress={onRetry}>
+                <Text style={styles.buttonText}>{t('common.retry')}</Text>
+            </TouchableOpacity>
+        </View>
+    </View>
+);
+
+interface SelectFollowedArtistsProps {
+    onSelectionChange?: (hasSelection: boolean) => void;
+}
+
+export const SelectFollowedArtists = forwardRef<any, SelectFollowedArtistsProps>(({ onSelectionChange }, ref) => {
     const [isLoading, setIsLoading] = useState(true);
     const [selectedIds, setSelectedIds] = useState([]);
     const [artists, setArtists] = useState([]);
     const [error, setError] = useState(null);
+    const [retryCount, setRetryCount] = useState(0);
     const [selectionCounts, setSelectionCounts] = useState({});
     const [isFavoriteSelected, setIsFavoriteSelected] = useState(false);
     const scrollViewRef = useRef(null);
@@ -300,15 +323,33 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                         Color: getRandomElement(colorsArray)
                     }));
                     setArtists(processedArtists);
+
+                    // Load saved state - フォロー解除されたアーティストを除去
+                    const currentArtistIds = new Set(processedArtists.map(a => a.ID));
+
+                    try {
+                        const savedIds = await AsyncStorage.getItem('soundcloud_selectedIds');
+                        const parsedIds: string[] = savedIds ? JSON.parse(savedIds) : [];
+                        const validIds = parsedIds.filter(id => currentArtistIds.has(id));
+                        setSelectedIds(validIds);
+                        AsyncStorage.setItem('soundcloud_selectedIds', JSON.stringify(validIds));
+
+                        const savedCounts = await AsyncStorage.getItem('soundcloud_selectionCounts');
+                        const parsedCounts: Record<string, number> = savedCounts ? JSON.parse(savedCounts) : {};
+                        const validCounts = Object.fromEntries(
+                            Object.entries(parsedCounts).filter(([id]) => currentArtistIds.has(id))
+                        );
+                        setSelectionCounts(validCounts);
+                        AsyncStorage.setItem('soundcloud_selectionCounts', JSON.stringify(validCounts));
+
+                        const savedFavorite = await AsyncStorage.getItem('soundcloud_isFavoriteTracks');
+                        if (savedFavorite) {
+                            setIsFavoriteSelected(JSON.parse(savedFavorite));
+                        }
+                    } catch {
+                        // ローカルストレージ破損時はデフォルト値で続行
+                    }
                 }
-
-                const savedIds = await AsyncStorage.getItem('soundcloud_selectedIds');
-                if (savedIds) setSelectedIds(JSON.parse(savedIds));
-
-                const savedCounts = await AsyncStorage.getItem('soundcloud_selectionCounts');
-                if (savedCounts) setSelectionCounts(JSON.parse(savedCounts));
-
-                setIsFavoriteSelected(JSON.parse(await AsyncStorage.getItem('soundcloud_isFavoriteTracks') || 'false'));
             } catch (err) {
                 setError('Network error');
             } finally {
@@ -317,7 +358,7 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
         };
 
         initializeData();
-    }, []);
+    }, [retryCount]);
 
     useEffect(() => {
         if (!isLoading) {
@@ -335,8 +376,14 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
         }
     }, [isLoading, containerWidth]);
 
+    // 選択状態が変わったら親に通知
+    useEffect(() => {
+        const hasSelection = isFavoriteSelected || selectedIds.length > 0;
+        onSelectionChange?.(hasSelection);
+    }, [selectedIds, isFavoriteSelected, onSelectionChange]);
+
     if (isLoading) return <LoadingAnimation />;
-    if (error) return <Text style={styles.errorText}>{error}</Text>;
+    if (error) return <ErrorState onRetry={() => { setError(null); setRetryCount(c => c + 1); }} />;
     if (artists.length === 0) {
         return <EmptyState />;
     }
@@ -463,12 +510,6 @@ const styles = StyleSheet.create({
         marginBottom: 4,
     },
 
-    errorText: {
-        color: '#EF4444',
-        textAlign: 'center',
-        padding: 16,
-    },
-
     emptyContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -516,6 +557,14 @@ const styles = StyleSheet.create({
 
     soundcloudButton: {
         backgroundColor: '#FF5500',
+        paddingVertical: 12,
+        paddingHorizontal: 24,
+        borderRadius: 24,
+        marginTop: 8,
+    },
+
+    retryButton: {
+        backgroundColor: '#374151',
         paddingVertical: 12,
         paddingHorizontal: 24,
         borderRadius: 24,

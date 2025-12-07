@@ -36,6 +36,7 @@ export const Form = () => {
     const { setShowDeleteButton } = useContext(PlaylistContext);
     const followedArtistsRef = useRef(null);
     const [containerWidth, setContainerWidth] = useState(0);
+    const [hasSelection, setHasSelection] = useState(false);
 
     // Animated Values
     const [isLoading, setIsLoading] = useState(false);
@@ -152,11 +153,12 @@ export const Form = () => {
                     </View>
                     {errors && <Text style={styles.errorText}>{errors.minute?.message}</Text>}
 
-                    <SelectFollowedArtists ref={followedArtistsRef} />
+                    <SelectFollowedArtists ref={followedArtistsRef} onSelectionChange={setHasSelection} />
 
                     <View style={styles.buttonContainer}>
                         <CreatePlaylistButton
                             minute={minuteValue}
+                            hasSelection={hasSelection}
                             createPlaylist={handleSubmit(onSubmit)}
                         />
                         <DeletePlaylist />

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, FC } from "react";
 import { auth } from '../features/spotify/auth/api/auth';
 import { Platform } from 'react-native';
+import { usePathname } from 'expo-router';
 import { getAccessToken } from '../utils/tokenManager';
 import { authEvents, AUTH_EVENTS } from '../utils/authEvents';
 
@@ -15,20 +16,31 @@ const SpotifyAuthContext = createContext<SpotifyAuthContextProps | null>(null);
 const useProvideSpotifyAuth = () => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const pathname = usePathname();
 
-  // 認証クリアイベントをリッスン
+  // Spotify認証が必要なページかどうか
+  const needsAuth = pathname === '/' || pathname === '/index' ||
+                    pathname === '/auth' || pathname.startsWith('/spotify');
+
+  // Spotify認証クリアイベントをリッスン
   useEffect(() => {
     const handleAuthCleared = () => {
       setIsAuthenticated(false);
     };
 
-    authEvents.on(AUTH_EVENTS.CLEARED, handleAuthCleared);
+    authEvents.on(AUTH_EVENTS.SPOTIFY_CLEARED, handleAuthCleared);
     return () => {
-      authEvents.off(AUTH_EVENTS.CLEARED, handleAuthCleared);
+      authEvents.off(AUTH_EVENTS.SPOTIFY_CLEARED, handleAuthCleared);
     };
   }, []);
 
   useEffect(() => {
+    // 認証が不要なページではAPI呼び出しをスキップ
+    if (!needsAuth) {
+      setLoading(false);
+      return;
+    }
+
     const fetchAuth = async () => {
       try {
         // ネイティブの場合はトークンの存在をまずチェック
@@ -53,7 +65,7 @@ const useProvideSpotifyAuth = () => {
       }
     };
     fetchAuth();
-  }, []);
+  }, [needsAuth]);
 
   const setAuthState = (state: boolean) => setIsAuthenticated(state);
 

@@ -15,7 +15,7 @@ export function CreatePlaylistWithFavoriteTracks(minute: string, selectedArtistI
             httpStatus: 0
         };
 
-        fetchWithRetry('/soundcloud/playlists/from-favorites', 'POST', {
+        fetchWithRetry('/api/soundcloud/playlists/from-favorites', 'POST', {
             data: {
                 'minute': parseInt(minute),
             },

@@ -11,7 +11,7 @@ export function deletePlaylist(): Promise<Response> {
             httpStatus: 0
         };
 
-        fetchWithRetry('/soundcloud/playlists', 'DELETE')
+        fetchWithRetry('/api/soundcloud/playlists', 'DELETE')
             .then(function (res) {
                 response.httpStatus = res.status
                 resolve(response)

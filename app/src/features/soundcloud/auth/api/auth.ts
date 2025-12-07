@@ -1,6 +1,7 @@
 import { fetchWithRetry, axios } from '../../../../lib/axos';
 import { Response } from '../types/index';
 import { Platform } from 'react-native';
+import { authEvents, AUTH_EVENTS } from '../../../../utils/authEvents';
 
 export type AuthzResponse = {
     authzUrl: string;
@@ -17,8 +18,8 @@ export function authz(): Promise<AuthzResponse> {
 
         // プラットフォームに応じてエンドポイントを切り替え
         const endpoint = Platform.OS === 'web'
-            ? '/soundcloud/auth/web/authz-url'     // Web: Cookie認証
-            : '/soundcloud/auth/native/authz-url'; // Native: JWT認証
+            ? '/api/soundcloud/auth/web/authz-url'     // Web: Cookie認証
+            : '/api/soundcloud/auth/native/authz-url'; // Native: JWT認証
 
         fetchWithRetry(endpoint)
             .then(function (res) {
@@ -48,8 +49,8 @@ export function auth(): Promise<AuthStatusResponse> {
 
         // プラットフォームに応じてエンドポイントを切り替え
         const endpoint = Platform.OS === 'web'
-            ? '/soundcloud/auth/web/status'     // Web: Cookie認証
-            : '/soundcloud/auth/native/status'; // Native: JWT認証
+            ? '/api/soundcloud/auth/web/status'     // Web: Cookie認証
+            : '/api/soundcloud/auth/native/status'; // Native: JWT認証
 
         fetchWithRetry(endpoint, 'GET')
             .then(function (res) {
@@ -75,17 +76,18 @@ export function logout(): Promise<Response> {
         try {
             // プラットフォームに応じてログアウト処理を切り替え
             if (Platform.OS === 'web') {
-                // Web: セッション削除
-                const res = await fetchWithRetry('/soundcloud/auth/web/session', 'DELETE');
+                // Web: セッション削除 + イベント発行
+                const res = await fetchWithRetry('/api/soundcloud/auth/web/session', 'DELETE');
                 response.httpStatus = res.status;
+                authEvents.emit(AUTH_EVENTS.SOUNDCLOUD_CLEARED);
             } else {
-                // Native: ローカルのトークンをクリア
+                // Native: ローカルのトークンをクリア（clearTokens内でイベント発行）
                 const { clearTokens } = await import('../../../../utils/tokenManager');
                 await clearTokens('soundcloud');
                 response.httpStatus = 200;
             }
             resolve(response);
-        } catch (error) {
+        } catch (error: any) {
             response.httpStatus = error.response?.status || 500;
             reject(response);
         }

@@ -3,13 +3,26 @@ import axiosRetry from 'axios-retry';
 import { API_URL, BASE_URL } from '../config';
 import { Platform } from 'react-native';
 import { router } from 'expo-router';
-import { getAccessToken, getRefreshToken, saveTokens, isTokenExpired, clearTokens } from '../utils/tokenManager';
-import { authEvents, AUTH_EVENTS } from '../utils/authEvents';
+import { getAccessToken, getRefreshToken, saveTokens, isTokenExpired, clearTokens, ServiceType } from '../utils/tokenManager';
+import { authEvents, AUTH_CLEARED_EVENTS } from '../utils/authEvents';
 
 /**
  * axios-retryの最大リトライ回数
  */
 export const MAX_RETRIES = 3;
+
+/**
+ * URLからサービスタイプを判断するヘルパー関数
+ */
+function getServiceFromUrl(url: string | undefined): ServiceType | null {
+  if (url?.includes('/api/spotify/')) {
+    return 'spotify';
+  }
+  if (url?.includes('/api/soundcloud/')) {
+    return 'soundcloud';
+  }
+  return null; // どちらでもない場合
+}
 
 let tokenRefreshed = false; // トークンが更新されたかどうかを示すフラグ
 
@@ -29,9 +42,12 @@ axios.interceptors.request.use(
   async (config) => {
     // ネイティブプラットフォームの場合のみ、JWTトークンをヘッダーに追加
     if (Platform.OS !== 'web') {
-      const accessToken = await getAccessToken();
-      if (accessToken) {
-        config.headers.Authorization = `Bearer ${accessToken}`;
+      const service = getServiceFromUrl(config.url);
+      if (service) {
+        const accessToken = await getAccessToken(service);
+        if (accessToken) {
+          config.headers.Authorization = `Bearer ${accessToken}`;
+        }
       }
     }
     // Web版はCookieで自動的に認証されるため、何もしない
@@ -59,23 +75,23 @@ axios.interceptors.response.use(
  * Web版セッション切れハンドラー
  *
  * 401エラー発生時に呼び出され、以下の処理を実行する:
- * 1. サーバー側のセッションを削除 (DELETE /spotify/auth/web/session)
- * 2. 認証クリアイベントを発行（useSpotifyAuthがリッスンして状態を更新）
+ * 1. サーバー側のセッションを削除 (DELETE /{service}/auth/web/session)
+ * 2. 認証クリアイベントを発行（useSpotifyAuth/useSoundCloudAuthがリッスンして状態を更新）
  *
  * Web版はCookie/Session認証を使用しているため、セッションが切れた場合は
  * リトライせず、再ログインが必要となる。
  *
  * リダイレクトは _layout.tsx で isAuthenticated の変更を検知して実行される。
  */
-async function handleWebSessionExpired() {
+async function handleWebSessionExpired(service: ServiceType) {
   try {
     // サーバー側のセッションを削除
-    await axios.delete('/spotify/auth/web/session');
+    await axios.delete(`/api/${service}/auth/web/session`);
   } catch (e) {
     console.error('Failed to delete session:', e);
   } finally {
-    // 認証クリアイベントを発行（useSpotifyAuthがリッスンして状態を更新）
-    authEvents.emit(AUTH_EVENTS.CLEARED);
+    // サービス別の認証クリアイベントを発行
+    authEvents.emit(AUTH_CLEARED_EVENTS[service]);
   }
 }
 
@@ -133,13 +149,14 @@ axiosRetry(axios, {
     const status = error.response?.status;
     const isTimeout = error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT';
     const isServiceUnavailable = status === 502 || status === 503 || status === 504;
+    const service = getServiceFromUrl(error.config?.url);
 
     // 【401エラーの場合: プラットフォーム別処理】
-    if (status === 401) {
+    if (status === 401 && service) {
       // Web版: Cookie/Session認証のセッション切れ
       // → リトライせず、セッション削除してホームへリダイレクト
       if (Platform.OS === 'web') {
-        await handleWebSessionExpired();
+        await handleWebSessionExpired(service);
         return false; // リトライしない → onRetry は実行されない
       }
 
@@ -149,7 +166,7 @@ axiosRetry(axios, {
         return true; // リトライする → onRetry でトークンリフレッシュが実行される
       } else {
         // リフレッシュ失敗済みの場合はトークンをクリアしてログアウト
-        await clearTokens();
+        await clearTokens(service);
         return false; // リトライしない → onRetry は実行されない
       }
     }
@@ -172,9 +189,10 @@ axiosRetry(axios, {
   onRetry: async (retryCount, error, requestConfig) => {
     if (error.response && error.response?.status === 401) {
       // 【401エラーの場合（Native版のみ到達）】
-      if (!tokenRefreshed) {
-        console.log(`Retry refresh auth token`);
-        await refreshAuthToken(); // トークンリフレッシュ後にリトライが実行される
+      const service = getServiceFromUrl(error.config?.url);
+      if (!tokenRefreshed && service) {
+        console.log(`Retry refresh auth token for ${service}`);
+        await refreshAuthToken(service); // トークンリフレッシュ後にリトライが実行される
       }
       return;
     }
@@ -207,7 +225,7 @@ export async function fetchWithRetry(url: string, method: string = 'GET', config
  * 401エラー発生時に onRetry から呼び出され、以下の処理を実行する:
  * 1. リフレッシュトークンを取得
  * 2. アクセストークンの有効期限をチェック
- * 3. 期限切れの場合、/spotify/auth/native/refresh を呼び出して新しいトークンペアを取得
+ * 3. 期限切れの場合、/{service}/auth/native/refresh を呼び出して新しいトークンペアを取得
  * 4. 新しいトークンペアを保存
  *
  * 【動作フロー】
@@ -217,37 +235,37 @@ export async function fetchWithRetry(url: string, method: string = 'GET', config
  * 【注意】
  * Web版では使用されない（Web版は Cookie/Session 認証のためリフレッシュ不要）
  */
-async function refreshAuthToken() {
+async function refreshAuthToken(service: ServiceType) {
   tokenRefreshed = true;
 
   try {
     // リフレッシュトークンを取得
-    const refreshToken = await getRefreshToken();
+    const refreshToken = await getRefreshToken(service);
 
     if (!refreshToken) {
       throw new Error('No refresh token available');
     }
 
     // アクセストークンが期限切れかチェック
-    const expired = await isTokenExpired();
+    const expired = await isTokenExpired(service);
     if (!expired) {
       tokenRefreshed = false; // まだ有効なのでフラグをリセット
       return;
     }
 
     // リフレッシュエンドポイントを呼び出して新しいトークンペアを取得
-    const response = await axios.post('/spotify/auth/native/refresh', {
+    const response = await axios.post(`/api/${service}/auth/native/refresh`, {
       refresh_token: refreshToken,
     });
 
     const newTokenPair = response.data;
-    await saveTokens(newTokenPair);
+    await saveTokens(newTokenPair, service);
 
     tokenRefreshed = false; // 成功したのでフラグをリセット
-    console.log('Token refreshed successfully');
+    console.log(`Token refreshed successfully for ${service}`);
   } catch (error) {
-    console.error('Token refresh failed:', error);
-    await clearTokens();
+    console.error(`Token refresh failed for ${service}:`, error);
+    await clearTokens(service);
     // tokenRefreshed は true のまま（次のリトライ時に retryCondition でログアウト処理が実行される）
   }
 }

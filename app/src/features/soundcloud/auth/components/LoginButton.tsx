@@ -11,13 +11,10 @@ import {
 import Svg, { Path } from 'react-native-svg';
 import { authz } from '../api/auth'
 import { t } from '../../../../locales/i18n';
-import { useSoundCloudAuth } from "../../../../hooks/useSoundCloudAuth";
 import ReactGA from 'react-ga4';
-import { handleApiError } from '../../../../utils/errorHandler';
 
 export const LoginButton = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const { setAuthState } = useSoundCloudAuth();
 
 
     const handlePress = async () => {
@@ -41,7 +38,6 @@ export const LoginButton = () => {
             }
         } catch (error: any) {
             console.error('SoundCloud login failed:', error);
-            handleApiError(error);
         } finally {
             setTimeout(() => {
                 setIsLoading(false)
