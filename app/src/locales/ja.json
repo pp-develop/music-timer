@@ -31,6 +31,7 @@
   "createPlaylist.findArtists": "Spotifyで探す",
   "createPlaylist.findArtistsTitle": "アーティストを見つける",
   "createPlaylist.favoriteTracks": "お気に入りの曲",
+  "createPlaylist.favoriteTracks.disabled": "お気に入り曲がありません。\nSpotifyで追加してください。",
   "error.not_enough_tracks": "トラック数が不足しています。再生時間を短くするか、アーティストを追加してください。",
   "error.no_favorite_tracks": "お気に入りのトラックがありません。Spotifyで曲にいいねをするか、アーティストを選択してください。",
   "error.tracks_not_found": "トラックが見つかりませんでした。条件を変更して再度お試しください。",

@@ -31,6 +31,7 @@
   "createPlaylist.findArtists": "Find on Spotify",
   "createPlaylist.findArtistsTitle": "Find Artists",
   "createPlaylist.favoriteTracks": "Favorite Tracks",
+  "createPlaylist.favoriteTracks.disabled": "No favorite tracks.\nAdd on Spotify",
   "error.not_enough_tracks": "Not enough tracks. Please shorten the playback time or add more artists.",
   "error.no_favorite_tracks": "No favorite tracks found. Like songs on Spotify or select artists.",
   "error.tracks_not_found": "Tracks not found. Change your conditions and try again.",

@@ -13,6 +13,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { t } from '../../../../locales/i18n';
 import { GetFollowedArtists, Artist } from '../api/getFollowedArtists';
+import { CheckFavoritesExists } from '../api/checkFavoritesExists';
 import useHorizontalScroll from '../../../common/hooks/useHorizontalScroll';
 import { Svg, Path, Polyline, Circle } from 'react-native-svg';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -164,16 +165,101 @@ const ArtistIcon = ({ artist, isSelected, onSelect, selectionCount, itemWidth })
     );
 };
 
-const FavoriteTracksIcon = ({ isSelected, onSelect, itemWidth }) => {
+// お気に入り無効時のトースト通知コンポーネント
+const DisabledToast = ({ visible, onHide }) => {
+    const opacity = useRef(new Animated.Value(0)).current;
+    const translateY = useRef(new Animated.Value(-50)).current;
+
+    useEffect(() => {
+        if (visible) {
+            // 表示アニメーション（上から降りてくる）
+            Animated.parallel([
+                Animated.timing(opacity, {
+                    toValue: 1,
+                    duration: 300,
+                    useNativeDriver: true,
+                }),
+                Animated.spring(translateY, {
+                    toValue: 0,
+                    friction: 8,
+                    tension: 40,
+                    useNativeDriver: true,
+                }),
+            ]).start();
+
+            // 3秒後に自動で非表示
+            const timer = setTimeout(() => {
+                hideToast();
+            }, 3000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [visible]);
+
+    const hideToast = () => {
+        Animated.parallel([
+            Animated.timing(opacity, {
+                toValue: 0,
+                duration: 200,
+                useNativeDriver: true,
+            }),
+            Animated.timing(translateY, {
+                toValue: -50,
+                duration: 200,
+                useNativeDriver: true,
+            }),
+        ]).start(() => {
+            onHide();
+        });
+    };
+
+    if (!visible) return null;
+
+    return (
+        <Animated.View
+            style={[
+                styles.toastContainer,
+                {
+                    opacity,
+                    transform: [{ translateY }],
+                }
+            ]}
+        >
+            <TouchableOpacity
+                style={styles.toastContent}
+                onPress={hideToast}
+                activeOpacity={0.9}
+            >
+                <View style={styles.toastIconContainer}>
+                    <MaterialIcons name="favorite-border" size={24} color="#F472B6" />
+                </View>
+                <View style={styles.toastTextContainer}>
+                    <Text style={styles.toastTitle}>{t('createPlaylist.favoriteTracks')}</Text>
+                    <Text style={styles.toastMessage}>{t('createPlaylist.favoriteTracks.disabled')}</Text>
+                </View>
+            </TouchableOpacity>
+        </Animated.View>
+    );
+};
+
+const FavoriteTracksIcon = ({ isSelected, onSelect, itemWidth, disabled = false, onDisabledPress }) => {
+    const handlePress = () => {
+        if (disabled) {
+            onDisabledPress?.();
+            return;
+        }
+        onSelect();
+    };
+
     return (
         <TouchableOpacity
-            onPress={onSelect}
-            activeOpacity={0.7}
+            onPress={handlePress}
+            activeOpacity={disabled ? 0.8 : 0.7}
             style={[{ width: itemWidth }]}
         >
             <LinearGradient
                 colors={isSelected ? ['#A1A1AA', '#2D3748'] : ['#374151', '#374151']}
-                style={styles.artistButton}
+                style={[styles.artistButton, disabled && styles.disabledButton]}
             >
                 {isSelected && (
                     <View style={styles.checkmark}>
@@ -183,13 +269,13 @@ const FavoriteTracksIcon = ({ isSelected, onSelect, itemWidth }) => {
                 <MaterialIcons
                     name="favorite"
                     size={32}
-                    color={isSelected ? '#FFFFFF' : '#9CA3AF'}
+                    color={disabled ? '#6B7280' : (isSelected ? '#FFFFFF' : '#9CA3AF')}
                     style={styles.favoriteIcon}
                 />
                 <Text
                     style={[
                         styles.artistName,
-                        { color: isSelected ? '#FFFFFF' : '#9CA3AF' }
+                        { color: disabled ? '#6B7280' : (isSelected ? '#FFFFFF' : '#9CA3AF') }
                     ]}
                     numberOfLines={1}
                     ellipsizeMode="tail"
@@ -248,6 +334,8 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
     const [retryCount, setRetryCount] = useState(0);
     const [selectionCounts, setSelectionCounts] = useState({});
     const [isFavoriteSelected, setIsFavoriteSelected] = useState(false);
+    const [favoritesExists, setFavoritesExists] = useState(true);
+    const [showDisabledToast, setShowDisabledToast] = useState(false);
     const scrollViewRef = useRef(null);
     const { resetScroll } = useHorizontalScroll(scrollViewRef);
     const [containerWidth, setContainerWidth] = useState(0);
@@ -331,7 +419,14 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
         const initializeData = async () => {
             setIsLoading(true);
             try {
-                const artistsData = await GetFollowedArtists();
+                // お気に入りトラックの存在チェックとアーティスト取得を並行実行
+                const [exists, artistsData] = await Promise.all([
+                    CheckFavoritesExists(),
+                    GetFollowedArtists()
+                ]);
+
+                setFavoritesExists(exists);
+
                 if (artistsData.httpStatus === 200) {
                     const processedArtists = artistsData.artists.map(artist => ({
                         ...artist,
@@ -359,7 +454,14 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
 
                         const savedFavorite = await AsyncStorage.getItem('isFavoriteTracks');
                         if (savedFavorite) {
-                            setIsFavoriteSelected(JSON.parse(savedFavorite));
+                            const wasFavoriteSelected = JSON.parse(savedFavorite);
+                            // お気に入りが存在しない場合は選択状態をクリア
+                            if (wasFavoriteSelected && !exists) {
+                                setIsFavoriteSelected(false);
+                                AsyncStorage.setItem('isFavoriteTracks', JSON.stringify(false));
+                            } else {
+                                setIsFavoriteSelected(wasFavoriteSelected);
+                            }
                         }
                     } catch {
                         // ローカルストレージ破損時はデフォルト値で続行
@@ -399,35 +501,43 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
     }
 
     return (
-        <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
-            <ScrollView
-                style={styles.scrollContainer}
-                contentContainerStyle={styles.scrollContentContainer}
-                showsVerticalScrollIndicator={false}
-                onLayout={(event) => {
-                    const { width } = event.nativeEvent.layout;
-                    setContainerWidth(width);
-                }}
-            >
-                <View style={[styles.artistGrid, { gap }]}>
-                    <FavoriteTracksIcon
-                        isSelected={isFavoriteSelected}
-                        onSelect={toggleFavorite}
-                        itemWidth={itemWidth}
-                    />
-                    {artists.map((artist) => (
-                        <ArtistIcon
-                            key={artist.ID}
-                            artist={artist}
-                            isSelected={selectedIds.includes(artist.ID)}
-                            onSelect={handleArtistClick}
-                            selectionCount={selectionCounts[artist.ID] || 0}
+        <>
+            <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+                <ScrollView
+                    style={styles.scrollContainer}
+                    contentContainerStyle={styles.scrollContentContainer}
+                    showsVerticalScrollIndicator={false}
+                    onLayout={(event) => {
+                        const { width } = event.nativeEvent.layout;
+                        setContainerWidth(width);
+                    }}
+                >
+                    <View style={[styles.artistGrid, { gap }]}>
+                        <FavoriteTracksIcon
+                            isSelected={isFavoriteSelected}
+                            onSelect={toggleFavorite}
                             itemWidth={itemWidth}
+                            disabled={!favoritesExists}
+                            onDisabledPress={() => setShowDisabledToast(true)}
                         />
-                    ))}
-                </View>
-            </ScrollView>
-        </Animated.View>
+                        {artists.map((artist) => (
+                            <ArtistIcon
+                                key={artist.ID}
+                                artist={artist}
+                                isSelected={selectedIds.includes(artist.ID)}
+                                onSelect={handleArtistClick}
+                                selectionCount={selectionCounts[artist.ID] || 0}
+                                itemWidth={itemWidth}
+                            />
+                        ))}
+                    </View>
+                </ScrollView>
+            </Animated.View>
+            <DisabledToast
+                visible={showDisabledToast}
+                onHide={() => setShowDisabledToast(false)}
+            />
+        </>
     );
 });
 
@@ -462,6 +572,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         gap: 4,
+    },
+
+    disabledButton: {
+        opacity: 0.7,
     },
 
     artistName: {
@@ -611,5 +725,56 @@ const styles = StyleSheet.create({
     loadingGradient: {
         width: '100%',
         height: '100%',
+    },
+
+    // Toast 通知用のスタイル
+    toastContainer: {
+        position: 'absolute',
+        top: 20,
+        left: 20,
+        right: 20,
+        zIndex: 1000,
+    },
+
+    toastContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(55, 65, 81, 0.95)',
+        borderRadius: 16,
+        padding: 16,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        elevation: 8,
+        borderWidth: 1,
+        borderColor: 'rgba(244, 114, 182, 0.3)',
+    },
+
+    toastIconContainer: {
+        width: 44,
+        height: 44,
+        borderRadius: 22,
+        backgroundColor: 'rgba(244, 114, 182, 0.15)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 12,
+    },
+
+    toastTextContainer: {
+        flex: 1,
+    },
+
+    toastTitle: {
+        color: '#FFFFFF',
+        fontSize: 15,
+        fontWeight: '600',
+        marginBottom: 4,
+    },
+
+    toastMessage: {
+        color: 'rgba(255, 255, 255, 0.7)',
+        fontSize: 13,
+        lineHeight: 18,
     },
 });

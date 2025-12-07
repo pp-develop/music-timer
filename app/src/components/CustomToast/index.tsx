@@ -14,23 +14,20 @@ type ToastType = 'success' | 'error' | 'info';
 const TOAST_COLORS = {
     success: {
         icon: '#059669',      // Success Green
-        glow: 'rgba(5, 150, 105, 0.3)',
-        glowMiddle: 'rgba(5, 150, 105, 0.15)',
-        glowOuter: 'rgba(5, 150, 105, 0.08)',
+        iconBg: 'rgba(5, 150, 105, 0.15)',
+        border: 'rgba(5, 150, 105, 0.3)',
         background: 'rgba(55, 65, 81, 0.95)',
     },
     error: {
         icon: '#DC2626',      // Error Red
-        glow: 'rgba(220, 38, 38, 0.3)',
-        glowMiddle: 'rgba(220, 38, 38, 0.15)',
-        glowOuter: 'rgba(220, 38, 38, 0.08)',
+        iconBg: 'rgba(220, 38, 38, 0.15)',
+        border: 'rgba(220, 38, 38, 0.3)',
         background: 'rgba(55, 65, 81, 0.95)',
     },
     info: {
         icon: '#3B82F6',      // Accent Blue
-        glow: 'rgba(59, 130, 246, 0.3)',
-        glowMiddle: 'rgba(59, 130, 246, 0.15)',
-        glowOuter: 'rgba(59, 130, 246, 0.08)',
+        iconBg: 'rgba(59, 130, 246, 0.15)',
+        border: 'rgba(59, 130, 246, 0.3)',
         background: 'rgba(55, 65, 81, 0.95)',
     },
 };
@@ -39,12 +36,11 @@ const TOAST_COLORS = {
  * 成功アイコン（チェックマーク）
  */
 const SuccessIcon: React.FC<{ color: string }> = ({ color }) => (
-    <Svg width={70} height={70} viewBox="0 0 70 70">
-        {/* チェックマーク */}
+    <Svg width={24} height={24} viewBox="0 0 24 24">
         <Path
-            d="M20 35L30 45L50 25"
-            stroke="white"
-            strokeWidth={5}
+            d="M6 12L10 16L18 8"
+            stroke={color}
+            strokeWidth={2.5}
             strokeLinecap="round"
             strokeLinejoin="round"
             fill="none"
@@ -56,16 +52,14 @@ const SuccessIcon: React.FC<{ color: string }> = ({ color }) => (
  * エラーアイコン（感嘆符）
  */
 const ErrorIcon: React.FC<{ color: string }> = ({ color }) => (
-    <Svg width={70} height={70} viewBox="0 0 70 70">
-        {/* 感嘆符のドット */}
+    <Svg width={24} height={24} viewBox="0 0 24 24">
         <Path
-            d="M38 52C38 53.66 36.66 55 35 55C33.34 55 32 53.66 32 52C32 50.34 33.34 49 35 49C36.66 49 38 50.34 38 52Z"
-            fill="white"
-        />
-        {/* 感嘆符の棒 */}
-        <Path
-            d="M32 18C32 16.34 33.34 15 35 15C36.66 15 38 16.34 38 18V40C38 41.66 36.66 43 35 43C33.34 43 32 41.66 32 40V18Z"
-            fill="white"
+            d="M12 8V12M12 16V16.01"
+            stroke={color}
+            strokeWidth={2.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
         />
     </Svg>
 );
@@ -95,17 +89,16 @@ const InfoIcon: React.FC<{ color: string }> = ({ color }) => {
 
     return (
         <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
-            <Svg width={70} height={70} viewBox="0 0 70 70">
-                {/* スピナー円弧 */}
+            <Svg width={24} height={24} viewBox="0 0 24 24">
                 <Circle
-                    cx="35"
-                    cy="35"
-                    r="15"
-                    stroke="white"
-                    strokeWidth="4"
+                    cx="12"
+                    cy="12"
+                    r="9"
+                    stroke={color}
+                    strokeWidth="2.5"
                     strokeLinecap="round"
                     fill="none"
-                    strokeDasharray="70, 20"
+                    strokeDasharray="45, 15"
                 />
             </Svg>
         </Animated.View>
@@ -114,22 +107,15 @@ const InfoIcon: React.FC<{ color: string }> = ({ color }) => {
 
 /**
  * カスタムトーストコンポーネント
- * FormOverlaysのErrorOverlayと統一されたデザイン
+ * DisabledToastと統一されたデザイン
  */
 export const CustomToast: React.FC<ToastConfigParams<any>> = ({ text1, text2, type = 'info' }) => {
-    const scale = useRef(new Animated.Value(0.8)).current;
     const opacity = useRef(new Animated.Value(0)).current;
-    const translateY = useRef(new Animated.Value(-20)).current;
+    const translateY = useRef(new Animated.Value(-50)).current;
 
     useEffect(() => {
-        // スプリングアニメーション（柔らかく優しい印象）
+        // 上から降りてくるアニメーション
         Animated.parallel([
-            Animated.spring(scale, {
-                toValue: 1,
-                friction: 8,
-                tension: 40,
-                useNativeDriver: true,
-            }),
             Animated.timing(opacity, {
                 toValue: 1,
                 duration: 300,
@@ -159,44 +145,20 @@ export const CustomToast: React.FC<ToastConfigParams<any>> = ({ text1, text2, ty
                 styles.container,
                 {
                     backgroundColor: colors.background,
+                    borderColor: colors.border,
                     opacity,
-                    transform: [
-                        { scale },
-                        { translateY }
-                    ],
+                    transform: [{ translateY }],
                 },
             ]}
         >
-            {/* アイコン部分（3層グロー効果） */}
-            <View style={styles.iconSection}>
-                <View style={styles.iconContainer}>
-                    {/* グロー効果（外側） */}
-                    <View
-                        style={[
-                            styles.iconGlowOuter,
-                            { backgroundColor: colors.glowOuter },
-                        ]}
-                    />
-                    {/* グロー効果（中間） */}
-                    <View
-                        style={[
-                            styles.iconGlowMiddle,
-                            { backgroundColor: colors.glowMiddle },
-                        ]}
-                    />
-                    {/* メインアイコン円 */}
-                    <View
-                        style={[
-                            styles.iconCircle,
-                            { backgroundColor: colors.icon },
-                        ]}
-                    >
-                        {/* ハイライト効果（立体感） */}
-                        <View style={styles.iconHighlight} />
-                        {/* アイコンシンボル */}
-                        <IconComponent color={colors.icon} />
-                    </View>
-                </View>
+            {/* アイコン部分 */}
+            <View
+                style={[
+                    styles.iconContainer,
+                    { backgroundColor: colors.iconBg },
+                ]}
+            >
+                <IconComponent color={colors.icon} />
             </View>
 
             {/* テキスト部分 */}
@@ -222,53 +184,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '90%',
         maxWidth: 420,
-        borderRadius: 20,
+        borderRadius: 16,
         padding: 16,
-        paddingVertical: 14,
         marginHorizontal: 'auto',
         marginTop: 10,
-        // iOS用シャドウ
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 8,
-        },
-        shadowOpacity: 0.3,
-        shadowRadius: 16,
-        // Android用シャドウ
-        elevation: 10,
-        // Web版のボーダー
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.1)',
-    },
-    iconSection: {
-        marginRight: 14,
-    },
-    iconContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
-        width: 70,
-        height: 70,
-    },
-    iconGlowOuter: {
-        position: 'absolute',
-        width: 90,
-        height: 90,
-        borderRadius: 45,
-    },
-    iconGlowMiddle: {
-        position: 'absolute',
-        width: 78,
-        height: 78,
-        borderRadius: 39,
-    },
-    iconCircle: {
-        width: 70,
-        height: 70,
-        borderRadius: 35,
-        alignItems: 'center',
-        justifyContent: 'center',
         // iOS用シャドウ
         shadowColor: '#000',
         shadowOffset: {
@@ -278,17 +197,17 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 8,
         // Android用シャドウ
-        elevation: 6,
-        overflow: 'hidden',
+        elevation: 8,
+        // ボーダー
+        borderWidth: 1,
     },
-    iconHighlight: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
-        borderRadius: 35,
+    iconContainer: {
+        width: 44,
+        height: 44,
+        borderRadius: 22,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 12,
     },
     textSection: {
         flex: 1,
@@ -298,15 +217,11 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontSize: 16,
         fontWeight: '600',
-        lineHeight: 22,
-        letterSpacing: 0.2,
-        marginBottom: 2,
+        marginBottom: 4,
     },
     text2: {
-        color: 'rgba(255, 255, 255, 0.75)',
-        fontSize: 13,
-        fontWeight: '400',
-        lineHeight: 18,
-        letterSpacing: 0.1,
+        color: 'rgba(255, 255, 255, 0.7)',
+        fontSize: 14,
+        lineHeight: 20,
     },
 });
