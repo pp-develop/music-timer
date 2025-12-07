@@ -2,8 +2,14 @@ import Axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { API_URL, BASE_URL } from '../config';
 import { Platform } from 'react-native';
+import { router } from 'expo-router';
 import { getAccessToken, getRefreshToken, saveTokens, isTokenExpired, clearTokens } from '../utils/tokenManager';
-import { MAX_RETRIES } from '../utils/errorHandler';
+import { authEvents, AUTH_EVENTS } from '../utils/authEvents';
+
+/**
+ * axios-retryの最大リトライ回数
+ */
+export const MAX_RETRIES = 3;
 
 let tokenRefreshed = false; // トークンが更新されたかどうかを示すフラグ
 
@@ -36,15 +42,30 @@ axios.interceptors.request.use(
   }
 );
 
+// レスポンスインターセプター（リトライ完了後のエラー処理）
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // リトライが完了した場合はエラー画面へリダイレクト
+    const retryCount = error?.config?.['axios-retry']?.retryCount || 0;
+    if (retryCount >= MAX_RETRIES) {
+      router.replace('/error');
+    }
+    return Promise.reject(error);
+  }
+);
+
 /**
  * Web版セッション切れハンドラー
  *
  * 401エラー発生時に呼び出され、以下の処理を実行する:
  * 1. サーバー側のセッションを削除 (DELETE /spotify/auth/web/session)
- * 2. ホームページ (/) へリダイレクト
+ * 2. 認証クリアイベントを発行（useSpotifyAuthがリッスンして状態を更新）
  *
  * Web版はCookie/Session認証を使用しているため、セッションが切れた場合は
  * リトライせず、再ログインが必要となる。
+ *
+ * リダイレクトは _layout.tsx で isAuthenticated の変更を検知して実行される。
  */
 async function handleWebSessionExpired() {
   try {
@@ -53,10 +74,8 @@ async function handleWebSessionExpired() {
   } catch (e) {
     console.error('Failed to delete session:', e);
   } finally {
-    // ホームページへリダイレクト（再ログインが必要）
-    if (typeof window !== 'undefined') {
-      window.location.href = '/';
-    }
+    // 認証クリアイベントを発行（useSpotifyAuthがリッスンして状態を更新）
+    authEvents.emit(AUTH_EVENTS.CLEARED);
   }
 }
 

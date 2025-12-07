@@ -1,5 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
-import { router } from 'expo-router';
+import { authEvents, AUTH_EVENTS } from './authEvents';
 
 export type ServiceType = 'spotify' | 'soundcloud';
 
@@ -69,13 +69,10 @@ export async function clearTokens(service: ServiceType): Promise<void> {
     await SecureStore.deleteItemAsync(getTokenKey(service, 'access'));
     await SecureStore.deleteItemAsync(getTokenKey(service, 'refresh'));
     await SecureStore.deleteItemAsync(getTokenKey(service, 'expiry'));
-
-    // トークンをクリアしたらログイン画面へリダイレクト
-    // 認証が必要な画面から自動的にログアウトさせる
-    router.replace('/');
   } catch (error) {
     console.error('Failed to clear tokens:', error);
-    // エラーが発生してもログイン画面へリダイレクト
-    router.replace('/');
+  } finally {
+    // 認証クリアイベントを発行（useSpotifyAuthがリッスンして状態を更新）
+    authEvents.emit(AUTH_EVENTS.CLEARED);
   }
 }

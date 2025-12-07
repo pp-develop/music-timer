@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { StyleSheet, ActivityIndicator, View, TouchableOpacity } from 'react-native';
 import { logout as RequestLogout } from '../api/auth'
-import { t } from '../../../../locales/i18n';
 import { useTheme } from '../../../../config/ThemeContext';
 import { useSpotifyAuth } from "../../../../hooks/useSpotifyAuth";
 import { router } from 'expo-router';
 import ReactGA from 'react-ga4';
 import { Svg, Path, Line, Polyline } from 'react-native-svg';
-import { handleApiError } from '../../../../utils/errorHandler';
 
 const LogoutIcon = () => (
     <Svg width={28} height={28} viewBox="0 0 24 24" stroke="#9CA3AF" strokeWidth={2}>
@@ -33,15 +31,13 @@ export const LogoutButton = () => {
             setIsLoading(true);
 
             // ログアウトリクエストを実行
+            // auth:cleared イベントが発行され、useSpotifyAuth で isAuthenticated=false に更新
+            // _layout.tsx で検知してホームへリダイレクト
             await RequestLogout();
-            setAuthState(false);
-            setIsLoading(false);
-
-            router.replace("/");
         } catch (error: any) {
             console.error('Logout failed:', error);
-
-            handleApiError(error);
+        } finally {
+            setIsLoading(false);
         }
     };
 

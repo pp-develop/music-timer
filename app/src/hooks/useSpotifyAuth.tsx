@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode, FC } 
 import { auth } from '../features/spotify/auth/api/auth';
 import { Platform } from 'react-native';
 import { getAccessToken } from '../utils/tokenManager';
+import { authEvents, AUTH_EVENTS } from '../utils/authEvents';
 
 export interface SpotifyAuthContextProps {
   loading: boolean;
@@ -15,21 +16,33 @@ const useProvideSpotifyAuth = () => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // 認証クリアイベントをリッスン
+  useEffect(() => {
+    const handleAuthCleared = () => {
+      setIsAuthenticated(false);
+    };
+
+    authEvents.on(AUTH_EVENTS.CLEARED, handleAuthCleared);
+    return () => {
+      authEvents.off(AUTH_EVENTS.CLEARED, handleAuthCleared);
+    };
+  }, []);
+
   useEffect(() => {
     const fetchAuth = async () => {
       try {
         // ネイティブの場合はトークンの存在をまずチェック
         if (Platform.OS !== 'web') {
           const token = await getAccessToken('spotify');
-          if (token) {
-            // トークンが存在する場合は認証済みと判断
-            setIsAuthenticated(true);
+          if (!token) {
+            // トークンがない場合は未認証（無駄なAPI呼び出しを避ける）
+            setIsAuthenticated(false);
             setLoading(false);
             return;
           }
         }
 
-        // Web または ネイティブでトークンがない場合はサーバーに確認
+        // Web・Native共通: サーバーでSpotify認証状態を確認
         const response = await auth();
         setIsAuthenticated(response.authenticated);
       } catch (error: any) {
