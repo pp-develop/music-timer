@@ -322,11 +322,36 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                 }
 
                 // Load saved state
-                const savedIds = await AsyncStorage.getItem('selectedIds');
-                if (savedIds) setSelectedIds(JSON.parse(savedIds));
+                const currentArtistIds = new Set(processedArtists.map(a => a.ID));
 
+                // selectedIds: フォロー中のアーティストのみに絞り込み
+                const savedIds = await AsyncStorage.getItem('selectedIds');
+                if (savedIds) {
+                    const parsedIds: string[] = JSON.parse(savedIds);
+                    const validIds = parsedIds.filter(id => currentArtistIds.has(id));
+                    setSelectedIds(validIds);
+                    // ゴーストIDが除去された場合は保存を更新
+                    if (validIds.length !== parsedIds.length) {
+                        AsyncStorage.setItem('selectedIds', JSON.stringify(validIds));
+                    }
+                }
+
+                // selectionCounts: フォロー中のアーティストのみに絞り込み
                 const savedCounts = await AsyncStorage.getItem('selectionCounts');
-                if (savedCounts) setSelectionCounts(JSON.parse(savedCounts));
+                if (savedCounts) {
+                    const parsedCounts: Record<string, number> = JSON.parse(savedCounts);
+                    const validCounts: Record<string, number> = {};
+                    for (const id of Object.keys(parsedCounts)) {
+                        if (currentArtistIds.has(id)) {
+                            validCounts[id] = parsedCounts[id];
+                        }
+                    }
+                    setSelectionCounts(validCounts);
+                    // ゴーストIDが除去された場合は保存を更新
+                    if (Object.keys(validCounts).length !== Object.keys(parsedCounts).length) {
+                        AsyncStorage.setItem('selectionCounts', JSON.stringify(validCounts));
+                    }
+                }
 
                 setIsFavoriteSelected(JSON.parse(await AsyncStorage.getItem('isFavoriteTracks') || 'false'));
             } catch (err) {
