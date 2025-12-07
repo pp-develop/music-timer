@@ -45,7 +45,7 @@ export const Form = () => {
 
     // カスタムフック
     const { animatedValues, panHandlers, controls } = useFormAnimations(isAnimating, isLoading, setIsLoading, setIsAnimating);
-    const { showError, handleHttpError, dismissError } = useFormErrorHandling(animatedValues.failureOpacity, setErrorMessage, setCreationStatus);
+    const { showError, dismissError } = useFormErrorHandling(animatedValues.failureOpacity, setErrorMessage, setCreationStatus);
     const { control, handleSubmit, minuteValue, errors } = useFormInput();
 
     const onSubmit = async (data: any) => {
@@ -95,7 +95,6 @@ export const Form = () => {
             controls.startAnimation()
         } catch (error) {
             showError(error.errorCode);
-            handleHttpError(error.httpStatus);
             setHttpStatus(error.httpStatus);
         } finally {
             controls.finishLoading();
