@@ -222,11 +222,30 @@ const EmptyState = () => (
     </View>
 );
 
+const ErrorState = ({ onRetry }: { onRetry: () => void }) => (
+    <View style={styles.emptyContainer}>
+        <View style={styles.emptyCard}>
+            <MaterialIcons name="wifi-off" size={32} color="#EF4444" style={styles.icon} />
+            <Text style={styles.emptyTitle}>
+                {t('common.networkError')}
+            </Text>
+            <Text style={styles.emptyText}>
+                {t('common.networkErrorDescription')}
+            </Text>
+            <View style={styles.divider} />
+            <TouchableOpacity style={styles.retryButton} onPress={onRetry}>
+                <Text style={styles.buttonText}>{t('common.retry')}</Text>
+            </TouchableOpacity>
+        </View>
+    </View>
+);
+
 export const SelectFollowedArtists = forwardRef((props, ref) => {
     const [isLoading, setIsLoading] = useState(true);
     const [selectedIds, setSelectedIds] = useState([]);
     const [artists, setArtists] = useState([]);
     const [error, setError] = useState(null);
+    const [retryCount, setRetryCount] = useState(0);
     const [selectionCounts, setSelectionCounts] = useState({});
     const [isFavoriteSelected, setIsFavoriteSelected] = useState(false);
     const scrollViewRef = useRef(null);
@@ -323,23 +342,27 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                     // Load saved state - フォロー解除されたアーティストを除去
                     const currentArtistIds = new Set(processedArtists.map(a => a.ID));
 
-                    const savedIds = await AsyncStorage.getItem('selectedIds');
-                    const parsedIds: string[] = savedIds ? JSON.parse(savedIds) : [];
-                    const validIds = parsedIds.filter(id => currentArtistIds.has(id));
-                    setSelectedIds(validIds);
-                    AsyncStorage.setItem('selectedIds', JSON.stringify(validIds));
+                    try {
+                        const savedIds = await AsyncStorage.getItem('selectedIds');
+                        const parsedIds: string[] = savedIds ? JSON.parse(savedIds) : [];
+                        const validIds = parsedIds.filter(id => currentArtistIds.has(id));
+                        setSelectedIds(validIds);
+                        AsyncStorage.setItem('selectedIds', JSON.stringify(validIds));
 
-                    const savedCounts = await AsyncStorage.getItem('selectionCounts');
-                    const parsedCounts: Record<string, number> = savedCounts ? JSON.parse(savedCounts) : {};
-                    const validCounts = Object.fromEntries(
-                        Object.entries(parsedCounts).filter(([id]) => currentArtistIds.has(id))
-                    );
-                    setSelectionCounts(validCounts);
-                    AsyncStorage.setItem('selectionCounts', JSON.stringify(validCounts));
+                        const savedCounts = await AsyncStorage.getItem('selectionCounts');
+                        const parsedCounts: Record<string, number> = savedCounts ? JSON.parse(savedCounts) : {};
+                        const validCounts = Object.fromEntries(
+                            Object.entries(parsedCounts).filter(([id]) => currentArtistIds.has(id))
+                        );
+                        setSelectionCounts(validCounts);
+                        AsyncStorage.setItem('selectionCounts', JSON.stringify(validCounts));
 
-                    const savedFavorite = await AsyncStorage.getItem('isFavoriteTracks');
-                    if (savedFavorite) {
-                        setIsFavoriteSelected(JSON.parse(savedFavorite));
+                        const savedFavorite = await AsyncStorage.getItem('isFavoriteTracks');
+                        if (savedFavorite) {
+                            setIsFavoriteSelected(JSON.parse(savedFavorite));
+                        }
+                    } catch {
+                        // ローカルストレージ破損時はデフォルト値で続行
                     }
                 }
             } catch (err) {
@@ -350,7 +373,7 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
         };
 
         initializeData();
-    }, []);
+    }, [retryCount]);
 
     useEffect(() => {
         if (!isLoading) {
@@ -370,7 +393,7 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
     }, [isLoading, containerWidth]);
 
     if (isLoading) return <LoadingAnimation />;
-    if (error) return <Text style={styles.errorText}>{error}</Text>;
+    if (error) return <ErrorState onRetry={() => { setError(null); setRetryCount(c => c + 1); }} />;
     if (artists.length === 0) {
         return <EmptyState />;
     }
@@ -497,12 +520,6 @@ const styles = StyleSheet.create({
         marginBottom: 4,
     },
 
-    errorText: {
-        color: '#EF4444',
-        textAlign: 'center',
-        padding: 16,
-    },
-
     emptyContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -550,6 +567,14 @@ const styles = StyleSheet.create({
 
     spotifyButton: {
         backgroundColor: '#1DB954', // Spotifyのブランドカラー
+        paddingVertical: 12,
+        paddingHorizontal: 24,
+        borderRadius: 24,
+        marginTop: 8,
+    },
+
+    retryButton: {
+        backgroundColor: '#374151',
         paddingVertical: 12,
         paddingHorizontal: 24,
         borderRadius: 24,
