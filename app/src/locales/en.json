@@ -39,5 +39,8 @@
   "error.internal_error": "Server error occurred. Please try again later.",
   "error.timeout_insufficient_tracks": "The selected conditions don't provide enough total duration.\nPlease shorten the playback time or add more favorite tracks or artists.",
   "error.timeout_no_match": "No combination found matching the specified playback time.\nChange the playback time or adjust your conditions.",
-  "error.default": "An error occurred. Please try again later."
+  "error.default": "An error occurred. Please try again later.",
+  "common.networkError": "Network Error",
+  "common.networkErrorDescription": "Failed to load data.\nPlease check your connection and try again.",
+  "common.retry": "Retry"
 }
