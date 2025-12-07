@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { StyleSheet, ActivityIndicator, View, TouchableOpacity } from 'react-native';
 import { logout as RequestLogout } from '../api/auth'
 import { useTheme } from '../../../../config/ThemeContext';
+import { useSpotifyAuth } from "../../../../hooks/useSpotifyAuth";
+import { router } from 'expo-router';
 import ReactGA from 'react-ga4';
 import { Svg, Path, Line, Polyline } from 'react-native-svg';
 
@@ -16,6 +18,7 @@ const LogoutIcon = () => (
 export const LogoutButton = () => {
     const theme = useTheme()
     const [isLoading, setIsLoading] = useState(false);
+    const { setAuthState } = useSpotifyAuth();
 
     const handlePress = async () => {
         try {

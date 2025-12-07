@@ -1,9 +1,11 @@
 import * as SecureStore from 'expo-secure-store';
-import { authEvents, AUTH_EVENTS } from './authEvents';
+import { authEvents, AUTH_CLEARED_EVENTS } from './authEvents';
 
-const ACCESS_TOKEN_KEY = 'access_token';
-const REFRESH_TOKEN_KEY = 'refresh_token';
-const TOKEN_EXPIRY_KEY = 'token_expiry';
+export type ServiceType = 'spotify' | 'soundcloud';
+
+const getTokenKey = (service: ServiceType, type: 'access' | 'refresh' | 'expiry'): string => {
+  return `${service}_${type}_token`;
+};
 
 export interface TokenPair {
   access_token: string;
@@ -13,12 +15,12 @@ export interface TokenPair {
 }
 
 // トークンの保存（ネイティブのみ）
-export async function saveTokens(tokenPair: TokenPair): Promise<void> {
+export async function saveTokens(tokenPair: TokenPair, service: ServiceType): Promise<void> {
   try {
-    await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, tokenPair.access_token);
-    await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, tokenPair.refresh_token);
+    await SecureStore.setItemAsync(getTokenKey(service, 'access'), tokenPair.access_token);
+    await SecureStore.setItemAsync(getTokenKey(service, 'refresh'), tokenPair.refresh_token);
     const expiryTime = Date.now() + tokenPair.expires_in * 1000;
-    await SecureStore.setItemAsync(TOKEN_EXPIRY_KEY, expiryTime.toString());
+    await SecureStore.setItemAsync(getTokenKey(service, 'expiry'), expiryTime.toString());
   } catch (error) {
     console.error('Failed to save tokens:', error);
     throw error;
@@ -26,9 +28,9 @@ export async function saveTokens(tokenPair: TokenPair): Promise<void> {
 }
 
 // アクセストークンの取得（ネイティブのみ）
-export async function getAccessToken(): Promise<string | null> {
+export async function getAccessToken(service: ServiceType): Promise<string | null> {
   try {
-    return await SecureStore.getItemAsync(ACCESS_TOKEN_KEY);
+    return await SecureStore.getItemAsync(getTokenKey(service, 'access'));
   } catch (error) {
     console.error('Failed to get access token:', error);
     return null;
@@ -36,9 +38,9 @@ export async function getAccessToken(): Promise<string | null> {
 }
 
 // リフレッシュトークンの取得（ネイティブのみ）
-export async function getRefreshToken(): Promise<string | null> {
+export async function getRefreshToken(service: ServiceType): Promise<string | null> {
   try {
-    return await SecureStore.getItemAsync(REFRESH_TOKEN_KEY);
+    return await SecureStore.getItemAsync(getTokenKey(service, 'refresh'));
   } catch (error) {
     console.error('Failed to get refresh token:', error);
     return null;
@@ -46,9 +48,9 @@ export async function getRefreshToken(): Promise<string | null> {
 }
 
 // トークンの有効期限チェック（ネイティブのみ）
-export async function isTokenExpired(): Promise<boolean> {
+export async function isTokenExpired(service: ServiceType): Promise<boolean> {
   try {
-    const expiryStr = await SecureStore.getItemAsync(TOKEN_EXPIRY_KEY);
+    const expiryStr = await SecureStore.getItemAsync(getTokenKey(service, 'expiry'));
 
     if (!expiryStr) return true;
 
@@ -62,16 +64,15 @@ export async function isTokenExpired(): Promise<boolean> {
 }
 
 // トークンのクリア（ログアウト時、ネイティブのみ）
-// リダイレクトはContextの状態変更により_layout.tsxで行われる
-export async function clearTokens(): Promise<void> {
+export async function clearTokens(service: ServiceType): Promise<void> {
   try {
-    await SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY);
-    await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY);
-    await SecureStore.deleteItemAsync(TOKEN_EXPIRY_KEY);
+    await SecureStore.deleteItemAsync(getTokenKey(service, 'access'));
+    await SecureStore.deleteItemAsync(getTokenKey(service, 'refresh'));
+    await SecureStore.deleteItemAsync(getTokenKey(service, 'expiry'));
   } catch (error) {
     console.error('Failed to clear tokens:', error);
   } finally {
-    // 認証クリアイベントを発行（useSpotifyAuthがリッスンして状態を更新）
-    authEvents.emit(AUTH_EVENTS.CLEARED);
+    // サービス別の認証クリアイベントを発行
+    authEvents.emit(AUTH_CLEARED_EVENTS[service]);
   }
 }

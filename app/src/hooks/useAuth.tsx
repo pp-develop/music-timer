@@ -1,26 +1,31 @@
 /**
- * 互換性レイヤー: useAuth.tsx
+ * 統一的な認証プロバイダー
  *
- * このファイルは既存のコードとの互換性を保つために存在します。
- * 実際の実装はuseSpotifyAuth.tsxにあります。
+ * 常に両方の認証プロバイダーをマウントします。
+ * パス遷移時のContext消失エラーを防ぐため、条件付きマウントは行いません。
  *
- * 現在、Spotify認証のみサポートしているため、useAuth === useSpotifyAuth です。
- * 将来的にSoundCloudなど他のサービスを追加する際は、
- * このファイルでサービスを切り替えるロジックを実装するか、
- * 各コンポーネントで明示的にuseSpotifyAuth/useSoundCloudAuthを使用してください。
+ * パフォーマンスへの影響は軽微:
+ * - Native: トークンがなければAPI呼び出しをスキップ
+ * - Web: セッションチェックAPIは軽量
  */
 
-export {
-  useSpotifyAuth as useAuth,
-  SpotifyAuthProvider as AuthProvider,
-  type SpotifyAuthContextProps as AuthContextProps
-} from './useSpotifyAuth';
+import React, { ReactNode, FC } from 'react';
+import { SpotifyAuthProvider } from './useSpotifyAuth';
+import { SoundCloudAuthProvider } from './useSoundCloudAuth';
+
+interface AuthProviderProps {
+  children: ReactNode;
+}
 
 /**
- * 注意:
- * index.tsx などのログイン画面では、まだこのuseAuthを使用していますが、
- * これは現状Spotify認証のみなので問題ありません。
- *
- * 将来的にマルチサービス対応する場合は、ログイン画面を
- * サービス選択画面に変更し、各サービスの認証を独立させる必要があります。
+ * 常に両方の認証プロバイダーをマウント
  */
+export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
+  return (
+    <SpotifyAuthProvider>
+      <SoundCloudAuthProvider>
+        {children}
+      </SoundCloudAuthProvider>
+    </SpotifyAuthProvider>
+  );
+};

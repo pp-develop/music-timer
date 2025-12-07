@@ -13,7 +13,7 @@ export function CreatePlaylistWithFavoriteTracks(minute: string, selectedArtistI
             httpStatus: 0
         };
 
-        fetchWithRetry('/spotify/playlists/from-favorites', 'POST', {
+        fetchWithRetry('/api/spotify/playlists/from-favorites', 'POST', {
             data: {
                 'minute': parseInt(minute),
                 'includeFavoriteTracks': true,

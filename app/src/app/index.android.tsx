@@ -5,8 +5,10 @@ import {
     ActivityIndicator,
     StyleSheet
 } from 'react-native';
-import { LoginButton } from "../features/spotify/auth";
-import { useAuth } from "../hooks/useAuth";
+import { LoginButton as SpotifyLoginButton } from "../features/spotify/auth";
+import { LoginButton as SoundCloudLoginButton } from "../features/soundcloud/auth";
+import { useSpotifyAuth } from "../hooks/useSpotifyAuth";
+import { useSoundCloudAuth } from "../hooks/useSoundCloudAuth";
 import { useTheme } from '../config/ThemeContext';
 import { router } from 'expo-router';
 import { t } from '../locales/i18n';
@@ -16,13 +18,21 @@ import { LinearGradient } from 'expo-linear-gradient';
 export default function Page() {
     usePageViewTracking(); // ページビューのトラッキングを有効化
     const theme = useTheme()
-    const { loading, isAuthenticated } = useAuth();
+    const { loading: spotifyLoading, isAuthenticated: spotifyAuthenticated } = useSpotifyAuth();
+    const { loading: soundcloudLoading, isAuthenticated: soundcloudAuthenticated } = useSoundCloudAuth();
+
+    const loading = spotifyLoading || soundcloudLoading;
+    const isAuthenticated = spotifyAuthenticated || soundcloudAuthenticated;
 
     useEffect(() => {
-        if (!loading && isAuthenticated) {
-            router.replace('/playlist/spotify');
+        if (!loading) {
+            if (spotifyAuthenticated) {
+                router.replace('/spotify/playlist');
+            } else if (soundcloudAuthenticated) {
+                router.replace('/soundcloud/playlist');
+            }
         }
-    }, [loading, isAuthenticated]);
+    }, [loading, spotifyAuthenticated, soundcloudAuthenticated]);
 
     return (
         <>
@@ -42,7 +52,8 @@ export default function Page() {
                                 <Text style={styles.title}>
                                     {t('appName')}
                                 </Text>
-                                <LoginButton />
+                                <SpotifyLoginButton />
+                                {/* <SoundCloudLoginButton /> */}
                             </View>
                         )
                     }

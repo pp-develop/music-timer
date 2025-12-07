@@ -14,7 +14,7 @@ export function CreatePlaylist(minute: string): Promise<Response> {
             httpStatus: 0
         };
 
-        fetchWithRetry('/spotify/playlists', 'POST', {
+        fetchWithRetry('/api/spotify/playlists', 'POST', {
             data: {
                 'minute': parseInt(minute)
             },

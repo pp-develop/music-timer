@@ -15,7 +15,12 @@ const PlaylistIcon = () => (
     </Svg>
 );
 
-export const CreatePlaylistButton = ({ minute, createPlaylist }) => {
+interface CreatePlaylistButtonProps {
+    minute: number | string;
+    createPlaylist: () => void;
+}
+
+export const CreatePlaylistButton = ({ minute, createPlaylist }: CreatePlaylistButtonProps) => {
     const handlePress = () => {
         createPlaylist();
     };

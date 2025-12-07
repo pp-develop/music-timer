@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, Platform } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { saveTokens, TokenPair } from '../utils/tokenManager';
-import { useAuth } from '../hooks/useAuth';
+import { saveTokens, TokenPair, ServiceType } from '../utils/tokenManager';
+import { useSpotifyAuth } from '../hooks/useSpotifyAuth';
+import { useSoundCloudAuth } from '../hooks/useSoundCloudAuth';
 
 export default function AuthCallbackPage() {
   // URLパラメータまたはフラグメントから直接トークンを取得
-  const { access_token, refresh_token, expires_in, error } = useLocalSearchParams();
+  const { service, access_token, refresh_token, expires_in, error } = useLocalSearchParams();
   const [status, setStatus] = useState<string>('処理中...');
-  const { setAuthState } = useAuth();
+  const { setAuthState: setSpotifyAuthState } = useSpotifyAuth();
+  const { setAuthState: setSoundCloudAuthState } = useSoundCloudAuth();
 
   useEffect(() => {
     const handleCallback = async () => {
@@ -33,6 +35,9 @@ export default function AuthCallbackPage() {
       }
 
       try {
+        // サービスを判定（デフォルトはspotify）
+        const serviceType: ServiceType = (Array.isArray(service) ? service[0] : service || 'spotify') as ServiceType;
+
         // トークンをSecureStoreに保存
         const tokenPair: TokenPair = {
           access_token: Array.isArray(access_token) ? access_token[0] : access_token,
@@ -41,13 +46,19 @@ export default function AuthCallbackPage() {
           token_type: 'Bearer',
         };
 
-        await saveTokens(tokenPair);
+        await saveTokens(tokenPair, serviceType);
 
         setStatus('認証成功！');
-        setAuthState(true);
+
+        // サービスごとに認証状態を更新
+        if (serviceType === 'spotify') {
+          setSpotifyAuthState(true);
+        } else if (serviceType === 'soundcloud') {
+          setSoundCloudAuthState(true);
+        }
 
         // プレイリスト画面にリダイレクト
-        setTimeout(() => router.replace('/playlist/spotify'), 500);
+        setTimeout(() => router.replace(`/${serviceType}/playlist`), 500);
       } catch (error) {
         console.error('Token save failed:', error);
         setStatus('トークン保存に失敗しました');
@@ -58,9 +69,12 @@ export default function AuthCallbackPage() {
     handleCallback();
   }, [access_token, refresh_token, expires_in, error]);
 
+  const serviceType = (Array.isArray(service) ? service[0] : service || 'spotify') as ServiceType;
+  const indicatorColor = serviceType === 'soundcloud' ? '#FF5500' : '#1DB954';
+
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color="#1DB954" />
+      <ActivityIndicator size="large" color={indicatorColor} />
       <Text style={styles.text}>{status}</Text>
     </View>
   );

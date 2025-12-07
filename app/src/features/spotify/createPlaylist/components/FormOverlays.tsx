@@ -237,7 +237,7 @@ interface PlaylistSuccessScreenProps {
     swipeIndicatorOpacity: Animated.Value;
     swipeIndicatorTranslateY: Animated.Value;
     panResponder: any;
-    spotifyPanResponder: any;
+    embedPanResponder: any;
     onClose: () => void;
     onOpenSpotify: () => void;
 }
@@ -252,7 +252,7 @@ export const PlaylistSuccessScreen: React.FC<PlaylistSuccessScreenProps> = ({
     swipeIndicatorOpacity,
     swipeIndicatorTranslateY,
     panResponder,
-    spotifyPanResponder,
+    embedPanResponder,
     onClose,
     onOpenSpotify,
 }) => {
@@ -330,7 +330,7 @@ export const PlaylistSuccessScreen: React.FC<PlaylistSuccessScreenProps> = ({
                     style={{ width: "100%" }}
                 />
                 <View
-                    {...spotifyPanResponder.panHandlers}
+                    {...embedPanResponder.panHandlers}
                     style={[styles.spotifyOverlay, { pointerEvents: "none" }]}
                 />
             </View>
