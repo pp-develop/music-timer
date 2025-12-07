@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Animated, Dimensions, TouchableOpacity, Pressable, Image, Platform, BackHandler } from 'react-native';
+
 import { Svg, Path } from 'react-native-svg';
 import { t } from '../../../../locales/i18n';
 import { SoundCloudEmbed } from '../../../../components/SoundCloudEmbed';
@@ -310,7 +311,7 @@ export const PlaylistSuccessScreen: React.FC<PlaylistSuccessScreenProps> = ({
                         paddingVertical: 14,
                         paddingHorizontal: 24,
                         borderRadius: 12,
-                        backgroundColor: "#FF5500",
+                        backgroundColor: "#454C50",
                         marginTop: 25,
                         marginLeft: 'auto',
                         marginRight: 'auto',
@@ -326,6 +327,15 @@ export const PlaylistSuccessScreen: React.FC<PlaylistSuccessScreenProps> = ({
             >
                 {({ pressed }) => (
                     <>
+                        <Image
+                            source={require('../../../../../assets/images/soundcloud-icon.png')}
+                            style={{
+                                width: 25,
+                                height: 25,
+                                marginRight: 10,
+                                opacity: pressed ? 0.7 : 1
+                            }}
+                        />
                         <Text style={[
                             styles.buttonText,
                             {
@@ -333,7 +343,7 @@ export const PlaylistSuccessScreen: React.FC<PlaylistSuccessScreenProps> = ({
                                 fontSize: 16,
                             }
                         ]}>
-                            {t('dialog.createPlaylist.open')}
+                            {t('dialog.createPlaylist.open.soundcloud')}
                         </Text>
                     </>
                 )}
