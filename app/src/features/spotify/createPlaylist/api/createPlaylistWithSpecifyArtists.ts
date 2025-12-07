@@ -13,7 +13,7 @@ export function CreatePlaylistWithSpecifyArtists(minute: string, selectedArtistI
             httpStatus: 0
         };
 
-        fetchWithRetry('/spotify/playlists', 'POST', {
+        fetchWithRetry('/spotify/playlists/from-artists', 'POST', {
             data: {
                 'minute': parseInt(minute),
                 'artistIds': selectedArtistIds
