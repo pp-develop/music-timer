@@ -5,7 +5,10 @@
     "version": "1.0.0",
     "scheme": "musictimer",
     "orientation": "portrait",
-    "platforms": ["android", "web"],
+    "platforms": [
+      "android",
+      "web"
+    ],
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
@@ -21,7 +24,9 @@
     "android": {
       "package": "com.ppdevelop.musictimer",
       "versionCode": 1,
-      "permissions": ["INTERNET"],
+      "permissions": [
+        "INTERNET"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -33,13 +38,14 @@
     },
     "plugins": [
       "expo-router",
-      "expo-secure-store"
+      "expo-secure-store",
+      "./plugins/withNetworkSecurityConfig"
     ],
     "extra": {
-      "EXPO_PUBLIC_API_URL": "https://api.music-timer.dpdns.org",
-      "EXPO_PUBLIC_BASE_URL": "https://music-timer.dpdns.org",
-      "EXPO_PUBLIC_NATIVE_API_URL": "https://api.music-timer.dpdns.org",
-      "EXPO_PUBLIC_NATIVE_BASE_URL": "https://music-timer.dpdns.org",
+      "EXPO_PUBLIC_API_URL": "https://api.musictimer.dpdns.org",
+      "EXPO_PUBLIC_BASE_URL": "https://musictimer.dpdns.org",
+      "EXPO_PUBLIC_NATIVE_API_URL": "https://api.musictimer.dpdns.org",
+      "EXPO_PUBLIC_NATIVE_BASE_URL": "https://musictimer.dpdns.org",
       "router": {
         "origin": false
       },

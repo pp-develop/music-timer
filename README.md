@@ -3,7 +3,7 @@
 ## Live URL
 
 Check out the live site here:  
-[music-timer](https://music-timer.dpdns.org)
+[music-timer](https://musictimer.dpdns.org)
 
 ![Screenshot of a comment on a GitHub issue showing an image, added in the Markdown, of an Octocat smiling and raising a tentacle.](https://private-user-images.githubusercontent.com/39284992/431059847-f186afd4-dcc8-4ff5-b594-41a050df371a.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDQwNDk3NDIsIm5iZiI6MTc0NDA0OTQ0MiwicGF0aCI6Ii8zOTI4NDk5Mi80MzEwNTk4NDctZjE4NmFmZDQtZGNjOC00ZmY1LWI1OTQtNDFhMDUwZGYzNzFhLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTA0MDclMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwNDA3VDE4MTA0MlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWEwZjEzYTEyMzJiMWI5Mzg0YjIxYzlmMmVmM2E3MGMzZDg3N2UxZGI2Nzg2ZjkxNmQ4N2VhMDA0ZDY0ZjdhZjImWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.p8rPY99vHTUG4ylzF1nJgPBlWiLL2NAL7qY7VAsXQYk)
 
