@@ -21,6 +21,5 @@ export const getErrorMessageKey = (code?: string): string => {
     return 'error.default';
   }
 
-  // エラーコードから翻訳キーを生成
   return `error.${code.toLowerCase()}`;
 };

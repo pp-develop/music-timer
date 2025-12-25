@@ -225,7 +225,7 @@ const DisabledToast = ({ visible, onHide }) => {
                 </View>
                 <View style={styles.toastTextContainer}>
                     <Text style={styles.toastTitle}>{t('createPlaylist.favoriteTracks')}</Text>
-                    <Text style={styles.toastMessage}>{t('createPlaylist.favoriteTracks.disabled')}</Text>
+                    <Text style={styles.toastMessage}>{t('createPlaylist.favoriteTracks.disabled.soundcloud')}</Text>
                 </View>
             </TouchableOpacity>
         </Animated.View>
@@ -285,14 +285,14 @@ const EmptyState = () => (
                 {t('createPlaylist.findArtistsTitle')}
             </Text>
             <Text style={styles.emptyText}>
-                {t('createPlaylist.followedArtistsEmpty')}
+                {t('createPlaylist.followedArtistsEmpty.soundcloud')}
             </Text>
             <View style={styles.divider} />
             <TouchableOpacity
                 style={styles.soundcloudButton}
                 onPress={() => Linking.openURL('https://soundcloud.com/discover')}
             >
-                <Text style={styles.buttonText}>{t('createPlaylist.findArtists')}</Text>
+                <Text style={styles.buttonText}>{t('createPlaylist.findArtists.soundcloud')}</Text>
             </TouchableOpacity>
         </View>
     </View>

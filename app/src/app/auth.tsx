@@ -4,6 +4,33 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { saveTokens, TokenPair, ServiceType } from '../utils/tokenManager';
 import { useSpotifyAuth } from '../hooks/useSpotifyAuth';
 import { useSoundCloudAuth } from '../hooks/useSoundCloudAuth';
+import { getServiceColor } from '../config/serviceConfig';
+
+/**
+ * JWTのペイロードからserviceを取得する
+ * JWTは base64エンコードされた header.payload.signature の形式
+ */
+function getServiceFromJWT(token: string): ServiceType | null {
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+
+    // ペイロード部分をbase64デコード
+    const payload = parts[1];
+    // base64url を base64 に変換
+    const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = atob(base64);
+    const decoded = JSON.parse(jsonPayload);
+
+    if (decoded.service === 'spotify' || decoded.service === 'soundcloud') {
+      return decoded.service as ServiceType;
+    }
+    return null;
+  } catch (error) {
+    console.error('[AUTH] Failed to decode JWT:', error);
+    return null;
+  }
+}
 
 export default function AuthCallbackPage() {
   // URLパラメータまたはフラグメントから直接トークンを取得
@@ -35,8 +62,20 @@ export default function AuthCallbackPage() {
       }
 
       try {
-        // サービスを判定（デフォルトはspotify）
-        const serviceType: ServiceType = (Array.isArray(service) ? service[0] : service || 'spotify') as ServiceType;
+        // サービスを判定
+        // 1. URLパラメータから取得を試みる
+        // 2. なければJWTのペイロードから取得
+        const serviceFromParam = Array.isArray(service) ? service[0] : service;
+        const accessTokenStr = Array.isArray(access_token) ? access_token[0] : access_token;
+        const serviceFromJWT = accessTokenStr ? getServiceFromJWT(accessTokenStr) : null;
+        const serviceType: ServiceType | null = (serviceFromParam as ServiceType) || serviceFromJWT;
+
+        if (!serviceType) {
+          console.error('Could not determine service type');
+          setStatus('サービスの判定に失敗しました');
+          setTimeout(() => router.replace('/'), 2000);
+          return;
+        }
 
         // トークンをSecureStoreに保存
         const tokenPair: TokenPair = {
@@ -69,8 +108,12 @@ export default function AuthCallbackPage() {
     handleCallback();
   }, [access_token, refresh_token, expires_in, error]);
 
-  const serviceType = (Array.isArray(service) ? service[0] : service || 'spotify') as ServiceType;
-  const indicatorColor = serviceType === 'soundcloud' ? '#FF5500' : '#1DB954';
+  // インジケーターの色を決定（JWTからも判定）
+  const serviceFromParam = Array.isArray(service) ? service[0] : service;
+  const accessTokenStr = Array.isArray(access_token) ? access_token[0] : access_token;
+  const serviceFromJWT = accessTokenStr ? getServiceFromJWT(accessTokenStr as string) : null;
+  const displayServiceType = (serviceFromParam as ServiceType) || serviceFromJWT;
+  const indicatorColor = getServiceColor(displayServiceType);
 
   return (
     <View style={styles.container}>

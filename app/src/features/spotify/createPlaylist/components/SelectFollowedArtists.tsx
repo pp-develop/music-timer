@@ -352,16 +352,16 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                 // お気に入りが選択されていたら解除する
                 if (isFavoriteSelected) {
                     setIsFavoriteSelected(false);
-                    AsyncStorage.setItem('isFavoriteTracks', JSON.stringify(false));
+                    AsyncStorage.setItem('spotify_isFavoriteTracks', JSON.stringify(false));
                 }
 
                 const newIds = [...prev, artistId];
-                AsyncStorage.setItem('selectedIds', JSON.stringify(newIds));
+                AsyncStorage.setItem('spotify_selectedIds', JSON.stringify(newIds));
 
                 // selectionCountsを更新
                 setSelectionCounts(prevCounts => {
                     const newCounts = { ...prevCounts, [artistId]: (prevCounts[artistId] || 0) + 1 };
-                    AsyncStorage.setItem('selectionCounts', JSON.stringify(newCounts));
+                    AsyncStorage.setItem('spotify_selectionCounts', JSON.stringify(newCounts));
                     return newCounts;
                 });
 
@@ -369,7 +369,7 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
             } else {
                 // 選択解除の場合
                 const newIds = prev.filter(id => id !== artistId);
-                AsyncStorage.setItem('selectedIds', JSON.stringify(newIds));
+                AsyncStorage.setItem('spotify_selectedIds', JSON.stringify(newIds));
                 return newIds;
             }
         });
@@ -377,12 +377,12 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
     const toggleFavorite = () => {
         setIsFavoriteSelected(prev => {
             const newState = !prev;
-            AsyncStorage.setItem('isFavoriteTracks', JSON.stringify(newState));
+            AsyncStorage.setItem('spotify_isFavoriteTracks', JSON.stringify(newState));
 
             // お気に入りを選択する場合、アーティスト選択をクリアする
             if (newState && selectedIds.length > 0) {
                 setSelectedIds([]);
-                AsyncStorage.setItem('selectedIds', JSON.stringify([]));
+                AsyncStorage.setItem('spotify_selectedIds', JSON.stringify([]));
             }
 
             return newState;
@@ -438,27 +438,27 @@ export const SelectFollowedArtists = forwardRef((props, ref) => {
                     const currentArtistIds = new Set(processedArtists.map(a => a.ID));
 
                     try {
-                        const savedIds = await AsyncStorage.getItem('selectedIds');
+                        const savedIds = await AsyncStorage.getItem('spotify_selectedIds');
                         const parsedIds: string[] = savedIds ? JSON.parse(savedIds) : [];
                         const validIds = parsedIds.filter(id => currentArtistIds.has(id));
                         setSelectedIds(validIds);
-                        AsyncStorage.setItem('selectedIds', JSON.stringify(validIds));
+                        AsyncStorage.setItem('spotify_selectedIds', JSON.stringify(validIds));
 
-                        const savedCounts = await AsyncStorage.getItem('selectionCounts');
+                        const savedCounts = await AsyncStorage.getItem('spotify_selectionCounts');
                         const parsedCounts: Record<string, number> = savedCounts ? JSON.parse(savedCounts) : {};
                         const validCounts = Object.fromEntries(
                             Object.entries(parsedCounts).filter(([id]) => currentArtistIds.has(id))
                         );
                         setSelectionCounts(validCounts);
-                        AsyncStorage.setItem('selectionCounts', JSON.stringify(validCounts));
+                        AsyncStorage.setItem('spotify_selectionCounts', JSON.stringify(validCounts));
 
-                        const savedFavorite = await AsyncStorage.getItem('isFavoriteTracks');
+                        const savedFavorite = await AsyncStorage.getItem('spotify_isFavoriteTracks');
                         if (savedFavorite) {
                             const wasFavoriteSelected = JSON.parse(savedFavorite);
                             // お気に入りが存在しない場合は選択状態をクリア
                             if (wasFavoriteSelected && !exists) {
                                 setIsFavoriteSelected(false);
-                                AsyncStorage.setItem('isFavoriteTracks', JSON.stringify(false));
+                                AsyncStorage.setItem('spotify_isFavoriteTracks', JSON.stringify(false));
                             } else {
                                 setIsFavoriteSelected(wasFavoriteSelected);
                             }

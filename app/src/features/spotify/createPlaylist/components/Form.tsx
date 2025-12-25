@@ -67,11 +67,11 @@ export const Form = () => {
             }
 
             // ローカルストレージから選択されたアーティストIDを取得
-            let selectedArtistIds = await AsyncStorage.getItem('selectedIds');
+            let selectedArtistIds = await AsyncStorage.getItem('spotify_selectedIds');
             // 取得した値が存在する場合はJSON形式から配列に変換
             selectedArtistIds = selectedArtistIds ? JSON.parse(selectedArtistIds) : [];
 
-            const isFavoriteTracks = JSON.parse(await AsyncStorage.getItem('isFavoriteTracks') || 'false');
+            const isFavoriteTracks = JSON.parse(await AsyncStorage.getItem('spotify_isFavoriteTracks') || 'false');
 
             // プレイリスト作成関数（エラー時もレスポンスを返す）
             const executeCreatePlaylist = async () => {

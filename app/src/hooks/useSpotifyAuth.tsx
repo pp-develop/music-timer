@@ -19,8 +19,9 @@ const useProvideSpotifyAuth = () => {
   const pathname = usePathname();
 
   // Spotify認証が必要なページかどうか
+  // 注意: /auth はコールバックページなので含めない（SoundCloud認証時にSpotify APIが呼ばれるのを防ぐ）
   const needsAuth = pathname === '/' || pathname === '/index' ||
-                    pathname === '/auth' || pathname.startsWith('/spotify');
+    pathname.startsWith('/spotify');
 
   // Spotify認証クリアイベントをリッスン
   useEffect(() => {
