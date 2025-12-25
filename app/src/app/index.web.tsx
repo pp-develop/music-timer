@@ -56,7 +56,7 @@ export default function Page() {
                                         {t('appName')}
                                     </Text>
                                     <SpotifyLoginButton />
-                                    {/* <SoundCloudLoginButton /> */}
+                                    <SoundCloudLoginButton />
                                 </View>
                             </>
                         }
