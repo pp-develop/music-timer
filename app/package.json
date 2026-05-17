@@ -11,7 +11,7 @@
     "@expo/metro-runtime": "6.1.2",
     "@hookform/resolvers": "5.2.2",
     "@react-native-async-storage/async-storage": "2.2.0",
-    "axios": "1.13.2",
+    "axios": "1.16.1",
     "axios-retry": "4.5.0",
     "expo": "54",
     "expo-constants": "18.0.10",
@@ -35,7 +35,7 @@
     "yup": "1.7.1"
   },
   "devDependencies": {
-    "eas-cli": "16.28.0",
+    "eas-cli": "18.13.0",
     "@babel/core": "7.25.2",
     "@types/react": "19.1.0",
     "npm-check-updates": "17.1.0",
