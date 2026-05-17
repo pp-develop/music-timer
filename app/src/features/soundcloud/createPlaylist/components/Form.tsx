@@ -164,15 +164,17 @@ export const Form = () => {
                             name="minute"
                             render={({ field: { onChange, value } }) => (
                                 <>
-                                    <TextInput
-                                        style={styles.input}
-                                        value={value}
-                                        onChangeText={onChange}
-                                        placeholder={t('form.specifyTime.placeholder')}
-                                        placeholderTextColor="#6B7280"
-                                        keyboardType="number-pad"
-                                        onSubmitEditing={handleSubmit(onSubmit)}
-                                    />
+                                    <View style={styles.inputWrapper}>
+                                        <TextInput
+                                            style={styles.input}
+                                            value={value}
+                                            onChangeText={onChange}
+                                            placeholder={t('form.specifyTime.placeholder')}
+                                            placeholderTextColor="#6B7280"
+                                            keyboardType="number-pad"
+                                            onSubmitEditing={handleSubmit(onSubmit)}
+                                        />
+                                    </View>
                                     <Text style={styles.unitText}>{t('form.specifyTime.minute')}</Text>
                                 </>
                             )}
@@ -271,8 +273,11 @@ const styles = StyleSheet.create({
         fontSize: Math.min(14, width * 0.035),
         fontWeight: '600',
     },
-    input: {
+    inputWrapper: {
         flex: 1,
+    },
+    input: {
+        width: '100%',
         color: '#FFFFFF',
         fontSize: Math.min(24, width * 0.06),
         padding: 0,
