@@ -68,10 +68,17 @@ export const useFormInput = () => {
         }
     }, [minuteValue]);
 
+    const adjustMinute = (delta: number) => {
+        const current = parseInt(minuteValue) || 25;
+        const next = Math.min(100, Math.max(3, current + delta));
+        setValue('minute', String(next));
+    };
+
     return {
         control,
         handleSubmit,
         minuteValue,
         errors,
+        adjustMinute,
     };
 };

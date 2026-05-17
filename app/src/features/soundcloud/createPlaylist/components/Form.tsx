@@ -6,6 +6,7 @@ import {
     StyleSheet,
     Dimensions,
     Animated,
+    TouchableOpacity,
 } from 'react-native';
 import { Header } from "../../../../components/Parts/Header";
 import { DeletePlaylist } from "../../deletePlaylist/components/DeletePlaylistButton";
@@ -37,7 +38,6 @@ export const Form = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const { setShowDeleteButton } = useContext(PlaylistContext);
     const followedArtistsRef = useRef(null);
-    const [containerWidth, setContainerWidth] = useState(0);
     const [hasSelection, setHasSelection] = useState(false);
 
     // Animated Values
@@ -48,7 +48,7 @@ export const Form = () => {
     // カスタムフック
     const { animatedValues, panHandlers, controls } = useFormAnimations(isAnimating, isLoading, setIsLoading, setIsAnimating);
     const { showError, dismissError } = useFormErrorHandling(animatedValues.failureOpacity, setErrorMessage, setCreationStatus);
-    const { control, handleSubmit, minuteValue, errors } = useFormInput();
+    const { control, handleSubmit, minuteValue, errors, adjustMinute } = useFormInput();
 
     const onSubmit = async (data: any) => {
         controls.startLoading();
@@ -158,33 +158,39 @@ export const Form = () => {
                 >
                     <Header />
 
-                    <View style={styles.inputContainer}
-                        onLayout={(event) => {
-                            const { width } = event.nativeEvent.layout;
-                            setContainerWidth(width);
-                        }}>
+                    <View style={styles.inputContainer}>
                         <Controller
                             control={control}
                             name="minute"
-                            render={({ field: { onChange, value }, fieldState: { error } }) => (
+                            render={({ field: { onChange, value } }) => (
                                 <>
                                     <TextInput
-                                        errorMessage={errors.minute?.message}
-                                        style={[styles.input, {
-                                            maxWidth: containerWidth - 16
-                                        }]}
+                                        style={styles.input}
                                         value={value}
                                         onChangeText={onChange}
                                         placeholder={t('form.specifyTime.placeholder')}
                                         placeholderTextColor="#6B7280"
                                         keyboardType="number-pad"
                                         onSubmitEditing={handleSubmit(onSubmit)}
-                                    >
-                                    </TextInput>
+                                    />
                                     <Text style={styles.unitText}>{t('form.specifyTime.minute')}</Text>
                                 </>
                             )}
                         />
+                    </View>
+                    <View style={styles.stepRow}>
+                        <TouchableOpacity style={styles.stepButton} onPress={() => adjustMinute(-10)}>
+                            <Text style={styles.stepButtonText}>-10</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.stepButton} onPress={() => adjustMinute(-1)}>
+                            <Text style={styles.stepButtonText}>-1</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.stepButton} onPress={() => adjustMinute(1)}>
+                            <Text style={styles.stepButtonText}>+1</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.stepButton} onPress={() => adjustMinute(10)}>
+                            <Text style={styles.stepButtonText}>+10</Text>
+                        </TouchableOpacity>
                     </View>
                     {errors && <Text style={styles.errorText}>{errors.minute?.message}</Text>}
 
@@ -244,12 +250,33 @@ const styles = StyleSheet.create({
         maxWidth: MAX_INPUT_WIDTH,
         alignSelf: 'stretch',
     },
+    stepRow: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: 8,
+        maxWidth: MAX_INPUT_WIDTH,
+        alignSelf: 'stretch',
+        marginTop: 8,
+    },
+    stepButton: {
+        backgroundColor: '#4B5563',
+        borderRadius: 10,
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    stepButtonText: {
+        color: '#D1D5DB',
+        fontSize: Math.min(14, width * 0.035),
+        fontWeight: '600',
+    },
     input: {
         flex: 1,
         color: '#FFFFFF',
         fontSize: Math.min(24, width * 0.06),
         padding: 0,
-        textAlign: "center"
+        textAlign: "center",
     },
     unitText: {
         color: '#9CA3AF',
