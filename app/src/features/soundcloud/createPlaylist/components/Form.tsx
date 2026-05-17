@@ -282,6 +282,7 @@ const styles = StyleSheet.create({
         color: '#9CA3AF',
         fontSize: Math.min(20, width * 0.05),
         marginLeft: 8,
+        flexShrink: 0,
     },
     buttonContainer: {
         flexDirection: 'row',
